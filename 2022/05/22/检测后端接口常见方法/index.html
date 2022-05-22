@@ -16,24 +16,22 @@
   <meta name="author" content="guokun">
   <meta name="keywords" content="">
   
-    <meta name="description" content="初始化仓库git init 克隆仓库git clone git地址 设置用户名和邮箱(–global 为全局参数，表明本地所有Git仓库都会使用这个配置)git config –global user,name “用户名”git config –global user.email “用户邮箱” 链接远程仓库git remote add origin git地址 当修改密码后需要git push 时">
+    <meta name="description" content="痛点，常常由于不知道后端接口是否可用而苦恼方法一：curl实现，post请求1、复制浏览器的curl链接， 2、用后端服务器地址和接口地址拼接替换掉curl中的请求地址 3、删除掉原有的orgin和referer字段， -H 请求头 --data-row：请求体 -x：请求协议  方法二：通过浏览器网址直接访问，get请求1、用后端服务器地址和接口地址拼接替换掉curl中的请求地址 容易由于鉴权问">
 <meta property="og:type" content="article">
-<meta property="og:title" content="实战中开发git">
-<meta property="og:url" content="http://example.com/2022/05/22/git/index.html">
+<meta property="og:title" content="检测后端接口常见方法">
+<meta property="og:url" content="http://example.com/2022/05/22/%E6%A3%80%E6%B5%8B%E5%90%8E%E7%AB%AF%E6%8E%A5%E5%8F%A3%E5%B8%B8%E8%A7%81%E6%96%B9%E6%B3%95/index.html">
 <meta property="og:site_name" content="闷葫芦">
-<meta property="og:description" content="初始化仓库git init 克隆仓库git clone git地址 设置用户名和邮箱(–global 为全局参数，表明本地所有Git仓库都会使用这个配置)git config –global user,name “用户名”git config –global user.email “用户邮箱” 链接远程仓库git remote add origin git地址 当修改密码后需要git push 时">
+<meta property="og:description" content="痛点，常常由于不知道后端接口是否可用而苦恼方法一：curl实现，post请求1、复制浏览器的curl链接， 2、用后端服务器地址和接口地址拼接替换掉curl中的请求地址 3、删除掉原有的orgin和referer字段， -H 请求头 --data-row：请求体 -x：请求协议  方法二：通过浏览器网址直接访问，get请求1、用后端服务器地址和接口地址拼接替换掉curl中的请求地址 容易由于鉴权问">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/2022/05/22/git/gitrebase.png">
-<meta property="article:published_time" content="2022-05-22T13:34:00.000Z">
-<meta property="article:modified_time" content="2022-05-22T14:14:20.101Z">
+<meta property="article:published_time" content="2022-05-22T14:36:45.000Z">
+<meta property="article:modified_time" content="2022-05-22T14:37:54.684Z">
 <meta property="article:author" content="guokun">
-<meta property="article:tag" content="git javascript">
+<meta property="article:tag" content="后端接口">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://example.com/2022/05/22/git/gitrebase.png">
   
   
   
-  <title>实战中开发git - 闷葫芦</title>
+  <title>检测后端接口常见方法 - 闷葫芦</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -189,7 +187,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="实战中开发git"></span>
+            <span id="subtitle" data-typed-text="检测后端接口常见方法"></span>
           
         </div>
 
@@ -200,7 +198,7 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-05-22 21:34" pubdate>
+        <time datetime="2022-05-22 22:36" pubdate>
           May 22, 2022 pm
         </time>
       </span>
@@ -213,7 +211,7 @@
         <i class="iconfont icon-chart"></i>
         
           <!-- compatible with older versions-->
-          2.8k 字
+          244 字
         
       </span>
     
@@ -225,7 +223,7 @@
         
         
           <!-- compatible with older versions-->
-          24 分钟
+          3 分钟
         
       </span>
     
@@ -271,244 +269,24 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">实战中开发git</h1>
+            <h1 style="display: none">检测后端接口常见方法</h1>
             
             <div class="markdown-body">
               
-              <h1 id="初始化仓库"><a href="#初始化仓库" class="headerlink" title="初始化仓库"></a>初始化仓库</h1><p>git init</p>
-<h2 id="克隆仓库"><a href="#克隆仓库" class="headerlink" title="克隆仓库"></a>克隆仓库</h2><p>git clone git地址</p>
-<h2 id="设置用户名和邮箱-–global-为全局参数，表明本地所有Git仓库都会使用这个配置"><a href="#设置用户名和邮箱-–global-为全局参数，表明本地所有Git仓库都会使用这个配置" class="headerlink" title="设置用户名和邮箱(–global 为全局参数，表明本地所有Git仓库都会使用这个配置)"></a>设置用户名和邮箱(–global 为全局参数，表明本地所有Git仓库都会使用这个配置)</h2><p>git config –global user,name “用户名”<br>git config –global user.email “用户邮箱”</p>
-<h2 id="链接远程仓库"><a href="#链接远程仓库" class="headerlink" title="链接远程仓库"></a>链接远程仓库</h2><p>git remote add origin git地址</p>
-<h3 id="当修改密码后需要git-push-时报http-denied错误时"><a href="#当修改密码后需要git-push-时报http-denied错误时" class="headerlink" title="当修改密码后需要git push 时报http denied错误时"></a>当修改密码后需要git push 时报http denied错误时</h3><p>输入”git config –system –unset credential.helper”命令（重置远程端的用户名和密码）<br>或<br>git config –global http.emptyAuth true </p>
-<h3 id="当本地查看远程分支时"><a href="#当本地查看远程分支时" class="headerlink" title="当本地查看远程分支时"></a>当本地查看远程分支时</h3><h3 id="git-fetch-origin。拉取远程分支列表"><a href="#git-fetch-origin。拉取远程分支列表" class="headerlink" title="** git fetch origin。拉取远程分支列表"></a>** git fetch origin。拉取远程分支列表</h3><table>
-<thead>
-<tr>
-<th>git branch</th>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody><tr>
-<td></td>
-<td>空</td>
-<td>查看本地分支</td>
-</tr>
-<tr>
-<td></td>
-<td>-r</td>
-<td>查看远程分支</td>
-</tr>
-<tr>
-<td></td>
-<td>-a</td>
-<td>查看全部焚毁</td>
-</tr>
-</tbody></table>
-<h1 id="撤销git-add-的方法-gt-git-restore"><a href="#撤销git-add-的方法-gt-git-restore" class="headerlink" title="撤销git add . 的方法 -&gt; git restore ."></a>撤销git add . 的方法 -&gt; git restore .</h1><h2 id="撤销git-commit-m-“注释”，"><a href="#撤销git-commit-m-“注释”，" class="headerlink" title="撤销git commit -m “注释”，"></a>撤销git commit -m “注释”，</h2><table>
-<thead>
-<tr>
-<th>git reset</th>
-<th>–hard</th>
-<th>删除工作空间改动代码，撤销git add，撤销commit . 注意完成这个操作后，就恢复到了上一次的commit状态。</th>
-</tr>
-</thead>
-<tbody><tr>
-<td></td>
-<td>–mixed</td>
-<td>不删除工作空间改动代码，撤销git add，撤销commit .为默认参数,git reset –mixed HEAD^==git reset HEAD^</td>
-</tr>
-<tr>
-<td></td>
-<td>–sort</td>
-<td>不删除工作空间改动代码，不撤销git add ，撤销commit</td>
-</tr>
-<tr>
-<td>git commit</td>
-<td>–amend</td>
-<td>如果commit注释写错了，改一下注释</td>
-</tr>
-</tbody></table>
-<h2 id="推送仓库"><a href="#推送仓库" class="headerlink" title="推送仓库"></a>推送仓库</h2><table>
-<thead>
-<tr>
-<th>git push</th>
-<th>-u</th>
-<th>建立+推送远程分支</th>
-</tr>
-</thead>
-<tbody><tr>
-<td></td>
-<td>-f</td>
-<td>强制覆盖远程分支</td>
-</tr>
-</tbody></table>
-<h3 id="暂时存储工作区代码，（可以在分支间横跳代码）"><a href="#暂时存储工作区代码，（可以在分支间横跳代码）" class="headerlink" title="暂时存储工作区代码，（可以在分支间横跳代码）"></a>暂时存储工作区代码，（可以在分支间横跳代码）</h3><table>
-<thead>
-<tr>
-<th>git stash save “save message”</th>
-<th>执行存储时，添加备注，方便查找，只有git stash 也要可以的，但查找时不方便识别。</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>git stash list</td>
-<td>查看stash了哪些存储</td>
-</tr>
-<tr>
-<td>git stash show</td>
-<td>显示做了哪些改动，默认show第一个存储,如果要显示其他存贮，后面加stash@{$num}，比如第二个 git stash show stash@{1}</td>
-</tr>
-<tr>
-<td>git stash show -p</td>
-<td>显示第一个存储的改动，如果想显示其他存存储，命令：git stash show stash@{$num} -p ，比如第二个：git stash show stash@{1} -p</td>
-</tr>
-<tr>
-<td>git stash apply</td>
-<td>应用某个存储,但不会把存储从存储列表中删除，默认使用第一个存储,即stash@{0}，如果要使用其他个，git stash apply stash@{$num} ， 比如第二个：git stash apply stash@{1}</td>
-</tr>
-<tr>
-<td>git stash pop</td>
-<td>命令恢复之前缓存的工作目录，将缓存堆栈中的对应stash删除，并将对应修改应用到当前的工作目录下,默认为第一个stash,即stash@{0}，如果要应用并删除其他stash，命令：git stash pop stash@{$num} ，比如应用并删除第二个：git stash pop stash@{1}</td>
-</tr>
-<tr>
-<td>git stash drop stash@{$num}</td>
-<td>丢弃stash@{$num}存储，从列表中删除这个存储</td>
-</tr>
-<tr>
-<td>git stash clear</td>
-<td>删除所有缓存的stash</td>
-</tr>
-</tbody></table>
-<h1 id="创建分支"><a href="#创建分支" class="headerlink" title="创建分支"></a>创建分支</h1><p>git branch test: 基于当前commit创建test分支。.git/HEAD 文件中记录了当前分支名字。<br>git checkout -b test; 创建并切换到test分支</p>
-<h1 id="删除分支"><a href="#删除分支" class="headerlink" title="删除分支"></a>删除分支</h1><p>git branch -d test：删除本地test分支</p>
-<p>git branch -D test： test分支还没有合入当前分支，所以要用-D参数才能删掉。</p>
-<p>git push origin –delete test 删除远程test分支</p>
-<p>git push origin :test 删除远程test分支</p>
-<h1 id="查看分支"><a href="#查看分支" class="headerlink" title="查看分支"></a>查看分支</h1><table>
-<thead>
-<tr>
-<th>git</th>
-<th>branch</th>
-<th>空</th>
-<th>列出当前分支清单</th>
-</tr>
-</thead>
-<tbody><tr>
-<td></td>
-<td></td>
-<td>-r</td>
-<td>查看远程分支</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td>-a</td>
-<td>查看远程分支和本地分支</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td>-v</td>
-<td>查看各个分支最后一个提交信息</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td>–merged</td>
-<td>查看哪些分支已经合并入当前分支</td>
-</tr>
-</tbody></table>
-<h1 id="拉取分支"><a href="#拉取分支" class="headerlink" title="拉取分支"></a>拉取分支</h1><p>git fetch origin 同步远程服务器的数据到本地</p>
-<p>git checkout -b test origin/test_remote 将远程分支test_remote拉取下来到本地test分支</p>
-<p>git checkout test 将远程分支test拉取下来到本地test分支</p>
-<p>git pull test从远程分支test 中checkout下来的本地分支test成为跟踪分支，使用git pull或者git push就会操作到对应的远程分支test</p>
-<h2 id="git-merge的参数"><a href="#git-merge的参数" class="headerlink" title="git merge的参数"></a>git merge的参数</h2><p>merge的两个分支要有历史关联，没有的话需要添加git merge master –allow-unrelated-histories，参数。</p>
-<table>
-<thead>
-<tr>
-<th>git</th>
-<th>merge</th>
-<th></th>
-<th>合并分支到当前分支</th>
-</tr>
-</thead>
-<tbody><tr>
-<td></td>
-<td></td>
-<td>–ff</td>
-<td>快速合并，这个是默认的参数。如果合并过程出现冲突，Git会显示出冲突并等待手动解决</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td>–ff-only</td>
-<td>只有能快速合并的情况才合并。如果合并过程出现冲突，Git会自动abort此次merge</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td>–no-ff</td>
-<td>不使用快速合并。会生成一次新的提交记录，这个记录只是标识在这里进行了一次merge操作（目前还没想到应用场景）</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td>–squash</td>
-<td>压缩合并。将待合并的分支的内容压缩成一个新的提交合并进来</td>
-</tr>
-</tbody></table>
-<h2 id="git-rebase的参数"><a href="#git-rebase的参数" class="headerlink" title="git rebase的参数"></a>git rebase的参数</h2><table>
-<thead>
-<tr>
-<th>git</th>
-<th>rebase</th>
-<th>分布湿合并分支</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>-i HEAD~num</td>
-<td>合并后num个commit记录</td>
-<td>p表示采用，s表示将当前commit合并到上一commit，d表示删除当前commit，。。。</td>
-</tr>
-<tr>
-<td>-i [start] [end]</td>
-<td>左开右闭</td>
-<td>start和end分别代码commit id</td>
-</tr>
-<tr>
-<td>-i [start] [end]</td>
-<td>onto [newbase]</td>
-<td>将部分分支复制到新commit上，实现中间一大段commit的删除</td>
-</tr>
-<tr>
-<td>通过git rebase -i [start] [end] 或者 git rebase -i HEAD~num将本地的多次提交合并为一个，以简化提交历史。(左开右闭)</td>
-<td></td>
-<td></td>
-</tr>
-</tbody></table>
-<p><img src="gitrebase.png" srcset="/img/loading.gif" lazyload alt="截屏2021-12-01 18.38.28.png"><br>在用d时可删除部分分支。s时前面得有pick，<br>本地有多个提交时,如果不进行这一步,在git rebase master时会多次解决冲突(最坏情况下,每一个提交都会相应解决一个冲突)</p>
-<h3 id="复制部分分支"><a href="#复制部分分支" class="headerlink" title="复制部分分支"></a>复制部分分支</h3><p>git rebase [startpoint] [endpoint] --onto [branchName] （[startpoint] [endpoint]指定的是一个前开后闭的区间，将该区间中的分支复制到另一个分支上）<br>运行git rebase –continue命令继续变基。<br>运行git rebase –abort命令回到rebase之前的状态。<br>个人见解，rebase就是操作本地的提交记录实现对commit的简化。git rebase branchname，在次合并分支，解决冲突，将冲突解决在开发分支上，避免主分支上出现脏分支记录。</p>
-<h1 id="git-commit-记录查询"><a href="#git-commit-记录查询" class="headerlink" title="git commit 记录查询"></a>git commit 记录查询</h1><table>
-<thead>
-<tr>
-<th>git</th>
-<th>show</th>
-<th>空</th>
-<th>.查看最新的commit</th>
-</tr>
-</thead>
-<tbody><tr>
-<td></td>
-<td></td>
-<td>commitId</td>
-<td>.查看指定commit hashID的所有修改：</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td>commitId fileName</td>
-<td>.查看某次commit中具体某个文件的修改：</td>
-</tr>
-</tbody></table>
+              <h3 id="痛点，常常由于不知道后端接口是否可用而苦恼"><a href="#痛点，常常由于不知道后端接口是否可用而苦恼" class="headerlink" title="痛点，常常由于不知道后端接口是否可用而苦恼"></a>痛点，常常由于不知道后端接口是否可用而苦恼</h3><h4 id="方法一：curl实现，post请求"><a href="#方法一：curl实现，post请求" class="headerlink" title="方法一：curl实现，post请求"></a>方法一：curl实现，post请求</h4><pre><code class="hljs">1、复制浏览器的curl链接，
+2、用后端服务器地址和接口地址拼接替换掉curl中的请求地址
+3、删除掉原有的orgin和referer字段，
+-H 请求头
+--data-row：请求体
+-x：请求协议
+</code></pre>
+<h4 id="方法二：通过浏览器网址直接访问，get请求"><a href="#方法二：通过浏览器网址直接访问，get请求" class="headerlink" title="方法二：通过浏览器网址直接访问，get请求"></a>方法二：通过浏览器网址直接访问，get请求</h4><pre><code class="hljs">1、用后端服务器地址和接口地址拼接替换掉curl中的请求地址
+容易由于鉴权问题出现错误。
+</code></pre>
+<h4 id="方法三：通过postman调用接口"><a href="#方法三：通过postman调用接口" class="headerlink" title="方法三：通过postman调用接口"></a>方法三：通过postman调用接口</h4><pre><code class="hljs">1、配置后端的域名和接口地址环境
+2、配置请求头
+3、配置请求体
+</code></pre>
 
               
             </div>
@@ -526,7 +304,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/git/" class="category-chain-item">git</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E6%8E%A5%E5%8F%A3/" class="category-chain-item">后端接口</a>
   
   
 
@@ -541,7 +319,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/git-javascript/">#git javascript</a>
+        <a href="/tags/%E5%90%8E%E7%AB%AF%E6%8E%A5%E5%8F%A3/">#后端接口</a>
       
     </div>
   
@@ -553,8 +331,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>实战中开发git</div>
-      <div>http://example.com/2022/05/22/git/</div>
+      <div>检测后端接口常见方法</div>
+      <div>http://example.com/2022/05/22/检测后端接口常见方法/</div>
     </div>
     <div class="license-meta">
       
@@ -607,18 +385,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/05/22/%E6%A3%80%E6%B5%8B%E5%90%8E%E7%AB%AF%E6%8E%A5%E5%8F%A3%E5%B8%B8%E8%A7%81%E6%96%B9%E6%B3%95/" title="检测后端接口常见方法">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">检测后端接口常见方法</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/05/22/hello-world/" title="Hello World">
-                        <span class="hidden-mobile">Hello World</span>
+                      <a href="/2022/05/22/git/" title="实战中开发git">
+                        <span class="hidden-mobile">实战中开发git</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
