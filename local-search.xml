@@ -4,6 +4,25 @@
   
   
   <entry>
+    <title>graphql看懂这个直接开发</title>
+    <link href="/2022/08/27/graphql%E7%9C%8B%E6%87%82%E8%BF%99%E4%B8%AA%E7%9B%B4%E6%8E%A5%E5%BC%80%E5%8F%91/"/>
+    <url>/2022/08/27/graphql%E7%9C%8B%E6%87%82%E8%BF%99%E4%B8%AA%E7%9B%B4%E6%8E%A5%E5%BC%80%E5%8F%91/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>持续更新（ing）</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>浏览器安全</title>
     <link href="/2022/05/24/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%AE%89%E5%85%A8/"/>
     <url>/2022/05/24/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%AE%89%E5%85%A8/</url>
@@ -71,7 +90,7 @@
     <link href="/2022/05/22/%E6%A3%80%E6%B5%8B%E5%90%8E%E7%AB%AF%E6%8E%A5%E5%8F%A3%E5%B8%B8%E8%A7%81%E6%96%B9%E6%B3%95/"/>
     <url>/2022/05/22/%E6%A3%80%E6%B5%8B%E5%90%8E%E7%AB%AF%E6%8E%A5%E5%8F%A3%E5%B8%B8%E8%A7%81%E6%96%B9%E6%B3%95/</url>
     
-    <content type="html"><![CDATA[<h3 id="痛点，常常由于不知道后端接口是否可用而苦恼"><a href="#痛点，常常由于不知道后端接口是否可用而苦恼" class="headerlink" title="痛点，常常由于不知道后端接口是否可用而苦恼"></a>痛点，常常由于不知道后端接口是否可用而苦恼</h3><h4 id="方法一：curl实现，post请求"><a href="#方法一：curl实现，post请求" class="headerlink" title="方法一：curl实现，post请求"></a>方法一：curl实现，post请求</h4><pre><code class="hljs">1、复制浏览器的curl链接，2、用后端服务器地址和接口地址拼接替换掉curl中的请求地址3、删除掉原有的orgin和referer字段，-H 请求头--data-row：请求体-x：请求协议</code></pre><h4 id="方法二：通过浏览器网址直接访问，get请求"><a href="#方法二：通过浏览器网址直接访问，get请求" class="headerlink" title="方法二：通过浏览器网址直接访问，get请求"></a>方法二：通过浏览器网址直接访问，get请求</h4><pre><code class="hljs">1、用后端服务器地址和接口地址拼接替换掉curl中的请求地址容易由于鉴权问题出现错误。</code></pre><h4 id="方法三：通过postman调用接口"><a href="#方法三：通过postman调用接口" class="headerlink" title="方法三：通过postman调用接口"></a>方法三：通过postman调用接口</h4><pre><code class="hljs">1、配置后端的域名和接口地址环境2、配置请求头3、配置请求体</code></pre>]]></content>
+    <content type="html"><![CDATA[<h3 id="痛点，常常由于不知道后端接口是否可用而苦恼"><a href="#痛点，常常由于不知道后端接口是否可用而苦恼" class="headerlink" title="痛点，常常由于不知道后端接口是否可用而苦恼"></a>痛点，常常由于不知道后端接口是否可用而苦恼</h3><h4 id="方法一：curl实现，post请求"><a href="#方法一：curl实现，post请求" class="headerlink" title="方法一：curl实现，post请求"></a>方法一：curl实现，post请求</h4><pre><code class="hljs">1、复制浏览器的curl链接，2、用后端服务器地址和接口地址拼接替换掉curl中的请求地址3、删除掉原有的orgin和referer字段，-H 请求头--data-row：请求体-x：请求协议</code></pre><h4 id="方法二：通过浏览器网址直接访问，get请求"><a href="#方法二：通过浏览器网址直接访问，get请求" class="headerlink" title="方法二：通过浏览器网址直接访问，get请求"></a>方法二：通过浏览器网址直接访问，get请求</h4><pre><code class="hljs">1、用后端服务器地址和接口地址拼接替换掉curl中的请求地址容易由于鉴权问题出现错误。</code></pre><h4 id="方法三：通过postman调用接口"><a href="#方法三：通过postman调用接口" class="headerlink" title="方法三：通过postman调用接口"></a>方法三：通过postman调用接口</h4><pre><code class="hljs">1、配置后端的域名和接口地址环境2、配置请求头3、配置请求体</code></pre><h4 id="常见的http码"><a href="#常见的http码" class="headerlink" title="常见的http码"></a>常见的http码</h4><p>412 先决条件不支持，说明采用了不常用的的headf方法<br>413 body数据量过大，接口未成功</p>]]></content>
     
     
     <categories>
