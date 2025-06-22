@@ -1,7 +1,8 @@
 ---
 title: graphql看懂这篇直接开发
 date: 2022-08-28 17:44:15
-tags: 持续更新（ing）
+tags: graphql
+categories: 前端
 ---
 # graphql的初尝
 

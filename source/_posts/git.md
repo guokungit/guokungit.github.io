@@ -1,8 +1,8 @@
 ---
 title: 实战中开发git
 date: 2022-05-22 21:34:00
-tags: git javascript
-categories: git
+tags: git
+categories: 仓库管理
 comments: true
 ---
 # 初始化仓库

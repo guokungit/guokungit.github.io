@@ -2,7 +2,7 @@
 title: react前端下载后端返回的文件方法（url、二进制流）
 date: 2022-05-22 22:41:02
 tags: 前端调接口下载
-categories: 下载
+categories: 前端
 comments: true
 ---
 ### 前端下载文件有两种方式：

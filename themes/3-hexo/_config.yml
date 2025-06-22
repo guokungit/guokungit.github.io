@@ -1,7 +1,7 @@
 version: 1.1.0
 # 你的头像url
-avatar: /img/avatar.jpg
-favicon: /img/avatar.jpg
+avatar: /img/avatar.png
+favicon: /img/avatar.png
 
 #如果博客放置位置不是根目录，则可以通过配置此路径解决静态文件路径错误问题
 # 比如访问地址为 yelog.org/blog 那就需要配置为 blog_path: /blog 才能正常访问
@@ -11,30 +11,30 @@ blog_path: /
 link:
   theme: color # 链接样式，color: 彩色图标  white: 黑白图标
   items:
-    rss: /atom.xml
-    github: https://github.com/yelog
-    facebook: https://www.facebook.com/faker.tops
+    rss:
+    github: https://github.com/guokungit
+    facebook:
     twitter:
     linkedin:
-    instagram: https://www.facebook.com/faker.tops
-    reddit: https://www.reddit.com/user/yelog/
-    weibo: http://weibo.com/u/2307534817
-    jianshu: https://www.jianshu.com/u/ff56736de7cf
-    zhihu: https://www.zhihu.com/people/jaytp/activities
+    instagram:
+    reddit:
+    weibo:
+    jianshu:
+    zhihu:
     csdn:
-    oschina: https://my.oschina.net/yelog
+    oschina:
     juejin:
-    email: jaytp@qq.com
-    qq: 872336115
-    kugou: https://www.kugou.com/
-    neteasemusic: https://music.163.com/#/user/home?id=88151013
+    email: guo2401143699@qq.com
+    qq: 2401143699
+    kugou:
+    neteasemusic:
 
 ##########多作者模式############
 author:
   on: false
   authors:
-    author1: 阁主
-    author2: 小马哥
+    author1:
+    author2:
 ##############################
 
 # 文章分类设置
@@ -42,12 +42,8 @@ category:
   num: true # 分类显示文章数
   sub: true # 开启多级分类
   sort:
-    - 读书
-    - 工具
-    - 大前端
-    - 后端
-    - 数据库
-    - 运维
+    - 前端
+    - 仓库管理
   width:
     lg: 120 # 1468px<屏幕宽度 左侧分类宽度
     md: 100 # 1024px<屏幕宽度<=1468px 左侧分类宽度
@@ -64,11 +60,11 @@ shortcutKey: true
 # 左下角自定义菜单
 menu:
   about:  # '关于' 按钮
-    on: true # 是否显示
+    on: false # 是否显示
     url: /about  # 跳转链接
     type: 1 # 跳转类型 1：站内异步跳转 2：当前页面跳转 3：打开新的tab页
   friend: # '友链' 按钮
-    on: true # 是否展示
+    on: false # 是否展示
   menus: # 添加的其他菜单写在 menus 下，如下三个菜单：动态菜单1、动态菜单2、动态菜单3
     相册:
       on: false
@@ -76,25 +72,25 @@ menu:
       type: 1  # 跳转类型 1：站内异步跳转
     叶落阁:
       on: false
-      url: http://yelog.org/
+      url:
       type: 2  # 跳转类型 2：当前页面跳转
     github:
       on: false
-      url: https://github.com/yelog
+      url:
       type: 3  # 跳转类型 3：打开新的tab页
 
 # 文末声明
-article_txt: 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 jaytp@qq.com
+article_txt: 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 guo2401143699@qq.com
 
-bottom_text: ©2016-2020 Yelog
+bottom_text:
 # 自定义页面最下方的站点版权信息
 # 如果不填，则自定义为 ©2017 author (这个author为hexo根目录_config.yml中配置的)
 
 # 底部备案号
 miit:
   on: false
-  info: 京ICP证030173号
-  url: http://beian.miit.gov.cn/ # 默认链接为 http://beian.miit.gov.cn/
+  info:
+  url: # 默认链接为 http://beian.miit.gov.cn/
 
 
 reward: true
@@ -118,7 +114,7 @@ word_count: false
 # 开启此功能需要安装插件 ：在 hexo根目录 执行npm i hexo-wordcount --save
 
 
-# 不蒜子网站计数设置
+# 不算子网站计数设置
 # http://ibruce.info/2015/04/04/busuanzi/
 visit_counter:
   on: true
@@ -141,8 +137,9 @@ article_list:
 
 # 文章列表背景图
 article_bg_img:
-  on: false # 是否开启
-  src: https://i.loli.net/2019/07/22/5d3521411f3f169375.png
+  on: true # 是否开启
+  src: https://gw.alicdn.com/imgextra/O1CN01qJtaNI1bWgX44BKhQ_!!6000000003473-2-yinhe.png_300x300Q75.jpg_.webp # 背景图地址
+  position: center center # 背景图位置，支持：left top | left center
   opacity: 0.3 # 背景图透明度，范围 0 ～ 1
 
 # 列表样式
@@ -223,8 +220,8 @@ mermaid:
 ##############################
 
 # 友情链接
-friends:
-  叶落阁: http://yelog.org/
+# friends:
+#   叶落阁:
 
 ##########评论设置#############
 comment:
@@ -240,15 +237,15 @@ disqus:
   # 获取shortname：https://help.disqus.com/customer/en/portal/articles/466208-what-s-a-shortname-
 
 
-gitalk:
-  githubID: yelog
-  repo: yelog.github.io
-  ClientID:
-  ClientSecret:
-  adminUser: yelog
-  distractionFreeMode: true
-  language: zh-CN
-  perPage: 10
+# gitalk:
+#   githubID: yelog
+#   repo: yelog.github.io
+#   ClientID:
+#   ClientSecret:
+#   adminUser: yelog
+#   distractionFreeMode: true
+#   language: zh-CN
+#   perPage: 10
 # gitalk：利用github issue制作的第三方聊天插件
 # https://github.com/gitalk/gitalk
 # 参数介绍：
@@ -261,11 +258,11 @@ gitalk:
 # perPage: 每次加载的数据大小，默认10，最大100
 
 
-gitment:
-  owner: yelog
-  repo: yelog.github.io
-  client_id:
-  client_secret:
+# gitment:
+#   owner: yelog
+#   repo: yelog.github.io
+#   client_id:
+#   client_secret:
   # gitment : 通过github issue实现的评论系统
   # 开源地址 : https://github.com/imsun/gitment
   # 使用说明 :
@@ -275,27 +272,27 @@ livere:
   # 来必力: http://livere.com/
   # 使用说明 : https://yelog.org//2020/05/23/3-hexo-comment/
 
-utteranc:
-  repo: xxx/xxx.github.io # 承载评论的仓库，填上自己新建的仓库
-  issue_term: pathname    # Issue 与 博客文章 之间映射关系
-  label: utteranc         # 创建的 Issue 添加的标签
-  theme: github-light     # 主题，可选主题请查看官方文档 https://utteranc.es/#heading-theme
+# utteranc:
+#   repo: xxx/xxx.github.io # 承载评论的仓库，填上自己新建的仓库
+#   issue_term: pathname    # Issue 与 博客文章 之间映射关系
+#   label: utteranc         # 创建的 Issue 添加的标签
+#   theme: github-light     # 主题，可选主题请查看官方文档 https://utteranc.es/#heading-theme
 # 官方文档 https://utteranc.es/
 # 使用说明 https://yelog.org//2020/05/23/3-hexo-comment/
 
-giscus:
-  repo: xxx/xxx             # 用于承载评论的仓库
-  repoId: xxx               # 仓库ID,从giscus网站获取
-  category: General         # Discussion主题分类
-  categoryId: x             # 分类ID,从giscus网站获取
-  mapping: pathname         # Github讨论与博客文章之间的映射关系, pathname url title og:title
-  strict: 0                 # 是否使用严格的标题匹配, 0 1
-  reactionsEnabled: 1       # 是否使用Github讨论的Reactions, 0 1
-  emitMetadata: 1           # 是否输出Github讨论的元数据, 0 1
-  inputPosition: top        # 输入框位置, top bottom
-  theme: light              # 主题, 支持的主题请查看giscus网站
-  lang: zh-CN               # 主题语言,支持的语言请查看giscus网站
-  loading: lazy             # 是否启用懒加载
+# giscus:
+#   repo: xxx/xxx             # 用于承载评论的仓库
+#   repoId: xxx               # 仓库ID,从giscus网站获取
+#   category: General         # Discussion主题分类
+#   categoryId: x             # 分类ID,从giscus网站获取
+#   mapping: pathname         # Github讨论与博客文章之间的映射关系, pathname url title og:title
+#   strict: 0                 # 是否使用严格的标题匹配, 0 1
+#   reactionsEnabled: 1       # 是否使用Github讨论的Reactions, 0 1
+#   emitMetadata: 1           # 是否输出Github讨论的元数据, 0 1
+#   inputPosition: top        # 输入框位置, top bottom
+#   theme: light              # 主题, 支持的主题请查看giscus网站
+#   lang: zh-CN               # 主题语言,支持的语言请查看giscus网站
+#   loading: lazy             # 是否启用懒加载
   # 官方文档: https://giscus.app/
 
 ##############################
