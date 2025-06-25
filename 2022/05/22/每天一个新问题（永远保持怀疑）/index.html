@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>每天一个新问题（永远保持怀疑） | 闷葫芦的博客</title>
+  <meta name="keywords" content=" 持续更新（ing） ">
+  <meta name="description" content="每天一个新问题（永远保持怀疑） | 闷葫芦的博客">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="记录前端的点点滴滴">
+<meta property="og:type" content="article">
+<meta property="og:title" content="lerna管理服务">
+<meta property="og:url" content="https://guokungit.github.io/project/2025/06/22/lerna%E7%AE%A1%E7%90%86%E6%9C%8D%E5%8A%A1/index.html">
+<meta property="og:site_name" content="闷葫芦的博客">
+<meta property="og:description" content="记录前端的点点滴滴">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-06-22T11:10:06.000Z">
+<meta property="article:modified_time" content="2025-06-22T11:10:06.494Z">
+<meta property="article:author" content="闷葫芦">
+<meta property="article:tag" content="前端, JavaScript, Web开发, Hexo, 博客">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="icon" href="/img/avatar.png">
+
+<link href="/css/style.css?v=1.1.0" rel="stylesheet">
+
+<link href="/css/hl_theme/atom-light.css?v=1.1.0" rel="stylesheet">
+
+<link href="//cdn.jsdelivr.net/npm/animate.css@4.1.0/animate.min.css" rel="stylesheet">
+
+<script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="/js/titleTip.js?v=1.1.0" ></script>
+
+<script src="//cdn.jsdelivr.net/npm/highlightjs@9.16.2/highlight.pack.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" ></script>
+
+<script src="/js/iconfont.js?v=1.1.0" ></script>
+
+<meta name="generator" content="Hexo 5.4.1"></head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="false">
+  <input class="theme_preload_comment" value="">
+  <input class="theme_blog_path" value="">
+  <input id="theme_shortcut" value="true" />
+  <input id="theme_highlight_on" value="true" />
+  <input id="theme_code_copy" value="true" />
+</div>
+
+
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/"
+   class="avatar_target">
+    <img class="avatar"
+         src="/img/avatar.png"/>
+</a>
+<div class="author">
+    <span>闷葫芦</span>
+</div>
+
+<div class="icon">
+    
+        
+    
+        
+            <a title="github"
+               href="https://github.com/guokungit"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-github"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <a title="email"
+               href="mailto:guo2401143699@qq.com"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-email"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="qq"
+               href="http://wpa.qq.com/msgrd?v=3&uin=2401143699&site=qq&menu=yes"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-qq"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+</div>
+
+
+
+
+
+<ul>
+    <li>
+        <div class="all active" data-rel="All">All
+            
+                <small>(10)</small>
+            
+        </div>
+    </li>
+    
+        
+            
+                
+    <li>
+        <div data-rel="前端">
+            
+            前端
+            <small>(5)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="仓库管理">
+            
+            仓库管理
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="项目">
+            
+            项目
+            <small>(2)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+        
+            
+            
+            
+    </div>
+    <div>
+        
+        
+    </div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="10">
+
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        Links
+        <i class="iconfont icon-left"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <div class="right-top">
+        <div id="default-panel">
+            <i class="iconfont icon-search" data-title="search shortcut key i"></i>
+            <div class="right-title">All</div>
+            <i class="iconfont icon-file-tree" data-title="switch to outline view shortcut key w"></i>
+        </div>
+        <div id="search-panel">
+            <i class="iconfont icon-left" data-title="return"></i>
+            <input id="local-search-input" autocomplete="off"/>
+            <label class="border-line" for="input"></label>
+            <i class="iconfont icon-case-sensitive" data-title="case sensitive"></i>
+            <i class="iconfont icon-tag" data-title="label"></i>
+        </div>
+        <div id="outline-panel" style="display: none">
+            <div class="right-title">outline</div>
+            <i class="iconfont icon-list" data-title="switch to article list"></i>
+        </div>
+    </div>
+
+    <div class="tags-list">
+    <input id="tag-search" />
+    <div class="tag-wrapper">
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>安全</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>持续更新（ing）</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>后端接口</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>前端调接口下载</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>音视频会议</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>影像协同</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>git</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>graphql</a>
+            </li>
+        
+    </div>
+
+</div>
+
+    
+    <nav id="title-list-nav">
+        
+        
+        <a  class="All "
+           href="/2025/06/22/lerna%E7%AE%A1%E7%90%86%E6%9C%8D%E5%8A%A1/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="lerna管理服务">lerna管理服务</span>
+            <span class="post-date" title="2025-06-22 19:10:06">2025/06/22</span>
+        </a>
+        
+        
+        <a  class="All 项目 "
+           href="/2025/06/22/%E5%9F%BA%E4%BA%8Eohif%E5%AE%9E%E7%8E%B0%E5%BD%B1%E5%83%8F%E5%8D%8F%E5%90%8C/"
+           data-tag="影像协同"
+           data-author="" >
+            <span class="post-title" title="基于OHIF实现影像协同">基于OHIF实现影像协同</span>
+            <span class="post-date" title="2025-06-22 14:11:27">2025/06/22</span>
+        </a>
+        
+        
+        <a  class="All 项目 "
+           href="/2025/06/22/webrtc%E5%AE%9E%E7%8E%B0%E9%9F%B3%E8%A7%86%E9%A2%91%E9%80%9A%E8%AF%9D/"
+           data-tag="音视频会议"
+           data-author="" >
+            <span class="post-title" title="webrtc实现音视频通话">webrtc实现音视频通话</span>
+            <span class="post-date" title="2025-06-22 14:10:57">2025/06/22</span>
+        </a>
+        
+        
+        <a  class="All "
+           href="/2025/06/22/hello-world/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="Hello World">Hello World</span>
+            <span class="post-date" title="2025-06-22 13:27:59">2025/06/22</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2022/08/28/graphql%E7%9C%8B%E6%87%82%E8%BF%99%E7%AF%87%E7%9B%B4%E6%8E%A5%E5%BC%80%E5%8F%91/"
+           data-tag="graphql"
+           data-author="" >
+            <span class="post-title" title="graphql看懂这篇直接开发">graphql看懂这篇直接开发</span>
+            <span class="post-date" title="2022-08-28 17:44:15">2022/08/28</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2022/05/24/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%AE%89%E5%85%A8/"
+           data-tag="安全"
+           data-author="" >
+            <span class="post-title" title="浏览器安全">浏览器安全</span>
+            <span class="post-date" title="2022-05-24 09:12:51">2022/05/24</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2022/05/22/%E6%AF%8F%E5%A4%A9%E4%B8%80%E4%B8%AA%E6%96%B0%E9%97%AE%E9%A2%98%EF%BC%88%E6%B0%B8%E8%BF%9C%E4%BF%9D%E6%8C%81%E6%80%80%E7%96%91%EF%BC%89/"
+           data-tag="持续更新（ing）"
+           data-author="" >
+            <span class="post-title" title="每天一个新问题（永远保持怀疑）">每天一个新问题（永远保持怀疑）</span>
+            <span class="post-date" title="2022-05-22 22:49:29">2022/05/22</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2022/05/22/react%E5%89%8D%E7%AB%AF%E4%B8%8B%E8%BD%BD%E5%90%8E%E7%AB%AF%E8%BF%94%E5%9B%9E%E7%9A%84%E6%96%87%E4%BB%B6%E6%96%B9%E6%B3%95%EF%BC%88url%E3%80%81%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%B5%81%EF%BC%89/"
+           data-tag="前端调接口下载"
+           data-author="" >
+            <span class="post-title" title="react前端下载后端返回的文件方法（url、二进制流）">react前端下载后端返回的文件方法（url、二进制流）</span>
+            <span class="post-date" title="2022-05-22 22:41:02">2022/05/22</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2022/05/22/%E6%A3%80%E6%B5%8B%E5%90%8E%E7%AB%AF%E6%8E%A5%E5%8F%A3%E5%B8%B8%E8%A7%81%E6%96%B9%E6%B3%95/"
+           data-tag="后端接口"
+           data-author="" >
+            <span class="post-title" title="检测后端接口常见方法">检测后端接口常见方法</span>
+            <span class="post-date" title="2022-05-22 22:36:45">2022/05/22</span>
+        </a>
+        
+        
+        <a  class="All 仓库管理 "
+           href="/2022/05/22/git/"
+           data-tag="git"
+           data-author="" >
+            <span class="post-title" title="实战中开发git">实战中开发git</span>
+            <span class="post-date" title="2022-05-22 21:34:00">2022/05/22</span>
+        </a>
+        
+        <div id="no-item-tips">
+
+        </div>
+    </nav>
+    <div id="outline-list">
+    </div>
+</div>
+
+    </div>
+    <div class="hide-list">
+        <div class="semicircle" data-title="Toggle full screen shortcut key s">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div id="post">
+    <div class="pjax">
+        <article id="post-每天一个新问题（永远保持怀疑）" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">每天一个新问题（永远保持怀疑）</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="前端">前端</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color5">持续更新（ing）</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+            Created At : <time class="date" title='Updated At: 2025-06-22 13:27:59'>2022-05-22 22:49</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        
+        <span id="busuanzi_container_page_pv">
+            Views 👀 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E7%AD%94%E6%A1%88%EF%BC%9A"><span class="toc-text">答案：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E7%AD%94%E6%A1%88"><span class="toc-text">答案</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E8%A7%A3%E7%AD%94"><span class="toc-text">解答</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E8%A7%A3%E7%AD%94-1"><span class="toc-text">解答</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E9%83%AD%E5%9D%A4%E3%80%81%E5%8F%B2%E5%A3%AE%E5%A3%AE%E3%80%81%E5%BE%90%E9%9B%AF%E7%AD%89%E5%9C%A8%E6%9E%97%E9%9D%99%E7%AC%AC%E4%B8%80%E6%AC%A1%E7%BA%BF%E4%B8%8B%E6%B2%9F%E9%80%9A%E6%97%B6%E7%9A%84%E8%AE%A8%E8%AE%BA%E6%89%80%E5%BE%97%E3%80%82"><span class="toc-text">郭坤、史壮壮、徐雯等在林静第一次线下沟通时的讨论所得。</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E8%A7%A3%E7%AD%94-2"><span class="toc-text">解答</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%9D%91"><span class="toc-text">坑</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E8%A7%A3%E7%AD%94-3"><span class="toc-text">解答</span></a></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-3 i,
+    .toc-level-3 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>1、&lt;&gt; 、&lt;React.Fragment&gt;与&lt;div&gt;。前两者作为代码块插入的form表单中，form表单无法获取其值，后者可以获得。</p>
+<h6 id="答案："><a href="#答案：" class="headerlink" title="答案："></a>答案：</h6><figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// form表单获取值是通过内部最近的控件的onchange（）事件和value值获取，&lt;&gt; 和 &lt;React.Fragment&gt;中是没有onchange（）和value事件的，所以form.item无法获取内部控件的值，（对children进行最近的控件的onchange的事件监听）。而div控件是有onchange事件的。（onchage事件是冒泡）</span></span><br><span class="line">    &lt;<span class="title class_">Form</span>.<span class="property">Item</span> name=<span class="string">&quot;opterator&quot;</span> label=<span class="string">&quot;操作人：&quot;</span>&gt;</span><br><span class="line">                <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>  <span class="attr">onChange</span>=<span class="string">&#123;e</span>=&gt;</span>&#123;</span></span><br><span class="line"><span class="language-xml">                  console.log(&quot;gerd =&gt; &quot; ,e)</span></span><br><span class="line"><span class="language-xml">                &#125;&#125;&gt;</span></span><br><span class="line"><span class="language-xml">                <span class="tag">&lt;&gt;</span></span></span><br><span class="line"><span class="language-xml">                <span class="tag">&lt;<span class="name">div</span> <span class="attr">onChange</span>=<span class="string">&#123;e</span>=&gt;</span>&#123;</span></span><br><span class="line"><span class="language-xml">                  console.log(e);</span></span><br><span class="line"><span class="language-xml">                  e.stopPropagation(); //阻止冒泡后，获取不到值</span></span><br><span class="line"><span class="language-xml">                &#125;&#125;&gt;</span></span><br><span class="line"><span class="language-xml">                  <span class="tag">&lt;<span class="name">input</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">                    // <span class="attr">style</span>=<span class="string">&#123;&#123;</span> <span class="attr">width:</span> &#x27;<span class="attr">75</span>%&#x27; &#125;&#125;</span></span></span><br><span class="line"><span class="tag"><span class="language-xml">                    <span class="attr">placeholder</span>=<span class="string">&quot;请输入操作人&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">                  /&gt;</span></span></span><br><span class="line"><span class="language-xml">                <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">              <span class="tag">&lt;/&gt;</span></span></span><br><span class="line">             &lt;/div&gt;</span><br><span class="line">        &lt;/<span class="title class_">Form</span>.<span class="property">Item</span>&gt;</span><br></pre></td></tr></table></figure>
+<p>2、antd的select的默认属性值在form表单中不起作用，获取的是undefined</p>
+<h6 id="答案"><a href="#答案" class="headerlink" title="答案"></a>答案</h6><blockquote>
+<p>form表单中控件的值默认初始化只能通过form的initialValues和setFieldsValue进行初始化，form.item内部控件中的defaultvalue值只能展示，但是当获取时，通过form的value为undefined。</p>
+</blockquote>
+<p>3、this.setstate({data}),为了代码的简略性，常常使用es6的特性。易出现state值发生了变化，但是render函数并未触发。</p>
+<h6 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h6><blockquote>
+<p>react的this.setstate方法在对象引用是需要注意，当对象中属性发生变化时，对象引用即发生变化，当数组对象中成员添加时，引用未发生变化。建议通过this.setstate({data: […data]})的方式，将数组拆分赋值，实现引用的变化来触发render函数。</p>
+</blockquote>
+<p>4、 当我们开发时，经常遇到antd中日期选择器的时间处理。</p>
+<h6 id="解答-1"><a href="#解答-1" class="headerlink" title="解答"></a>解答</h6><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 通过monent函数转化，当然，monent需要引入函数库；import monent from &#x27;monent&#x27;;</span></span><br><span class="line">startDate = <span class="title function_">moment</span>(value.<span class="property">findDate</span>[<span class="number">0</span>].<span class="title function_">format</span>(<span class="string">&#x27;YYYY-MM-DD HH:mm:ss&#x27;</span>));<span class="comment">// 转化为开始日期</span></span><br><span class="line">endDate = <span class="title function_">moment</span>(value.<span class="property">findDate</span>[<span class="number">1</span>].<span class="title function_">format</span>(<span class="string">&#x27;YYYY-MM-DD HH:mm:ss&#x27;</span>));<span class="comment">// 转化为结束日期</span></span><br><span class="line"><span class="comment">// 此处的x为datepicker的value值哟。</span></span><br><span class="line">日期=》时间戳： x.<span class="title function_">unix</span>()</span><br><span class="line">时间戳=》日期：<span class="title function_">moment</span>( <span class="keyword">new</span> <span class="title class_">Date</span>(x * <span class="number">1000</span> ))</span><br></pre></td></tr></table></figure>
+<p>5、当需要实现带状态跳转页面时，实现进出返回页面的页面信息一致。</p>
+<h6 id="郭坤、史壮壮、徐雯等在林静第一次线下沟通时的讨论所得。"><a href="#郭坤、史壮壮、徐雯等在林静第一次线下沟通时的讨论所得。" class="headerlink" title="郭坤、史壮壮、徐雯等在林静第一次线下沟通时的讨论所得。"></a>郭坤、史壮壮、徐雯等在林静第一次线下沟通时的讨论所得。</h6><blockquote>
+<p>1）、redux<br>2）、将状态放在上级组件中存储<br>3）、放在sessionstorage或localstorage中存储</p>
+</blockquote>
+<p>优缺点：redux可避免状态外漏</p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>方法</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>redux</td>
+<td>避免状态信息的泄漏</td>
+<td>每次不可以刷新页面进入，需通过路由跳转才能获取props中redux的值</td>
+</tr>
+<tr>
+<td>2</td>
+<td>将状态放在上级组件中存储</td>
+<td>通过组件的props传值，获取值时机可靠</td>
+<td>组件间耦合关系太深，开发繁琐</td>
+</tr>
+<tr>
+<td>3</td>
+<td>放在sessionstorage或localstorage中存储</td>
+<td>存储值方便</td>
+<td>当页面跳转时，无法有效的删除storage和在session中泄露状态信息</td>
+</tr>
+<tr>
+<td>4</td>
+<td>放在url中存储</td>
+<td>方便页面跳转获取参数</td>
+<td>当状态信息过多时，超出url长度。对于泄漏参数信息可以通过加密实现，最简单的window.btoa()和window.atob();window.atob()进行加密</td>
+</tr>
+</tbody></table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">6、&lt;a href=&quot;#&quot;&gt;&lt;/a&gt;标签点击下，路由上会添加#，当有涉及到路由情况时要注意，比如umi的propmt控件，检测路由变化，当路由发生变化时才进入肉流程。反之不会。</span><br><span class="line">    &lt;Prompt</span><br><span class="line">      when=&#123;this.state.submit&#125; // sunmit为提交按钮状态 默认为false</span><br><span class="line">      message=&#123;location =&gt; &#123;</span><br><span class="line">        if (this.state.submit) &#123;</span><br><span class="line">          Modal.confirm(&#123;</span><br><span class="line">            icon: &lt;ExclamationCircleOutlined /&gt;,</span><br><span class="line">            content: &#x27;暂未提交您所做的更改，是否提交&#x27;,</span><br><span class="line">            okText: &#x27;继续加载&#x27;,</span><br><span class="line">            cancelText: &#x27;取消&#x27;,</span><br><span class="line">            onOk: () =&gt; &#123;</span><br><span class="line">              this.setState(&#123; submit: false &#125;, () =&gt; &#123;</span><br><span class="line">                this.props.history.push(`$&#123;location.pathname&#125;`);</span><br><span class="line">              &#125;);</span><br><span class="line">            &#125;,</span><br><span class="line">            onCancel: () =&gt; &#123;&#125;,</span><br><span class="line">          &#125;);</span><br><span class="line">          return false; // 返回false时，阻塞路由跳转</span><br><span class="line">        &#125;</span><br><span class="line">        return true; // 返回true时，路由跳转</span><br><span class="line">      &#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>7、永远不要修改this.state里的对象，要用lodash的cloneDeep实现对象隔离。chrome也是人写的，不可避免的存在错误，不要相信没问题的工具。能相信的只有自己。！！！！</p>
+<p>8、父组件向子组件传值，子组件的个别属性接收的是第一次组件的值。状态未刷新</p>
+<h6 id="解答-2"><a href="#解答-2" class="headerlink" title="解答"></a>解答</h6><pre><code>    react的diff是根据组件的key值和value进行对比是否进行更换的，没有key值易出现传a但是接受到的还是b，状态没有刷新的情况。
+</code></pre>
+<p> 9、定位问题，需要根据现有的情况进行定位。比如：当页面上路由展示不对时，应该尝试当url变化时，内容是否展示。是则是展示控件问题，通过查看版本锁，打包工具的不同对应的版本锁也不同。<br> 10、验签问题，验签实质时获取申请的资源通过计算出想要的字段放在头文件中，每次调用接口都带上。</p>
+<h6 id="坑"><a href="#坑" class="headerlink" title="坑"></a>坑</h6><pre><code>   当设计时间戳问题时，一般设置为前后三十秒。且为本机时间，这时候电脑时间要与网络同步，不然会验签不通过。
+</code></pre>
+<p>11、antd的版本包问题：antdesign/proprolayout依赖安装ant时，它默认安装最新的antd版本包。但是antd的版本包易出错，导致网站样式错误。</p>
+<h6 id="解答-3"><a href="#解答-3" class="headerlink" title="解答"></a>解答</h6><pre><code>    通过指定安装antd版本，寻找无问题的antd版本可以安装无错误时间的antd版本，或者，依赖安装的prolayout中指定的antd版本。（到npm包仓库中找对应的版本包里的依赖项的版本）
+</code></pre>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 guo2401143699@qq.com </span>
+    </div>
+</article>
+
+
+<p>
+    <a  class="dashang" onclick="dashangToggle()">💰</a>
+</p>
+
+
+
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">
+    c2022 guokun
+</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a></p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full" data-title="Toggle full screen shortcut key s"><span class="min "></span></button>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+
+<div class="hide_box" onclick="dashangToggle()"></div>
+<div class="shang_box">
+    <a class="shang_close"  onclick="dashangToggle()">×</a>
+    <div class="shang_tit">
+        <p>Help us with donation</p>
+    </div>
+    <div class="shang_payimg">
+        <div class="pay_img">
+            <img src="/img/alipay.jpg" class="alipay" title="扫码支持">
+            <img src="/img/weixin.jpg" class="weixin" title="扫码支持">
+        </div>
+    </div>
+    <div class="shang_payselect">
+        <span><label><input type="radio" name="pay" checked value="alipay">alipay</label></span><span><label><input type="radio" name="pay" value="weixin">weixin</label></span>
+    </div>
+</div>
+
+
+</body>
+<script src="/js/jquery.pjax.js?v=1.1.0" ></script>
+
+<script src="/js/script.js?v=1.1.0" ></script>
+<script>
+    var img_resize = 'default';
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $("#post .pjax table").addClass("green_title");
+        
+
+        /*渲染打赏样式*/
+        
+        $("input[name=pay]").on("click", function () {
+            if($("input[name=pay]:checked").val()=="weixin"){
+                $(".shang_box .shang_payimg .pay_img").addClass("weixin_img");
+            } else {
+                $(".shang_box .shang_payimg .pay_img").removeClass("weixin_img");
+            }
+        })
+        
+
+        /*高亮代码块行号*/
+        
+
+        /*访问数量*/
+        
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js");
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+    function dashangToggle() {
+        $(".shang_box").fadeToggle();
+        $(".hide_box").fadeToggle();
+    }
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 542px;
+    }
+    .nav.fullscreen {
+        margin-left: -542px;
+    }
+    .nav-left {
+        width: 120px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 492px;
+        }
+        .nav.fullscreen {
+            margin-left: -492px;
+        }
+        .nav-left {
+            width: 100px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 492px;
+            margin-left: -492px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #e2e0e0;
+    }
+    
+    
+
+    /*列表样式*/
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+    .nav-right:before {
+        content: ' ';
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.3;
+        background: url("https://gw.alicdn.com/imgextra/O1CN01qJtaNI1bWgX44BKhQ_!!6000000003473-2-yinhe.png_300x300Q75.jpg_.webp");
+        background-repeat: no-repeat;
+        background-position: 50% 0;
+        -ms-background-size: cover;
+        -o-background-size: cover;
+        -moz-background-size: cover;
+        -webkit-background-size: cover;
+        background-size: cover;
+    }
+    
+
+    
+</style>
+
+
+
+
+
+
+
+</html>
