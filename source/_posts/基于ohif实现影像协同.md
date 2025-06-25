@@ -7,6 +7,8 @@ categories: 项目
 
 # <a href="https://github.com/OHIF/Viewers.git" >OHIF</a> 为开源项目，用于放射科医生查看CT、DR类影像所用的软件
 
+## 系统介绍 ![pacs系统](pacs系统.jpg)
+
 ## 项目目标
 1、实现鼠标轨迹协同
 2、多人协同操作（兼容不同协同人的显示器分辨率不同）

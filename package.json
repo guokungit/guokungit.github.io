@@ -6,7 +6,7 @@
     "build": "npm run rm && hexo generate",
     "clean": "hexo clean",
     "rm":"rm -rf db.json && rm -rf .deploy_git",
-    "deploy": "hexo deploy",
+    "deploy": "npm run build && hexo deploy",
     "server": "hexo server"
   },
   "hexo": {
