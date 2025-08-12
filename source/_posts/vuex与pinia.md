@@ -212,6 +212,52 @@ counterStore.$patch((state) => {
   state.list.push(4)
 })
 ```
+在 Pinia 中，`this.$patch` 采用的是类似 `Object.assign` 的**合并更新**方式，而不是全量替换。
+
+具体来说：
+- 当使用对象形式的 `$patch` 时（`this.$patch({ ... })`），它会将传入的对象与原状态进行**合并**
+- 只会更新你明确指定的属性，未指定的属性会保持不变
+- 这类似于 `Object.assign(state, yourPatchObject)` 的行为
+
+示例说明：
+```javascript
+// 初始状态
+state: () => ({
+  count: 0,
+  user: { name: '张三', age: 20 },
+  list: [1, 2, 3]
+})
+
+// 执行 $patch
+this.$patch({
+  count: 1,
+  user: { name: '李四' }
+})
+
+// 执行后状态
+{
+  count: 1,                  // 被更新
+  user: { name: '李四' },    // 被替换（注意：嵌套对象会被整体替换）
+  list: [1, 2, 3]            // 未指定，保持不变
+}
+```
+
+需要注意的是：
+- 对于**顶层属性**，是合并更新（只更新指定的属性）
+- 对于**嵌套对象**，`$patch` 会直接替换整个对象（不会深层合并）
+- 如果需要深层合并嵌套对象，应该使用函数形式的 `$patch` 并手动处理
+
+函数形式的 `$patch` 更加灵活：
+```javascript
+this.$patch((state) => {
+  // 只更新嵌套对象的某个属性，而不是替换整个对象
+  state.user.name = '李四';
+  // 可以进行更精细的控制
+  state.list.push(4);
+})
+```
+
+总结：`$patch` 不是全量替换，而是对顶层属性进行合并更新（类似 `Object.assign`），但嵌套对象会被直接替换，除非使用函数形式手动处理。
 
 3. **通过 actions 修改**（复杂逻辑或异步操作）：
 ```javascript
