@@ -114,7 +114,7 @@ deploy_to_test:
   dependencies:
     - build_project
   script:
-    # 安装ssh客户端
+    # 安装ssh客户端 这里依据操作系统来
     - apk add --no-cache openssh-client
     # 配置SSH（需要在GitLab项目设置中添加SSH私钥作为CI/CD变量）
     - eval $(ssh-agent -s)
