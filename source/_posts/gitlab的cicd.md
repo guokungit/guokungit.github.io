@@ -457,3 +457,116 @@ deploy_to_test:
    给 Runner 所在服务器增加资源（CPU/内存），或配置缓存（如 `node_modules` 缓存）。
 
 配置完成后，你的流水线会自动使用指定的 Runner 执行任务，避免因共享 Runner 资源不足导致的卡住或失败问题。
+
+## gitlab 的 cicd 的 runner 配置
+
+![runner 配置](runner配置.png)
+
+## 在根目录下新建 .gitlab.yml 文件
+
+```
+# 定义流水线执行阶段
+stages:
+  - install       # 安装依赖
+  # - lint          # 代码检查
+  # - test          # 运行测试
+  - build         # 构建项目
+  - deploy_test   # 部署到测试环境
+  # - deploy_prod   # 部署到生产环境
+
+# 缓存node_modules，加速后续构建
+cache:
+  paths:
+    - node_modules/
+
+# 安装依赖阶段
+install_deps:
+  stage: install
+  image: node:16-alpine  # 使用Node.js 16的轻量镜像
+  tags: # 指定runner
+    - macLocal
+  script:
+    - npm install --registry=https://registry.npm.taobao.org  # 使用国内镜像加速
+  artifacts:
+    paths:
+      - node_modules/   # 保存依赖供后续阶段使用
+
+# 代码检查阶段
+# code_lint:
+#   stage: lint
+#   image: node:16-alpine
+#   tags:
+#     - macLocal
+#   dependencies:
+#     - install_deps  # 依赖安装阶段的输出
+#   script:
+#     - npm run lint  # 假设package.json中定义了lint脚本
+
+# 测试阶段
+# unit_test:
+#   stage: test
+#   image: node:16-alpine
+#   dependencies:
+#     - install_deps
+#   script:
+#     - npm run test:unit  # 运行单元测试
+
+# 构建阶段
+build_project:
+  stage: build
+  image: node:16-alpine
+  tags:
+    - macLocal
+  dependencies:
+    - install_deps
+  script:
+    - npm run build  # 构建生产版本
+  artifacts:
+    paths:
+      - dist/  # 保存构建结果供部署使用
+  only:
+    - dev  # 只在dev分支执行
+    # - dev     # 只在main分支执行
+
+# 部署到测试环境
+deploy_to_test:
+  stage: deploy_test
+  image: alpine:latest
+  tags:
+    - macLocal
+  dependencies:
+    - build_project
+  script:
+    # 安装ssh客户端
+    # - brew install openssh
+    # 配置SSH（需要在GitLab项目设置中添加SSH私钥作为CI/CD变量）
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan -H $TEST_SERVER_HOST >> ~/.ssh/known_hosts
+    # 部署到测试服务器
+    - scp -r dist $TEST_SERVER_USER@$TEST_SERVER_HOST:$TEST_SERVER_PATH
+  only:
+    - dev  # 只在develop分支部署到测试环境
+
+# 部署到生产环境
+# deploy_to_prod:
+#   stage: deploy_prod
+#   image: alpine:latest
+#   dependencies:
+#     - build_project
+#   script:
+#     # 类似测试环境部署步骤，替换为生产服务器信息
+#     - apk add --no-cache openssh-client
+#     - eval $(ssh-agent -s)
+#     - echo "$SSH_PRIVATE_KEY_PROD" | tr -d '\r' | ssh-add -
+#     - mkdir -p ~/.ssh
+#     - chmod 700 ~/.ssh
+#     - ssh-keyscan -H $PROD_SERVER_HOST >> ~/.ssh/known_hosts
+#     - scp -r dist/* $PROD_SERVER_USER@$PROD_SERVER_HOST:$PROD_SERVER_PATH
+#   only:
+#     - main  # 只在main分支部署到生产环境
+#   when: manual  # 需要手动触发，防止误部署
+
+```
