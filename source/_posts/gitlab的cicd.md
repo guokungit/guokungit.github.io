@@ -5,6 +5,100 @@ tags: cicd
 categories: 运维
 ---
 
+搭建GitLab可以通过多种方式实现，以下是基于Docker和直接安装两种常见方法的详细步骤：
+
+### 方法一：使用Docker快速部署（推荐）
+
+1. **安装Docker和Docker Compose**
+   首先确保系统已安装Docker和Docker Compose：
+   ```bash
+   # 安装Docker
+   sudo apt-get update
+   sudo apt-get install docker-ce docker-ce-cli containerd.io
+   
+   # 安装Docker Compose
+   sudo curl -L "https://github.com/docker/compose/releases/download/v2.20.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+   sudo chmod +x /usr/local/bin/docker-compose
+   ```
+
+2. **创建docker-compose.yml文件**
+   ```yaml
+   version: '3.6'
+   services:
+     web:
+       image: 'gitlab/gitlab-ce:latest'
+       restart: always
+       hostname: 'gitlab.example.com'  # 替换为你的域名或IP
+       environment:
+         GITLAB_OMNIBUS_CONFIG: |
+           external_url 'http://gitlab.example.com'  # 替换为你的访问地址
+           # 可选配置
+           gitlab_rails['gitlab_shell_ssh_port'] = 2222
+       ports:
+         - '80:80'
+         - '443:443'
+         - '2222:22'
+       volumes:
+         - './gitlab/config:/etc/gitlab'
+         - './gitlab/logs:/var/log/gitlab'
+         - './gitlab/data:/var/opt/gitlab'
+       shm_size: '256m'
+   ```
+
+3. **启动GitLab**
+   ```bash
+   docker-compose up -d
+   ```
+
+4. **获取初始管理员密码**
+   ```bash
+   sudo docker exec -it <容器ID> grep 'Password:' /etc/gitlab/initial_root_password
+   ```
+
+5. **访问GitLab**
+   通过浏览器访问你配置的`external_url`，使用用户名`root`和上述密码登录。
+
+### 方法二：直接在Linux系统上安装
+
+以Ubuntu为例：
+
+1. **安装依赖包**
+   ```bash
+   sudo apt-get update
+   sudo apt-get install -y curl openssh-server ca-certificates tzdata perl
+   ```
+
+2. **添加GitLab仓库并安装**
+   ```bash
+   # 添加GitLab软件源
+   curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | sudo bash
+   
+   # 安装GitLab社区版
+   sudo EXTERNAL_URL="http://gitlab.example.com" apt-get install gitlab-ce
+   ```
+
+3. **配置GitLab**
+   ```bash
+   # 重新配置GitLab
+   sudo gitlab-ctl reconfigure
+   ```
+
+4. **启动相关服务**
+   ```bash
+   sudo gitlab-ctl start
+   ```
+
+5. **获取初始密码**（同Docker方法）
+
+### 后续配置建议
+
+1. 登录后立即修改管理员密码
+2. 配置邮件服务（在`gitlab.rb`中设置SMTP参数）
+3. 配置HTTPS以增强安全性
+4. 根据需要调整存储路径和资源限制
+
+GitLab启动可能需要几分钟时间，具体取决于服务器性能。如果遇到问题，可以通过`gitlab-ctl status`（直接安装）或`docker logs`（Docker方式）查看服务状态和日志。
+
 我了解 Git CI/CD。Git CI/CD 是基于 Git 版本控制系统的持续集成（Continuous Integration，CI）和持续部署（Continuous Deployment，CD）实践，旨在通过自动化流程提高软件开发效率和质量。
 
 #### 一切都要在 gitlab 上注册过 runner 才能进行，（运维）
@@ -45,6 +139,10 @@ categories: 运维
 2. 执行依赖安装、代码检查、构建等操作
 3. 构建成功后，自动部署到目标环境（如测试服、生产服）
 
+## gitlab 的 cicd 的 runner 配置
+
+![runner 配置](runner配置.png)
+
 ### 配置文件示例
 
 在项目根目录创建 `.gitlab-ci.yml` 文件，这是 GitLab CI/CD 的核心配置文件：
@@ -68,6 +166,8 @@ cache:
 install_deps:
   stage: install
   image: node:16-alpine  # 使用Node.js 16的轻量镜像
+  tags:
+    - macLocal
   script:
     - npm install --registry=https://registry.npm.taobao.org  # 使用国内镜像加速
   artifacts:
@@ -78,6 +178,8 @@ install_deps:
 code_lint:
   stage: lint
   image: node:16-alpine
+  tags:
+    - macLocal
   dependencies:
     - install_deps  # 依赖安装阶段的输出
   script:
@@ -87,6 +189,8 @@ code_lint:
 unit_test:
   stage: test
   image: node:16-alpine
+  tags:
+    - macLocal
   dependencies:
     - install_deps
   script:
@@ -96,6 +200,8 @@ unit_test:
 build_project:
   stage: build
   image: node:16-alpine
+  tags:
+    - macLocal
   dependencies:
     - install_deps
   script:
@@ -111,11 +217,13 @@ build_project:
 deploy_to_test:
   stage: deploy_test
   image: alpine:latest
+  tags:
+    - macLocal
   dependencies:
     - build_project
   script:
     # 安装ssh客户端 这里依据操作系统来
-    - apk add --no-cache openssh-client
+    # - brew install openssh
     # 配置SSH（需要在GitLab项目设置中添加SSH私钥作为CI/CD变量）
     - eval $(ssh-agent -s)
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
@@ -123,7 +231,7 @@ deploy_to_test:
     - chmod 700 ~/.ssh
     - ssh-keyscan -H $TEST_SERVER_HOST >> ~/.ssh/known_hosts
     # 部署到测试服务器
-    - scp -r dist/* $TEST_SERVER_USER@$TEST_SERVER_HOST:$TEST_SERVER_PATH
+    - scp -r dist $TEST_SERVER_USER@$TEST_SERVER_HOST:$TEST_SERVER_PATH
   only:
     - develop  # 只在develop分支部署到测试环境
 
@@ -131,17 +239,19 @@ deploy_to_test:
 deploy_to_prod:
   stage: deploy_prod
   image: alpine:latest
+  tags:
+    - macLocal
   dependencies:
     - build_project
   script:
     # 类似测试环境部署步骤，替换为生产服务器信息
-    - apk add --no-cache openssh-client
+    # - brew install openssh
     - eval $(ssh-agent -s)
     - echo "$SSH_PRIVATE_KEY_PROD" | tr -d '\r' | ssh-add -
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
     - ssh-keyscan -H $PROD_SERVER_HOST >> ~/.ssh/known_hosts
-    - scp -r dist/* $PROD_SERVER_USER@$PROD_SERVER_HOST:$PROD_SERVER_PATH
+    - scp -r dist $TEST_SERVER_USER@$TEST_SERVER_HOST:$TEST_SERVER_PATH
   only:
     - main  # 只在main分支部署到生产环境
   when: manual  # 需要手动触发，防止误部署
@@ -458,115 +568,3 @@ deploy_to_test:
 
 配置完成后，你的流水线会自动使用指定的 Runner 执行任务，避免因共享 Runner 资源不足导致的卡住或失败问题。
 
-## gitlab 的 cicd 的 runner 配置
-
-![runner 配置](runner配置.png)
-
-## 在根目录下新建 .gitlab.yml 文件
-
-```
-# 定义流水线执行阶段
-stages:
-  - install       # 安装依赖
-  # - lint          # 代码检查
-  # - test          # 运行测试
-  - build         # 构建项目
-  - deploy_test   # 部署到测试环境
-  # - deploy_prod   # 部署到生产环境
-
-# 缓存node_modules，加速后续构建
-cache:
-  paths:
-    - node_modules/
-
-# 安装依赖阶段
-install_deps:
-  stage: install
-  image: node:16-alpine  # 使用Node.js 16的轻量镜像
-  tags: # 指定runner
-    - macLocal
-  script:
-    - npm install --registry=https://registry.npm.taobao.org  # 使用国内镜像加速
-  artifacts:
-    paths:
-      - node_modules/   # 保存依赖供后续阶段使用
-
-# 代码检查阶段
-# code_lint:
-#   stage: lint
-#   image: node:16-alpine
-#   tags:
-#     - macLocal
-#   dependencies:
-#     - install_deps  # 依赖安装阶段的输出
-#   script:
-#     - npm run lint  # 假设package.json中定义了lint脚本
-
-# 测试阶段
-# unit_test:
-#   stage: test
-#   image: node:16-alpine
-#   dependencies:
-#     - install_deps
-#   script:
-#     - npm run test:unit  # 运行单元测试
-
-# 构建阶段
-build_project:
-  stage: build
-  image: node:16-alpine
-  tags:
-    - macLocal
-  dependencies:
-    - install_deps
-  script:
-    - npm run build  # 构建生产版本
-  artifacts:
-    paths:
-      - dist/  # 保存构建结果供部署使用
-  only:
-    - dev  # 只在dev分支执行
-    # - dev     # 只在main分支执行
-
-# 部署到测试环境
-deploy_to_test:
-  stage: deploy_test
-  image: alpine:latest
-  tags:
-    - macLocal
-  dependencies:
-    - build_project
-  script:
-    # 安装ssh客户端
-    # - brew install openssh
-    # 配置SSH（需要在GitLab项目设置中添加SSH私钥作为CI/CD变量）
-    - eval $(ssh-agent -s)
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - ssh-keyscan -H $TEST_SERVER_HOST >> ~/.ssh/known_hosts
-    # 部署到测试服务器
-    - scp -r dist $TEST_SERVER_USER@$TEST_SERVER_HOST:$TEST_SERVER_PATH
-  only:
-    - dev  # 只在develop分支部署到测试环境
-
-# 部署到生产环境
-# deploy_to_prod:
-#   stage: deploy_prod
-#   image: alpine:latest
-#   dependencies:
-#     - build_project
-#   script:
-#     # 类似测试环境部署步骤，替换为生产服务器信息
-#     - apk add --no-cache openssh-client
-#     - eval $(ssh-agent -s)
-#     - echo "$SSH_PRIVATE_KEY_PROD" | tr -d '\r' | ssh-add -
-#     - mkdir -p ~/.ssh
-#     - chmod 700 ~/.ssh
-#     - ssh-keyscan -H $PROD_SERVER_HOST >> ~/.ssh/known_hosts
-#     - scp -r dist/* $PROD_SERVER_USER@$PROD_SERVER_HOST:$PROD_SERVER_PATH
-#   only:
-#     - main  # 只在main分支部署到生产环境
-#   when: manual  # 需要手动触发，防止误部署
-
-```
