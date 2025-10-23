@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>react前端下载后端返回的文件方法（url、二进制流） | 闷葫芦的博客</title>
+  <meta name="keywords" content=" 前端调接口下载 ">
+  <meta name="description" content="react前端下载后端返回的文件方法（url、二进制流） | 闷葫芦的博客">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="在 VS Code 中调试时需要 launch.json，核心原因是它为调试器提供了“如何启动&#x2F;连接程序”的关键配置信息。VS Code 作为一个通用编辑器，支持多种编程语言和项目类型（如前端、后端、脚本等），而不同场景的调试方式差异很大，launch.json 正是用来统一描述这些差异的配置文件。 具体来说，launch.json 的作用包括： 告诉调试器“调试什么”比如：  调试前端项目时，需">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vscode的调试">
+<meta property="og:url" content="https://guokungit.github.io/project/2025/10/23/vscode%E7%9A%84%E8%B0%83%E8%AF%95/index.html">
+<meta property="og:site_name" content="闷葫芦的博客">
+<meta property="og:description" content="在 VS Code 中调试时需要 launch.json，核心原因是它为调试器提供了“如何启动&#x2F;连接程序”的关键配置信息。VS Code 作为一个通用编辑器，支持多种编程语言和项目类型（如前端、后端、脚本等），而不同场景的调试方式差异很大，launch.json 正是用来统一描述这些差异的配置文件。 具体来说，launch.json 的作用包括： 告诉调试器“调试什么”比如：  调试前端项目时，需">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-10-23T11:36:18.000Z">
+<meta property="article:modified_time" content="2025-10-23T11:37:00.475Z">
+<meta property="article:author" content="闷葫芦">
+<meta property="article:tag" content="工程化">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="icon" href="/img/avatar.png">
+
+<link href="/css/style.css?v=1.1.0" rel="stylesheet">
+
+<link href="/css/hl_theme/atom-light.css?v=1.1.0" rel="stylesheet">
+
+<link href="//cdn.jsdelivr.net/npm/animate.css@4.1.0/animate.min.css" rel="stylesheet">
+
+<script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="/js/titleTip.js?v=1.1.0" ></script>
+
+<script src="//cdn.jsdelivr.net/npm/highlightjs@9.16.2/highlight.pack.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" ></script>
+
+<script src="/js/iconfont.js?v=1.1.0" ></script>
+
+<meta name="generator" content="Hexo 5.4.1"></head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="false">
+  <input class="theme_preload_comment" value="">
+  <input class="theme_blog_path" value="">
+  <input id="theme_shortcut" value="true" />
+  <input id="theme_highlight_on" value="true" />
+  <input id="theme_code_copy" value="true" />
+</div>
+
+
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/"
+   class="avatar_target">
+    <img class="avatar"
+         src="/img/avatar.png"/>
+</a>
+<div class="author">
+    <span>闷葫芦</span>
+</div>
+
+<div class="icon">
+    
+        
+    
+        
+            <a title="github"
+               href="https://github.com/guokungit"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-github"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <a title="email"
+               href="mailto:guo2401143699@qq.com"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-email"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="qq"
+               href="http://wpa.qq.com/msgrd?v=3&uin=2401143699&site=qq&menu=yes"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-qq"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+</div>
+
+
+
+
+
+<ul>
+    <li>
+        <div class="all active" data-rel="All">All
+            
+                <small>(19)</small>
+            
+        </div>
+    </li>
+    
+        
+            
+                
+    <li>
+        <div data-rel="前端">
+            
+            前端
+            <small>(10)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="仓库管理">
+            
+            仓库管理
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="调试">
+            
+            调试
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="工程化">
+            
+            工程化
+            <small>(3)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="项目">
+            
+            项目
+            <small>(2)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="运维">
+            
+            运维
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+        
+            
+            
+            
+    </div>
+    <div>
+        
+        
+    </div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="19">
+
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        Links
+        <i class="iconfont icon-left"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <div class="right-top">
+        <div id="default-panel">
+            <i class="iconfont icon-search" data-title="search shortcut key i"></i>
+            <div class="right-title">All</div>
+            <i class="iconfont icon-file-tree" data-title="switch to outline view shortcut key w"></i>
+        </div>
+        <div id="search-panel">
+            <i class="iconfont icon-left" data-title="return"></i>
+            <input id="local-search-input" autocomplete="off"/>
+            <label class="border-line" for="input"></label>
+            <i class="iconfont icon-case-sensitive" data-title="case sensitive"></i>
+            <i class="iconfont icon-tag" data-title="label"></i>
+        </div>
+        <div id="outline-panel" style="display: none">
+            <div class="right-title">outline</div>
+            <i class="iconfont icon-list" data-title="switch to article list"></i>
+        </div>
+    </div>
+
+    <div class="tags-list">
+    <input id="tag-search" />
+    <div class="tag-wrapper">
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>安全</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>持续更新（ing）</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>工程化</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>工具</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>后端接口</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>脚手架</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>前端调接口下载</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>音视频会议</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>影像协同</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>增量发布</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>cicd</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>git</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>graphql</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>react webapackgit</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>vue状态库pinia、vuex</a>
+            </li>
+        
+    </div>
+
+</div>
+
+    
+    <nav id="title-list-nav">
+        
+        
+        <a  class="All 调试 "
+           href="/2025/10/23/vscode%E7%9A%84%E8%B0%83%E8%AF%95/"
+           data-tag="工程化"
+           data-author="" >
+            <span class="post-title" title="vscode的调试">vscode的调试</span>
+            <span class="post-date" title="2025-10-23 19:36:18">2025/10/23</span>
+        </a>
+        
+        
+        <a  class="All 工程化 "
+           href="/2025/10/22/%E5%89%8D%E7%AB%AF%E6%9C%AC%E5%9C%B0%E8%B0%83%E8%AF%95%E8%84%9A%E6%89%8B%E6%9E%B6/"
+           data-tag="脚手架"
+           data-author="" >
+            <span class="post-title" title="前端本地调试脚手架">前端本地调试脚手架</span>
+            <span class="post-date" title="2025-10-22 09:33:58">2025/10/22</span>
+        </a>
+        
+        
+        <a  class="All 工程化 "
+           href="/2025/10/10/%E5%89%8D%E7%AB%AF%E5%A2%9E%E9%87%8F%E5%8F%91%E5%B8%83/"
+           data-tag="增量发布"
+           data-author="" >
+            <span class="post-title" title="前端增量发布">前端增量发布</span>
+            <span class="post-date" title="2025-10-10 09:44:03">2025/10/10</span>
+        </a>
+        
+        
+        <a  class="All 运维 "
+           href="/2025/08/14/gitlab%E7%9A%84cicd/"
+           data-tag="cicd"
+           data-author="" >
+            <span class="post-title" title="gitlab的cicd">gitlab的cicd</span>
+            <span class="post-date" title="2025-08-14 12:12:21">2025/08/14</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2025/08/13/electron%E9%A1%B9%E7%9B%AE%E6%89%93%E5%BC%80%E6%8E%A7%E5%88%B6%E5%8F%B0/"
+           data-tag="工具"
+           data-author="" >
+            <span class="post-title" title="electron项目打开控制台">electron项目打开控制台</span>
+            <span class="post-date" title="2025-08-13 08:50:50">2025/08/13</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2025/08/11/vuex%E4%B8%8Epinia/"
+           data-tag="vue状态库pinia、vuex"
+           data-author="" >
+            <span class="post-title" title="vuex与pinia">vuex与pinia</span>
+            <span class="post-date" title="2025-08-11 09:33:44">2025/08/11</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2025/08/01/%E5%A6%82%E4%BD%95%E5%9C%A8%E4%B8%80%E4%B8%AA%E9%A1%B9%E7%9B%AE%E4%B8%AD%E4%BD%BF%E7%94%A8lerna%E7%AE%A1%E7%90%86%E6%9C%8D%E5%8A%A1/"
+           data-tag="工程化"
+           data-author="" >
+            <span class="post-title" title="如何在一个项目中使用lerna管理服务">如何在一个项目中使用lerna管理服务</span>
+            <span class="post-date" title="2025-08-01 18:19:36">2025/08/01</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2025/08/01/scp%E5%85%8D%E5%AF%86%E6%8E%A8%E9%80%81%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E5%A4%B9%E5%88%B0%E8%BF%9C%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8/"
+           data-tag="工程化"
+           data-author="" >
+            <span class="post-title" title="scp免密推送本地文件夹到远程服务器">scp免密推送本地文件夹到远程服务器</span>
+            <span class="post-date" title="2025-08-01 17:26:16">2025/08/01</span>
+        </a>
+        
+        
+        <a  class="All "
+           href="/2025/07/16/hello-world/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="Hello World">Hello World</span>
+            <span class="post-date" title="2025-07-16 09:13:21">2025/07/16</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2025/06/25/react%E6%90%AD%E5%BB%BA%E6%A1%86%E6%9E%B6%E5%B7%B2%E8%B8%A9%E5%9D%91/"
+           data-tag="react webapackgit"
+           data-author="" >
+            <span class="post-title" title="react搭建框架已踩坑">react搭建框架已踩坑</span>
+            <span class="post-date" title="2025-06-25 11:00:06">2025/06/25</span>
+        </a>
+        
+        
+        <a  class="All 工程化 "
+           href="/2025/06/22/lerna%E7%AE%A1%E7%90%86%E6%9C%8D%E5%8A%A1/"
+           data-tag="脚手架"
+           data-author="" >
+            <span class="post-title" title="lerna管理服务">lerna管理服务</span>
+            <span class="post-date" title="2025-06-22 19:10:06">2025/06/22</span>
+        </a>
+        
+        
+        <a  class="All 项目 "
+           href="/2025/06/22/%E5%9F%BA%E4%BA%8Eohif%E5%AE%9E%E7%8E%B0%E5%BD%B1%E5%83%8F%E5%8D%8F%E5%90%8C/"
+           data-tag="影像协同"
+           data-author="" >
+            <span class="post-title" title="基于OHIF实现影像协同">基于OHIF实现影像协同</span>
+            <span class="post-date" title="2025-06-22 14:11:27">2025/06/22</span>
+        </a>
+        
+        
+        <a  class="All 项目 "
+           href="/2025/06/22/webrtc%E5%AE%9E%E7%8E%B0%E9%9F%B3%E8%A7%86%E9%A2%91%E9%80%9A%E8%AF%9D/"
+           data-tag="音视频会议"
+           data-author="" >
+            <span class="post-title" title="webrtc实现音视频通话">webrtc实现音视频通话</span>
+            <span class="post-date" title="2025-06-22 14:10:57">2025/06/22</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2022/08/28/graphql%E7%9C%8B%E6%87%82%E8%BF%99%E7%AF%87%E7%9B%B4%E6%8E%A5%E5%BC%80%E5%8F%91/"
+           data-tag="graphql"
+           data-author="" >
+            <span class="post-title" title="graphql看懂这篇直接开发">graphql看懂这篇直接开发</span>
+            <span class="post-date" title="2022-08-28 17:44:15">2022/08/28</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2022/05/24/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%AE%89%E5%85%A8/"
+           data-tag="安全"
+           data-author="" >
+            <span class="post-title" title="浏览器安全">浏览器安全</span>
+            <span class="post-date" title="2022-05-24 09:12:51">2022/05/24</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2022/05/22/%E6%AF%8F%E5%A4%A9%E4%B8%80%E4%B8%AA%E6%96%B0%E9%97%AE%E9%A2%98%EF%BC%88%E6%B0%B8%E8%BF%9C%E4%BF%9D%E6%8C%81%E6%80%80%E7%96%91%EF%BC%89/"
+           data-tag="持续更新（ing）"
+           data-author="" >
+            <span class="post-title" title="每天一个新问题（永远保持怀疑）">每天一个新问题（永远保持怀疑）</span>
+            <span class="post-date" title="2022-05-22 22:49:29">2022/05/22</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2022/05/22/react%E5%89%8D%E7%AB%AF%E4%B8%8B%E8%BD%BD%E5%90%8E%E7%AB%AF%E8%BF%94%E5%9B%9E%E7%9A%84%E6%96%87%E4%BB%B6%E6%96%B9%E6%B3%95%EF%BC%88url%E3%80%81%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%B5%81%EF%BC%89/"
+           data-tag="前端调接口下载"
+           data-author="" >
+            <span class="post-title" title="react前端下载后端返回的文件方法（url、二进制流）">react前端下载后端返回的文件方法（url、二进制流）</span>
+            <span class="post-date" title="2022-05-22 22:41:02">2022/05/22</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2022/05/22/%E6%A3%80%E6%B5%8B%E5%90%8E%E7%AB%AF%E6%8E%A5%E5%8F%A3%E5%B8%B8%E8%A7%81%E6%96%B9%E6%B3%95/"
+           data-tag="后端接口"
+           data-author="" >
+            <span class="post-title" title="检测后端接口常见方法">检测后端接口常见方法</span>
+            <span class="post-date" title="2022-05-22 22:36:45">2022/05/22</span>
+        </a>
+        
+        
+        <a  class="All 仓库管理 "
+           href="/2022/05/22/git/"
+           data-tag="git"
+           data-author="" >
+            <span class="post-title" title="实战中开发git">实战中开发git</span>
+            <span class="post-date" title="2022-05-22 21:34:00">2022/05/22</span>
+        </a>
+        
+        <div id="no-item-tips">
+
+        </div>
+    </nav>
+    <div id="outline-list">
+    </div>
+</div>
+
+    </div>
+    <div class="hide-list">
+        <div class="semicircle" data-title="Toggle full screen shortcut key s">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div id="post">
+    <div class="pjax">
+        <article id="post-react前端下载后端返回的文件方法（url、二进制流）" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">react前端下载后端返回的文件方法（url、二进制流）</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="前端">前端</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color3">前端调接口下载</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+            Created At : <time class="date" title='Updated At: 2025-07-16 09:13:21'>2022-05-22 22:41</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        
+        <span id="busuanzi_container_page_pv">
+            Views 👀 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E7%AB%AF%E4%B8%8B%E8%BD%BD%E6%96%87%E4%BB%B6%E6%9C%89%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F%EF%BC%9A"><span class="toc-text">前端下载文件有两种方式：</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80%EF%BC%9A%E5%90%8E%E7%AB%AF%E5%B0%86%E9%9D%99%E6%80%81%E8%B5%84%E6%BA%90%E6%94%BE%E5%9C%A8%E4%BA%86cdn%E4%B8%8A%EF%BC%8C%E8%BF%94%E5%9B%9Ecdn%E4%B8%8A%E7%9A%84%E7%BD%91%E5%9D%80%E7%BB%99%E5%89%8D%E7%AB%AF%E3%80%82%E5%89%8D%E7%AB%AF%E7%9A%84window-open%E6%96%B9%E6%B3%95%E6%89%93%E5%BC%80url%E6%97%B6%EF%BC%8C%E6%B5%8F%E8%A7%88%E5%99%A8%E5%88%A4%E6%96%AD%E5%BD%93%E5%89%8Durl%E6%98%AF%E8%B5%84%E6%BA%90%E8%BF%98%E6%98%AF%E9%A1%B5%E9%9D%A2%EF%BC%8C%E5%BD%93%E6%98%AF%E8%B5%84%E6%BA%90%E6%97%B6%E8%BF%9B%E8%A1%8C%E4%B8%8B%E8%BD%BD%EF%BC%8C%E5%90%A6%E5%88%99%E5%B1%95%E7%A4%BA%E9%A1%B5%E9%9D%A2%E3%80%82"><span class="toc-text">方法一：后端将静态资源放在了cdn上，返回cdn上的网址给前端。前端的window.open方法打开url时，浏览器判断当前url是资源还是页面，当是资源时进行下载，否则展示页面。</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C%EF%BC%9A%E5%90%8E%E7%AB%AF%E8%BF%94%E5%9B%9E%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%B5%81%E3%80%82%E5%B0%86%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%B5%81%E5%B0%81%E8%A3%85%E6%88%90blob%EF%BC%8C%E8%BF%99%E7%A7%8D%E7%9A%84%E4%B8%8D%E6%8E%A8%E8%8D%90%EF%BC%8C%E5%BD%93%E5%BD%93%E5%89%8D%E7%BD%91%E9%80%9F%E4%B8%8D%E5%A5%BD%E6%97%B6%EF%BC%8C%E4%B8%8B%E8%BD%BD%E7%9A%84%E6%95%B0%E6%8D%AE%E6%98%93%E5%87%BA%E9%94%99%E3%80%82"><span class="toc-text">方法二：后端返回二进制流。将二进制流封装成blob，这种的不推荐，当当前网速不好时，下载的数据易出错。</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%B8%89%E3%80%81%E5%B0%86%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%95%B0%E6%8D%AE%E5%B0%81%E8%A3%85%E4%B8%BA%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96FileReader%E5%AF%B9%E8%B1%A1"><span class="toc-text">方法三、将二进制数据封装为文件读取FileReader对象</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E5%9B%9B%E3%80%81%E4%BD%BF%E7%94%A8%E6%8F%92%E4%BB%B6file-saver"><span class="toc-text">方法四、使用插件file-saver</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%BA%94%E3%80%81%E4%BD%BF%E7%94%A8%E6%8F%92%E4%BB%B6downloadjs"><span class="toc-text">方法五、使用插件downloadjs</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%8F%91%E9%80%81%E8%AF%B7%E6%B1%82%EF%BC%8C%E8%8E%B7%E5%8F%96%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%B5%81%E6%95%B0%E6%8D%AE"><span class="toc-text">二、发送请求，获取二进制流数据</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%80%9A%E8%BF%87%E6%95%B0%E6%8D%AE%E6%BA%90%E6%8B%BC%E6%8E%A5%E7%94%9F%E4%BA%A7excel%E6%96%87%E4%BB%B6"><span class="toc-text">通过数据源拼接生产excel文件</span></a></li></ol></li></ol></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-3 i,
+    .toc-level-3 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="前端下载文件有两种方式："><a href="#前端下载文件有两种方式：" class="headerlink" title="前端下载文件有两种方式："></a>前端下载文件有两种方式：</h3><p>1、通过后端返回的url，前端通过window.open(url);<br>2、后端返回的是二进制流，通过a标签实现下载。</p>
+<h5 id="方法一：后端将静态资源放在了cdn上，返回cdn上的网址给前端。前端的window-open方法打开url时，浏览器判断当前url是资源还是页面，当是资源时进行下载，否则展示页面。"><a href="#方法一：后端将静态资源放在了cdn上，返回cdn上的网址给前端。前端的window-open方法打开url时，浏览器判断当前url是资源还是页面，当是资源时进行下载，否则展示页面。" class="headerlink" title="方法一：后端将静态资源放在了cdn上，返回cdn上的网址给前端。前端的window.open方法打开url时，浏览器判断当前url是资源还是页面，当是资源时进行下载，否则展示页面。"></a>方法一：后端将静态资源放在了cdn上，返回cdn上的网址给前端。前端的window.open方法打开url时，浏览器判断当前url是资源还是页面，当是资源时进行下载，否则展示页面。</h5><h5 id="方法二：后端返回二进制流。将二进制流封装成blob，这种的不推荐，当当前网速不好时，下载的数据易出错。"><a href="#方法二：后端返回二进制流。将二进制流封装成blob，这种的不推荐，当当前网速不好时，下载的数据易出错。" class="headerlink" title="方法二：后端返回二进制流。将二进制流封装成blob，这种的不推荐，当当前网速不好时，下载的数据易出错。"></a>方法二：后端返回二进制流。将二进制流封装成blob，这种的不推荐，当当前网速不好时，下载的数据易出错。</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">axios(&#123;</span><br><span class="line">      method: &#x27;post&#x27;,</span><br><span class="line">      url: &#x27;/api/trust/auditDownload&#x27;, //此处放hobber的内部的url</span><br><span class="line">      data: params,</span><br><span class="line">      responseType: &#x27;arraybuffer&#x27;, // 需要制定返回的类型，否则下载的文件会乱码</span><br><span class="line">    &#125;).then(res =&gt; &#123;</span><br><span class="line">      // 假设 data 是返回来的二进制数据</span><br><span class="line">      const data = res.data;</span><br><span class="line">      const url = window.URL.createObjectURL( // type指定下载的文件的格式</span><br><span class="line">        new Blob([data], &#123;</span><br><span class="line">          type:</span><br><span class="line">            &#x27;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet&#x27;,</span><br><span class="line">        &#125;),</span><br><span class="line">      );</span><br><span class="line">      const link = document.createElement(&#x27;a&#x27;);</span><br><span class="line">      link.style.display = &#x27;none&#x27;;</span><br><span class="line">      link.href = url;</span><br><span class="line">      link.setAttribute(&#x27;download&#x27;, &#x27;excel.xlsx&#x27;); // 设置下载的文件名</span><br><span class="line">      document.body.appendChild(link); </span><br><span class="line">      link.click(); // 触发a标签</span><br><span class="line">      document.body.removeChild(link); // 删除标签</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
+<h5 id="方法三、将二进制数据封装为文件读取FileReader对象"><a href="#方法三、将二进制数据封装为文件读取FileReader对象" class="headerlink" title="方法三、将二进制数据封装为文件读取FileReader对象"></a>方法三、将二进制数据封装为文件读取FileReader对象</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">// utils.js</span><br><span class="line">export const download = (res) =&gt; &#123;</span><br><span class="line">  // 创建文件对象</span><br><span class="line">  let reader = new FileReader()</span><br><span class="line">  // 监听读取完毕</span><br><span class="line">  reader.onloadend = function () &#123;</span><br><span class="line">    // 返回base64位的文件内容</span><br><span class="line">    let url = reader.result</span><br><span class="line">    // 下载</span><br><span class="line">    window.location.href = url</span><br><span class="line">  &#125;</span><br><span class="line">  // 开始读取指定的Blob中的内容。一旦完成，result属性中将包含一个data: URL格式的Base64字符串以表示所读取文件的内容。</span><br><span class="line">  reader.readAsDataURL(res)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意： 使用 FileReader对象封装二进制流之后没办法设置下载的文件名，默认文件名为下载，文件格式根据读取的是请求返回的content-type。</p>
+<h5 id="方法四、使用插件file-saver"><a href="#方法四、使用插件file-saver" class="headerlink" title="方法四、使用插件file-saver"></a>方法四、使用插件file-saver</h5><p>下载插件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save file-saver</span><br></pre></td></tr></table></figure>
+<p>引入插件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import &#123; saveAs &#125; from &#x27;file-saver&#x27;</span><br></pre></td></tr></table></figure>
+<p>封装下载方法，使用插件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">export const downloadFile = (res, type, filename) =&gt; &#123;</span><br><span class="line">  // 将二进制数据封装成blob对象</span><br><span class="line">   const blob = new Blob([res], &#123;</span><br><span class="line">    type: type</span><br><span class="line">  &#125;)</span><br><span class="line">  /**</span><br><span class="line">    这里也可以使用File对象封装二进制数据</span><br><span class="line">    const file = new File([res], filename, &#123;</span><br><span class="line">      type: type</span><br><span class="line">    &#125;);</span><br><span class="line">  */</span><br><span class="line">  // 调用插件方法</span><br><span class="line">  saveAs(blob,filename)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://github.com/eligrey/FileSaver.js">插件源码</a></p>
+<h5 id="方法五、使用插件downloadjs"><a href="#方法五、使用插件downloadjs" class="headerlink" title="方法五、使用插件downloadjs"></a>方法五、使用插件downloadjs</h5><p>下载插件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save downloadjs</span><br></pre></td></tr></table></figure>
+<p>引入插件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">const download = require(&#x27;downloadjs&#x27;)</span><br></pre></td></tr></table></figure>
+<p>因为downloadjs源码中没有通过export导出download方法，而是通过return的方式返回download方法，因为需要使用require来引入文件。</p>
+<p>封装下载方法，使用插件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">export const downloadFile = (res, type, filename) =&gt; &#123;</span><br><span class="line">  // 将二进制流转成blob对象</span><br><span class="line">  const blob = new Blob([res], &#123;</span><br><span class="line">    type: type</span><br><span class="line">  &#125;)</span><br><span class="line">  // 调用插件方法</span><br><span class="line">  download(blob, filename, type);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://github.com/rndme/download">插件源码</a></p>
+<h5 id="二、发送请求，获取二进制流数据"><a href="#二、发送请求，获取二进制流数据" class="headerlink" title="二、发送请求，获取二进制流数据"></a>二、发送请求，获取二进制流数据</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">// index.vue</span><br><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;button @click=&#x27;handleDownload&#x27;&gt;下载&lt;/button&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">// 引入下载方法</span><br><span class="line">import &#123;download&#125; from &#x27;utils&#x27;</span><br><span class="line">export default&#123;</span><br><span class="line">  methods: &#123;</span><br><span class="line">    async downloadFile () &#123;</span><br><span class="line">      let res = await axios.get(</span><br><span class="line">        url: &#x27;xxxx/xxxx&#x27;,</span><br><span class="line">        method: &#x27;GET&#x27;,</span><br><span class="line">        // 设置返回数据类型，这里一定要设置，否则下载下来的文件会是空白,也可以是`arraybuffer`</span><br><span class="line">        responseType: &#x27;blob&#x27;,</span><br><span class="line">        params: &#123;</span><br><span class="line">          id: &#x27;xxxxxx&#x27;</span><br><span class="line">        &#125;</span><br><span class="line">      )</span><br><span class="line">      // 获取在response headers中返回的下载文件类型</span><br><span class="line">      let type = JSON.parse(res.headers)[&#x27;content-type&#x27;]</span><br><span class="line">      </span><br><span class="line">      /*获取在response headers中返回的下载文件名</span><br><span class="line">        因为返回文件名是通过encodeURIComponent()函数进行了编码，因此需要通过decodeURIComponent()函数解码</span><br><span class="line">      */</span><br><span class="line">      let fileName = decodeURIComponent(JSON.parse(res.headers)[&#x27;file-name&#x27;])</span><br><span class="line">      // 调用封装好的下载函数</span><br><span class="line">      download(res, type, fileName)</span><br><span class="line">    &#125;,</span><br><span class="line">    // 点击下载按钮下载</span><br><span class="line">    handleDownload() &#123;</span><br><span class="line">      this.downloadFile()</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<h5 id="通过数据源拼接生产excel文件"><a href="#通过数据源拼接生产excel文件" class="headerlink" title="通过数据源拼接生产excel文件"></a>通过数据源拼接生产excel文件</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br></pre></td><td class="code"><pre><span class="line">const outputExcel = () =&gt; &#123;</span><br><span class="line">        let resultContent = &#x27;A, B, C, D\n&#x27;</span><br><span class="line">        let transferContent = resultContent =&gt; &#123;</span><br><span class="line">            //根据数据 利用a标签模仿下载生成本地文件</span><br><span class="line">            let date = moment(new Date()).format(&#x27;YYYY-MM-DD&#x27;)</span><br><span class="line">            const blob = new Blob([&#x27;\ufeff&#x27;, resultContent], &#123;</span><br><span class="line">                type: &#x27;text/csv&#x27;, // application/x-xls text/csv</span><br><span class="line">            &#125;)</span><br><span class="line">            const objectURL = window.URL.createObjectURL(blob)</span><br><span class="line">            const download = document.createElement(&#x27;a&#x27;)</span><br><span class="line">            download.href = objectURL</span><br><span class="line">            download.download = `$&#123;date&#125;_$&#123;&#x27;文件名&#x27;&#125;.$&#123;&#x27;csv&#x27;&#125;`</span><br><span class="line">            download.click()</span><br><span class="line">            message.success(&#x27;文件已下载&#x27;)</span><br><span class="line">        &#125;</span><br><span class="line">        let generateTxt = message =&gt; &#123;</span><br><span class="line">            var element = document.createElement(&#x27;a&#x27;)</span><br><span class="line">            element.setAttribute(&#x27;href&#x27;, &#x27;data:text/plain;charset=utf-8,&#x27; + encodeURIComponent(message))</span><br><span class="line">            element.setAttribute(&#x27;download&#x27;, &#x27;文件名&#x27; + new Date().getTime())</span><br><span class="line">            element.style.display = &#x27;none&#x27;</span><br><span class="line">            document.body.appendChild(element)</span><br><span class="line">            element.click()</span><br><span class="line">            document.body.removeChild(element)</span><br><span class="line">        &#125;</span><br><span class="line">        let current = 1,</span><br><span class="line">            pageSize = 8000</span><br><span class="line"></span><br><span class="line">        Modal.confirm(&#123;</span><br><span class="line">            title: &#x27;提示&#x27;,</span><br><span class="line">            content: &#x27;确认导出全部信息吗？&#x27;,</span><br><span class="line">            okText: &#x27;确认&#x27;,</span><br><span class="line">            cancelText: &#x27;取消&#x27;,</span><br><span class="line">            onOk: () =&gt; &#123;</span><br><span class="line">                // 一次访问8000条数据的方案</span><br><span class="line">                refetch(&#123;</span><br><span class="line">                    filter: &#123;&#125;,</span><br><span class="line">                    pager: &#123; sort: &#x27;&#x27;, current, pageSize &#125;,</span><br><span class="line">                    roleId,</span><br><span class="line">                &#125;).then(values =&gt; &#123;</span><br><span class="line">                    console.log(&#x27;values&#x27;, values)</span><br><span class="line">                    const total = values.data.allRoleUsers.total</span><br><span class="line">                    const nodes = values.data.allRoleUsers.nodes</span><br><span class="line">                    if (total &gt; pageSize) &#123;</span><br><span class="line">                        message.warning(&#x27;用户数量太多&#x27;)</span><br><span class="line">                    &#125; else &#123;</span><br><span class="line">                        for (let node of nodes) &#123;</span><br><span class="line">                            let expireDate = moment(node[&#x27;expireDate&#x27;]).format(&#x27;YYYY-MM-DD&#x27;)</span><br><span class="line">                            if (expireDate === &#x27;9999-12-31&#x27;) &#123;</span><br><span class="line">                                expireDate = &#x27;永久有效&#x27;</span><br><span class="line">                            &#125;</span><br><span class="line">                            resultContent +=</span><br><span class="line">                                node[&#x27;A&#x27;] +</span><br><span class="line">                                &#x27;,&#x27; +</span><br><span class="line">                                node[&#x27;B&#x27;][&#x27;C&#x27;] +</span><br><span class="line">                                &#x27;,&#x27; +</span><br><span class="line">                                expireDate +</span><br><span class="line">                                &#x27;,&#x27; +</span><br><span class="line">                                moment(node[&#x27;D&#x27;]).format(&#x27;YYYY-MM-DD&#x27;) +</span><br><span class="line">                                &#x27;\n&#x27;</span><br><span class="line">                        &#125;</span><br><span class="line">                        // transferContent(resultContent)</span><br><span class="line">                        generateTxt(resultContent)</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;)</span><br><span class="line">                // 轮询接口的方案</span><br><span class="line">                // const timer = setInterval(() =&gt; &#123;</span><br><span class="line">                //     // console.log(&#x27;current&#x27;, current, Math.ceil(total / pageSize) + 1)</span><br><span class="line">                //     if (current &lt; Math.ceil(total / pageSize) + 1) &#123;</span><br><span class="line">                //         fetchMore(&#123;</span><br><span class="line">                //             variables: &#123;</span><br><span class="line">                //                 filter: &#123;&#125;,</span><br><span class="line">                //                 pager: &#123; sort: &#x27;&#x27;, current, pageSize &#125;,</span><br><span class="line">                //                 roleId,</span><br><span class="line">                //             &#125;,</span><br><span class="line">                //             updateQuery: (previousResult, &#123; fetchMoreResult &#125;) =&gt; &#123;</span><br><span class="line">                //                 // console.log(&#x27;previousResult&#x27;, previousResult, fetchMoreResult)</span><br><span class="line">                //                 const nodes = fetchMoreResult?.allRoleUsers?.nodes</span><br><span class="line">                //                 for (let node of nodes) &#123;</span><br><span class="line">                //                     resultContent +=</span><br><span class="line">                //                         node[&#x27;A&#x27;] +</span><br><span class="line">                //                         &#x27;,&#x27; +</span><br><span class="line">                //                         node[&#x27;B&#x27;][&#x27;C&#x27;] +</span><br><span class="line">                //                         &#x27;,&#x27; +</span><br><span class="line">                //                         moment(node[&#x27;D&#x27;]).format(&#x27;YYYY-MM-DD&#x27;) +</span><br><span class="line">                //                         &#x27;\n&#x27;</span><br><span class="line">                //                 &#125;</span><br><span class="line">                //             &#125;,</span><br><span class="line">                //         &#125;)</span><br><span class="line">                //         current++</span><br><span class="line">                //     &#125; else &#123;</span><br><span class="line">                //         // 校验下载量是否与total值一致，一致则下载，反之则给出提示</span><br><span class="line">                //         const fileDateLines = resultContent.split(&#x27;\n&#x27;).length - 1</span><br><span class="line">                //         if (fileDateLines === total + 1) &#123;</span><br><span class="line">                //             transferContent(resultContent)</span><br><span class="line">                //         &#125; else &#123;</span><br><span class="line">                //             message.warning(&#x27;数据量较大，导出数据出错，请联系管理员&#x27;)</span><br><span class="line">                //         &#125;</span><br><span class="line">                //         clearInterval(timer)</span><br><span class="line">                //     &#125;</span><br><span class="line">                // &#125;, 500)</span><br><span class="line">            &#125;,</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 guo2401143699@qq.com </span>
+    </div>
+</article>
+
+
+<p>
+    <a  class="dashang" onclick="dashangToggle()">💰</a>
+</p>
+
+
+
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">
+    c2022 guokun
+</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a></p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full" data-title="Toggle full screen shortcut key s"><span class="min "></span></button>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+
+<div class="hide_box" onclick="dashangToggle()"></div>
+<div class="shang_box">
+    <a class="shang_close"  onclick="dashangToggle()">×</a>
+    <div class="shang_tit">
+        <p>Help us with donation</p>
+    </div>
+    <div class="shang_payimg">
+        <div class="pay_img">
+            <img src="/img/alipay.jpg" class="alipay" title="扫码支持">
+            <img src="/img/weixin.jpg" class="weixin" title="扫码支持">
+        </div>
+    </div>
+    <div class="shang_payselect">
+        <span><label><input type="radio" name="pay" checked value="alipay">alipay</label></span><span><label><input type="radio" name="pay" value="weixin">weixin</label></span>
+    </div>
+</div>
+
+
+</body>
+<script src="/js/jquery.pjax.js?v=1.1.0" ></script>
+
+<script src="/js/script.js?v=1.1.0" ></script>
+<script>
+    var img_resize = 'default';
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $("#post .pjax table").addClass("green_title");
+        
+
+        /*渲染打赏样式*/
+        
+        $("input[name=pay]").on("click", function () {
+            if($("input[name=pay]:checked").val()=="weixin"){
+                $(".shang_box .shang_payimg .pay_img").addClass("weixin_img");
+            } else {
+                $(".shang_box .shang_payimg .pay_img").removeClass("weixin_img");
+            }
+        })
+        
+
+        /*高亮代码块行号*/
+        
+
+        /*访问数量*/
+        
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js");
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+    function dashangToggle() {
+        $(".shang_box").fadeToggle();
+        $(".hide_box").fadeToggle();
+    }
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 542px;
+    }
+    .nav.fullscreen {
+        margin-left: -542px;
+    }
+    .nav-left {
+        width: 120px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 492px;
+        }
+        .nav.fullscreen {
+            margin-left: -492px;
+        }
+        .nav-left {
+            width: 100px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 492px;
+            margin-left: -492px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #e2e0e0;
+    }
+    
+    
+
+    /*列表样式*/
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+    .nav-right:before {
+        content: ' ';
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.3;
+        background: url("https://gw.alicdn.com/imgextra/O1CN01qJtaNI1bWgX44BKhQ_!!6000000003473-2-yinhe.png_300x300Q75.jpg_.webp");
+        background-repeat: no-repeat;
+        background-position: 50% 0;
+        -ms-background-size: cover;
+        -o-background-size: cover;
+        -moz-background-size: cover;
+        -webkit-background-size: cover;
+        background-size: cover;
+    }
+    
+
+    
+</style>
+
+
+
+
+
+
+
+</html>
