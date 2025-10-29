@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>gitlab的cicd | 闷葫芦的博客</title>
+  <meta name="keywords" content=" cicd ">
+  <meta name="description" content="gitlab的cicd | 闷葫芦的博客">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="在 VS Code 中调试时需要 launch.json，核心原因是它为调试器提供了“如何启动&#x2F;连接程序”的关键配置信息。VS Code 作为一个通用编辑器，支持多种编程语言和项目类型（如前端、后端、脚本等），而不同场景的调试方式差异很大，launch.json 正是用来统一描述这些差异的配置文件。 具体来说，launch.json 的作用包括： 告诉调试器“调试什么”比如：  调试前端项目时，需">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vscode的调试">
+<meta property="og:url" content="https://guokungit.github.io/project/2025/10/23/vscode%E7%9A%84%E8%B0%83%E8%AF%95/index.html">
+<meta property="og:site_name" content="闷葫芦的博客">
+<meta property="og:description" content="在 VS Code 中调试时需要 launch.json，核心原因是它为调试器提供了“如何启动&#x2F;连接程序”的关键配置信息。VS Code 作为一个通用编辑器，支持多种编程语言和项目类型（如前端、后端、脚本等），而不同场景的调试方式差异很大，launch.json 正是用来统一描述这些差异的配置文件。 具体来说，launch.json 的作用包括： 告诉调试器“调试什么”比如：  调试前端项目时，需">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-10-23T11:36:18.000Z">
+<meta property="article:modified_time" content="2025-10-23T11:37:00.475Z">
+<meta property="article:author" content="闷葫芦">
+<meta property="article:tag" content="工程化">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="icon" href="/img/avatar.png">
+
+<link href="/css/style.css?v=1.1.0" rel="stylesheet">
+
+<link href="/css/hl_theme/atom-light.css?v=1.1.0" rel="stylesheet">
+
+<link href="//cdn.jsdelivr.net/npm/animate.css@4.1.0/animate.min.css" rel="stylesheet">
+
+<script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="/js/titleTip.js?v=1.1.0" ></script>
+
+<script src="//cdn.jsdelivr.net/npm/highlightjs@9.16.2/highlight.pack.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" ></script>
+
+<script src="/js/iconfont.js?v=1.1.0" ></script>
+
+<meta name="generator" content="Hexo 5.4.1"></head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="false">
+  <input class="theme_preload_comment" value="">
+  <input class="theme_blog_path" value="">
+  <input id="theme_shortcut" value="true" />
+  <input id="theme_highlight_on" value="true" />
+  <input id="theme_code_copy" value="true" />
+</div>
+
+
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/"
+   class="avatar_target">
+    <img class="avatar"
+         src="/img/avatar.png"/>
+</a>
+<div class="author">
+    <span>闷葫芦</span>
+</div>
+
+<div class="icon">
+    
+        
+    
+        
+            <a title="github"
+               href="https://github.com/guokungit"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-github"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <a title="email"
+               href="mailto:guo2401143699@qq.com"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-email"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="qq"
+               href="http://wpa.qq.com/msgrd?v=3&uin=2401143699&site=qq&menu=yes"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-qq"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+</div>
+
+
+
+
+
+<ul>
+    <li>
+        <div class="all active" data-rel="All">All
+            
+                <small>(19)</small>
+            
+        </div>
+    </li>
+    
+        
+            
+                
+    <li>
+        <div data-rel="前端">
+            
+            前端
+            <small>(10)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="仓库管理">
+            
+            仓库管理
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="调试">
+            
+            调试
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="工程化">
+            
+            工程化
+            <small>(3)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="项目">
+            
+            项目
+            <small>(2)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="运维">
+            
+            运维
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+        
+            
+            
+            
+    </div>
+    <div>
+        
+        
+    </div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="19">
+
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        Links
+        <i class="iconfont icon-left"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <div class="right-top">
+        <div id="default-panel">
+            <i class="iconfont icon-search" data-title="search shortcut key i"></i>
+            <div class="right-title">All</div>
+            <i class="iconfont icon-file-tree" data-title="switch to outline view shortcut key w"></i>
+        </div>
+        <div id="search-panel">
+            <i class="iconfont icon-left" data-title="return"></i>
+            <input id="local-search-input" autocomplete="off"/>
+            <label class="border-line" for="input"></label>
+            <i class="iconfont icon-case-sensitive" data-title="case sensitive"></i>
+            <i class="iconfont icon-tag" data-title="label"></i>
+        </div>
+        <div id="outline-panel" style="display: none">
+            <div class="right-title">outline</div>
+            <i class="iconfont icon-list" data-title="switch to article list"></i>
+        </div>
+    </div>
+
+    <div class="tags-list">
+    <input id="tag-search" />
+    <div class="tag-wrapper">
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>安全</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>持续更新（ing）</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>工程化</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>工具</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>后端接口</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>脚手架</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>前端调接口下载</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>音视频会议</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>影像协同</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>增量发布</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>cicd</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>git</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>graphql</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>react webapackgit</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>vue状态库pinia、vuex</a>
+            </li>
+        
+    </div>
+
+</div>
+
+    
+    <nav id="title-list-nav">
+        
+        
+        <a  class="All 调试 "
+           href="/2025/10/23/vscode%E7%9A%84%E8%B0%83%E8%AF%95/"
+           data-tag="工程化"
+           data-author="" >
+            <span class="post-title" title="vscode的调试">vscode的调试</span>
+            <span class="post-date" title="2025-10-23 19:36:18">2025/10/23</span>
+        </a>
+        
+        
+        <a  class="All 工程化 "
+           href="/2025/10/22/%E5%89%8D%E7%AB%AF%E6%9C%AC%E5%9C%B0%E8%B0%83%E8%AF%95%E8%84%9A%E6%89%8B%E6%9E%B6/"
+           data-tag="脚手架"
+           data-author="" >
+            <span class="post-title" title="前端本地调试脚手架">前端本地调试脚手架</span>
+            <span class="post-date" title="2025-10-22 09:33:58">2025/10/22</span>
+        </a>
+        
+        
+        <a  class="All 工程化 "
+           href="/2025/10/10/%E5%89%8D%E7%AB%AF%E5%A2%9E%E9%87%8F%E5%8F%91%E5%B8%83/"
+           data-tag="增量发布"
+           data-author="" >
+            <span class="post-title" title="前端增量发布">前端增量发布</span>
+            <span class="post-date" title="2025-10-10 09:44:03">2025/10/10</span>
+        </a>
+        
+        
+        <a  class="All 运维 "
+           href="/2025/08/14/gitlab%E7%9A%84cicd/"
+           data-tag="cicd"
+           data-author="" >
+            <span class="post-title" title="gitlab的cicd">gitlab的cicd</span>
+            <span class="post-date" title="2025-08-14 12:12:21">2025/08/14</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2025/08/13/electron%E9%A1%B9%E7%9B%AE%E6%89%93%E5%BC%80%E6%8E%A7%E5%88%B6%E5%8F%B0/"
+           data-tag="工具"
+           data-author="" >
+            <span class="post-title" title="electron项目打开控制台">electron项目打开控制台</span>
+            <span class="post-date" title="2025-08-13 08:50:50">2025/08/13</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2025/08/11/vuex%E4%B8%8Epinia/"
+           data-tag="vue状态库pinia、vuex"
+           data-author="" >
+            <span class="post-title" title="vuex与pinia">vuex与pinia</span>
+            <span class="post-date" title="2025-08-11 09:33:44">2025/08/11</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2025/08/01/%E5%A6%82%E4%BD%95%E5%9C%A8%E4%B8%80%E4%B8%AA%E9%A1%B9%E7%9B%AE%E4%B8%AD%E4%BD%BF%E7%94%A8lerna%E7%AE%A1%E7%90%86%E6%9C%8D%E5%8A%A1/"
+           data-tag="工程化"
+           data-author="" >
+            <span class="post-title" title="如何在一个项目中使用lerna管理服务">如何在一个项目中使用lerna管理服务</span>
+            <span class="post-date" title="2025-08-01 18:19:36">2025/08/01</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2025/08/01/scp%E5%85%8D%E5%AF%86%E6%8E%A8%E9%80%81%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E5%A4%B9%E5%88%B0%E8%BF%9C%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8/"
+           data-tag="工程化"
+           data-author="" >
+            <span class="post-title" title="scp免密推送本地文件夹到远程服务器">scp免密推送本地文件夹到远程服务器</span>
+            <span class="post-date" title="2025-08-01 17:26:16">2025/08/01</span>
+        </a>
+        
+        
+        <a  class="All "
+           href="/2025/07/16/hello-world/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="Hello World">Hello World</span>
+            <span class="post-date" title="2025-07-16 09:13:21">2025/07/16</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2025/06/25/react%E6%90%AD%E5%BB%BA%E6%A1%86%E6%9E%B6%E5%B7%B2%E8%B8%A9%E5%9D%91/"
+           data-tag="react webapackgit"
+           data-author="" >
+            <span class="post-title" title="react搭建框架已踩坑">react搭建框架已踩坑</span>
+            <span class="post-date" title="2025-06-25 11:00:06">2025/06/25</span>
+        </a>
+        
+        
+        <a  class="All 工程化 "
+           href="/2025/06/22/lerna%E7%AE%A1%E7%90%86%E6%9C%8D%E5%8A%A1/"
+           data-tag="脚手架"
+           data-author="" >
+            <span class="post-title" title="lerna管理服务">lerna管理服务</span>
+            <span class="post-date" title="2025-06-22 19:10:06">2025/06/22</span>
+        </a>
+        
+        
+        <a  class="All 项目 "
+           href="/2025/06/22/%E5%9F%BA%E4%BA%8Eohif%E5%AE%9E%E7%8E%B0%E5%BD%B1%E5%83%8F%E5%8D%8F%E5%90%8C/"
+           data-tag="影像协同"
+           data-author="" >
+            <span class="post-title" title="基于OHIF实现影像协同">基于OHIF实现影像协同</span>
+            <span class="post-date" title="2025-06-22 14:11:27">2025/06/22</span>
+        </a>
+        
+        
+        <a  class="All 项目 "
+           href="/2025/06/22/webrtc%E5%AE%9E%E7%8E%B0%E9%9F%B3%E8%A7%86%E9%A2%91%E9%80%9A%E8%AF%9D/"
+           data-tag="音视频会议"
+           data-author="" >
+            <span class="post-title" title="webrtc实现音视频通话">webrtc实现音视频通话</span>
+            <span class="post-date" title="2025-06-22 14:10:57">2025/06/22</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2022/08/28/graphql%E7%9C%8B%E6%87%82%E8%BF%99%E7%AF%87%E7%9B%B4%E6%8E%A5%E5%BC%80%E5%8F%91/"
+           data-tag="graphql"
+           data-author="" >
+            <span class="post-title" title="graphql看懂这篇直接开发">graphql看懂这篇直接开发</span>
+            <span class="post-date" title="2022-08-28 17:44:15">2022/08/28</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2022/05/24/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%AE%89%E5%85%A8/"
+           data-tag="安全"
+           data-author="" >
+            <span class="post-title" title="浏览器安全">浏览器安全</span>
+            <span class="post-date" title="2022-05-24 09:12:51">2022/05/24</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2022/05/22/%E6%AF%8F%E5%A4%A9%E4%B8%80%E4%B8%AA%E6%96%B0%E9%97%AE%E9%A2%98%EF%BC%88%E6%B0%B8%E8%BF%9C%E4%BF%9D%E6%8C%81%E6%80%80%E7%96%91%EF%BC%89/"
+           data-tag="持续更新（ing）"
+           data-author="" >
+            <span class="post-title" title="每天一个新问题（永远保持怀疑）">每天一个新问题（永远保持怀疑）</span>
+            <span class="post-date" title="2022-05-22 22:49:29">2022/05/22</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2022/05/22/react%E5%89%8D%E7%AB%AF%E4%B8%8B%E8%BD%BD%E5%90%8E%E7%AB%AF%E8%BF%94%E5%9B%9E%E7%9A%84%E6%96%87%E4%BB%B6%E6%96%B9%E6%B3%95%EF%BC%88url%E3%80%81%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%B5%81%EF%BC%89/"
+           data-tag="前端调接口下载"
+           data-author="" >
+            <span class="post-title" title="react前端下载后端返回的文件方法（url、二进制流）">react前端下载后端返回的文件方法（url、二进制流）</span>
+            <span class="post-date" title="2022-05-22 22:41:02">2022/05/22</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2022/05/22/%E6%A3%80%E6%B5%8B%E5%90%8E%E7%AB%AF%E6%8E%A5%E5%8F%A3%E5%B8%B8%E8%A7%81%E6%96%B9%E6%B3%95/"
+           data-tag="后端接口"
+           data-author="" >
+            <span class="post-title" title="检测后端接口常见方法">检测后端接口常见方法</span>
+            <span class="post-date" title="2022-05-22 22:36:45">2022/05/22</span>
+        </a>
+        
+        
+        <a  class="All 仓库管理 "
+           href="/2022/05/22/git/"
+           data-tag="git"
+           data-author="" >
+            <span class="post-title" title="实战中开发git">实战中开发git</span>
+            <span class="post-date" title="2022-05-22 21:34:00">2022/05/22</span>
+        </a>
+        
+        <div id="no-item-tips">
+
+        </div>
+    </nav>
+    <div id="outline-list">
+    </div>
+</div>
+
+    </div>
+    <div class="hide-list">
+        <div class="semicircle" data-title="Toggle full screen shortcut key s">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div id="post">
+    <div class="pjax">
+        <article id="post-gitlab的cicd" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">gitlab的cicd</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="运维">运维</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color5">cicd</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+            Created At : <time class="date" title='Updated At: 2025-08-15 17:39:31'>2025-08-14 12:12</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        
+        <span id="busuanzi_container_page_pv">
+            Views 👀 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80%EF%BC%9A%E4%BD%BF%E7%94%A8Docker%E5%BF%AB%E9%80%9F%E9%83%A8%E7%BD%B2%EF%BC%88%E6%8E%A8%E8%8D%90%EF%BC%89"><span class="toc-text">方法一：使用Docker快速部署（推荐）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C%EF%BC%9A%E7%9B%B4%E6%8E%A5%E5%9C%A8Linux%E7%B3%BB%E7%BB%9F%E4%B8%8A%E5%AE%89%E8%A3%85"><span class="toc-text">方法二：直接在Linux系统上安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%8E%E7%BB%AD%E9%85%8D%E7%BD%AE%E5%BB%BA%E8%AE%AE"><span class="toc-text">后续配置建议</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%80%E5%88%87%E9%83%BD%E8%A6%81%E5%9C%A8-gitlab-%E4%B8%8A%E6%B3%A8%E5%86%8C%E8%BF%87-runner-%E6%89%8D%E8%83%BD%E8%BF%9B%E8%A1%8C%EF%BC%8C%EF%BC%88%E8%BF%90%E7%BB%B4%EF%BC%89"><span class="toc-text">一切都要在 gitlab 上注册过 runner 才能进行，（运维）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%EF%BC%9A"><span class="toc-text">核心概念：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E5%B7%A5%E5%85%B7%EF%BC%9A"><span class="toc-text">常见工具：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B8%E5%9E%8B%E6%B5%81%E7%A8%8B%EF%BC%9A"><span class="toc-text">典型流程：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E6%B5%81%E7%A8%8B%E8%AE%BE%E8%AE%A1"><span class="toc-text">核心流程设计</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gitlab-%E7%9A%84-cicd-%E7%9A%84-runner-%E9%85%8D%E7%BD%AE"><span class="toc-text">gitlab 的 cicd 的 runner 配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E7%A4%BA%E4%BE%8B"><span class="toc-text">配置文件示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E8%AF%B4%E6%98%8E"><span class="toc-text">配置说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E7%94%9F%E6%88%90-SSH-%E5%AF%86%E9%92%A5%E5%AF%B9%EF%BC%88%E6%9C%AC%E5%9C%B0%E6%93%8D%E4%BD%9C%EF%BC%89"><span class="toc-text">1. 生成 SSH 密钥对（本地操作）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E8%8E%B7%E5%8F%96%E7%A7%81%E9%92%A5%E5%86%85%E5%AE%B9%EF%BC%88SSH-PRIVATE-KEY%EF%BC%89"><span class="toc-text">2. 获取私钥内容（SSH_PRIVATE_KEY）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%B0%86%E5%85%AC%E9%92%A5%E9%85%8D%E7%BD%AE%E5%88%B0%E7%9B%AE%E6%A0%87%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-text">3. 将公钥配置到目标服务器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%9C%A8-GitLab-%E4%B8%AD%E9%85%8D%E7%BD%AE-SSH-PRIVATE-KEY-%E5%8F%98%E9%87%8F"><span class="toc-text">4. 在 GitLab 中配置 SSH_PRIVATE_KEY 变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-text">注意事项</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81Runner-%E7%B1%BB%E5%9E%8B%E9%80%89%E6%8B%A9"><span class="toc-text">一、Runner 类型选择</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E8%AE%BE%E7%BD%AE%E7%89%B9%E5%AE%9A-Runner%EF%BC%88%E6%8E%A8%E8%8D%90%EF%BC%89"><span class="toc-text">二、设置特定 Runner（推荐）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%AE%89%E8%A3%85-Runner-%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-text">1. 安装 Runner 到服务器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%B3%A8%E5%86%8C-Runner-%E5%88%B0%E4%BD%A0%E7%9A%84%E9%A1%B9%E7%9B%AE"><span class="toc-text">2. 注册 Runner 到你的项目</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A4-1%EF%BC%9A%E8%8E%B7%E5%8F%96%E6%B3%A8%E5%86%8C%E4%BB%A4%E7%89%8C"><span class="toc-text">步骤 1：获取注册令牌</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A4-2%EF%BC%9A%E6%B3%A8%E5%86%8C-Runner"><span class="toc-text">步骤 2：注册 Runner</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E5%90%AF%E5%8A%A8-Runner-%E6%9C%8D%E5%8A%A1"><span class="toc-text">3. 启动 Runner 服务</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E9%85%8D%E7%BD%AE-Runner-%E6%9D%83%E9%99%90%EF%BC%88%E5%85%B3%E9%94%AE%EF%BC%89"><span class="toc-text">三、配置 Runner 权限（关键）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%9C%A8%E6%B5%81%E6%B0%B4%E7%BA%BF%E4%B8%AD%E6%8C%87%E5%AE%9A-Runner"><span class="toc-text">四、在流水线中指定 Runner</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E7%AE%A1%E7%90%86-Runner"><span class="toc-text">五、管理 Runner</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="toc-text">常见问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81Runner-%E7%B1%BB%E5%9E%8B%E9%80%89%E6%8B%A9-1"><span class="toc-text">一、Runner 类型选择</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E8%AE%BE%E7%BD%AE%E7%89%B9%E5%AE%9A-Runner%EF%BC%88%E6%8E%A8%E8%8D%90%EF%BC%89-1"><span class="toc-text">二、设置特定 Runner（推荐）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%AE%89%E8%A3%85-Runner-%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8-1"><span class="toc-text">1. 安装 Runner 到服务器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%B3%A8%E5%86%8C-Runner-%E5%88%B0%E4%BD%A0%E7%9A%84%E9%A1%B9%E7%9B%AE-1"><span class="toc-text">2. 注册 Runner 到你的项目</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A4-1%EF%BC%9A%E8%8E%B7%E5%8F%96%E6%B3%A8%E5%86%8C%E4%BB%A4%E7%89%8C-1"><span class="toc-text">步骤 1：获取注册令牌</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A4-2%EF%BC%9A%E6%B3%A8%E5%86%8C-Runner-1"><span class="toc-text">步骤 2：注册 Runner</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E5%90%AF%E5%8A%A8-Runner-%E6%9C%8D%E5%8A%A1-1"><span class="toc-text">3. 启动 Runner 服务</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E9%85%8D%E7%BD%AE-Runner-%E6%9D%83%E9%99%90%EF%BC%88%E5%85%B3%E9%94%AE%EF%BC%89-1"><span class="toc-text">三、配置 Runner 权限（关键）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%9C%A8%E6%B5%81%E6%B0%B4%E7%BA%BF%E4%B8%AD%E6%8C%87%E5%AE%9A-Runner-1"><span class="toc-text">四、在流水线中指定 Runner</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E7%AE%A1%E7%90%86-Runner-1"><span class="toc-text">五、管理 Runner</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98-1"><span class="toc-text">常见问题</span></a></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-3 i,
+    .toc-level-3 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>搭建GitLab可以通过多种方式实现，以下是基于Docker和直接安装两种常见方法的详细步骤：</p>
+<h3 id="方法一：使用Docker快速部署（推荐）"><a href="#方法一：使用Docker快速部署（推荐）" class="headerlink" title="方法一：使用Docker快速部署（推荐）"></a>方法一：使用Docker快速部署（推荐）</h3><ol>
+<li><p><strong>安装Docker和Docker Compose</strong><br>首先确保系统已安装Docker和Docker Compose：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装Docker</span></span><br><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install docker-ce docker-ce-cli containerd.io</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装Docker Compose</span></span><br><span class="line">sudo curl -L <span class="string">&quot;https://github.com/docker/compose/releases/download/v2.20.2/docker-compose-<span class="subst">$(uname -s)</span>-<span class="subst">$(uname -m)</span>&quot;</span> -o /usr/local/bin/docker-compose</span><br><span class="line">sudo <span class="built_in">chmod</span> +x /usr/local/bin/docker-compose</span><br></pre></td></tr></table></figure></li>
+<li><p><strong>创建docker-compose.yml文件</strong></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3.6&#x27;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">web:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">&#x27;gitlab/gitlab-ce:latest&#x27;</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">hostname:</span> <span class="string">&#x27;gitlab.example.com&#x27;</span>  <span class="comment"># 替换为你的域名或IP</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="attr">GITLAB_OMNIBUS_CONFIG:</span> <span class="string">|</span></span><br><span class="line"><span class="string">        external_url &#x27;http://gitlab.example.com&#x27;  # 替换为你的访问地址</span></span><br><span class="line"><span class="string">        # 可选配置</span></span><br><span class="line"><span class="string">        gitlab_rails[&#x27;gitlab_shell_ssh_port&#x27;] = 2222</span></span><br><span class="line"><span class="string"></span>    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;80:80&#x27;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;443:443&#x27;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;2222:22&#x27;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;./gitlab/config:/etc/gitlab&#x27;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;./gitlab/logs:/var/log/gitlab&#x27;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;./gitlab/data:/var/opt/gitlab&#x27;</span></span><br><span class="line">    <span class="attr">shm_size:</span> <span class="string">&#x27;256m&#x27;</span></span><br></pre></td></tr></table></figure></li>
+<li><p><strong>启动GitLab</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-compose up -d</span><br></pre></td></tr></table></figure></li>
+<li><p><strong>获取初始管理员密码</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo docker <span class="built_in">exec</span> -it &lt;容器ID&gt; grep <span class="string">&#x27;Password:&#x27;</span> /etc/gitlab/initial_root_password</span><br></pre></td></tr></table></figure></li>
+<li><p><strong>访问GitLab</strong><br>通过浏览器访问你配置的<code>external_url</code>，使用用户名<code>root</code>和上述密码登录。</p>
+</li>
+</ol>
+<h3 id="方法二：直接在Linux系统上安装"><a href="#方法二：直接在Linux系统上安装" class="headerlink" title="方法二：直接在Linux系统上安装"></a>方法二：直接在Linux系统上安装</h3><p>以Ubuntu为例：</p>
+<ol>
+<li><p><strong>安装依赖包</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install -y curl openssh-server ca-certificates tzdata perl</span><br></pre></td></tr></table></figure></li>
+<li><p><strong>添加GitLab仓库并安装</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 添加GitLab软件源</span></span><br><span class="line">curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | sudo bash</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装GitLab社区版</span></span><br><span class="line">sudo EXTERNAL_URL=<span class="string">&quot;http://gitlab.example.com&quot;</span> apt-get install gitlab-ce</span><br></pre></td></tr></table></figure></li>
+<li><p><strong>配置GitLab</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 重新配置GitLab</span></span><br><span class="line">sudo gitlab-ctl reconfigure</span><br></pre></td></tr></table></figure></li>
+<li><p><strong>启动相关服务</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gitlab-ctl start</span><br></pre></td></tr></table></figure></li>
+<li><p><strong>获取初始密码</strong>（同Docker方法）</p>
+</li>
+</ol>
+<h3 id="后续配置建议"><a href="#后续配置建议" class="headerlink" title="后续配置建议"></a>后续配置建议</h3><ol>
+<li>登录后立即修改管理员密码</li>
+<li>配置邮件服务（在<code>gitlab.rb</code>中设置SMTP参数）</li>
+<li>配置HTTPS以增强安全性</li>
+<li>根据需要调整存储路径和资源限制</li>
+</ol>
+<p>GitLab启动可能需要几分钟时间，具体取决于服务器性能。如果遇到问题，可以通过<code>gitlab-ctl status</code>（直接安装）或<code>docker logs</code>（Docker方式）查看服务状态和日志。</p>
+<p>我了解 Git CI/CD。Git CI/CD 是基于 Git 版本控制系统的持续集成（Continuous Integration，CI）和持续部署（Continuous Deployment，CD）实践，旨在通过自动化流程提高软件开发效率和质量。</p>
+<h4 id="一切都要在-gitlab-上注册过-runner-才能进行，（运维）"><a href="#一切都要在-gitlab-上注册过-runner-才能进行，（运维）" class="headerlink" title="一切都要在 gitlab 上注册过 runner 才能进行，（运维）"></a>一切都要在 gitlab 上注册过 runner 才能进行，（运维）</h4><h3 id="核心概念："><a href="#核心概念：" class="headerlink" title="核心概念："></a>核心概念：</h3><ol>
+<li><p><strong>持续集成（CI）</strong>：</p>
+<ul>
+<li>开发者频繁将代码提交到 Git 仓库（如 GitHub、GitLab 等）</li>
+<li>每次提交后自动触发构建、测试流程</li>
+<li>快速发现代码集成问题，减少合并冲突</li>
+</ul>
+</li>
+<li><p><strong>持续部署（CD）</strong>：</p>
+<ul>
+<li>代码通过 CI 验证后，自动部署到测试、预生产或生产环境</li>
+<li>减少人工操作，加速软件交付周期</li>
+</ul>
+</li>
+</ol>
+<h3 id="常见工具："><a href="#常见工具：" class="headerlink" title="常见工具："></a>常见工具：</h3><ul>
+<li><strong>GitHub Actions</strong>：与 GitHub 深度集成的 CI/CD 工具，通过仓库中的 YAML 配置文件定义工作流</li>
+<li><strong>GitLab CI/CD</strong>：GitLab 内置的 CI/CD 功能，使用 <code>.gitlab-ci.yml</code> 配置</li>
+<li><strong>Jenkins</strong>：老牌 CI/CD 工具，可与 Git 仓库集成，支持复杂流水线配置</li>
+</ul>
+<h3 id="典型流程："><a href="#典型流程：" class="headerlink" title="典型流程："></a>典型流程：</h3><ol>
+<li>开发者提交代码到 Git 仓库</li>
+<li>触发 CI 流水线：自动拉取代码、安装依赖、编译构建</li>
+<li>运行自动化测试（单元测试、集成测试等）</li>
+<li>测试通过后，CD 流程自动部署到目标环境</li>
+<li>全程生成日志报告，便于问题追踪</li>
+</ol>
+<p>通过 Git CI/CD，团队可以更频繁、更可靠地交付软件，同时减少手动操作带来的错误。</p>
+<p>在 GitLab 上为 Vue 前端项目配置 CI/CD 可以实现自动构建、测试和部署，大幅提升开发效率。以下是详细的配置步骤和示例：</p>
+<h3 id="核心流程设计"><a href="#核心流程设计" class="headerlink" title="核心流程设计"></a>核心流程设计</h3><ol>
+<li>当代码推送到 GitLab 仓库时，自动触发流水线</li>
+<li>执行依赖安装、代码检查、构建等操作</li>
+<li>构建成功后，自动部署到目标环境（如测试服、生产服）</li>
+</ol>
+<h2 id="gitlab-的-cicd-的-runner-配置"><a href="#gitlab-的-cicd-的-runner-配置" class="headerlink" title="gitlab 的 cicd 的 runner 配置"></a>gitlab 的 cicd 的 runner 配置</h2><p><img src="runner%E9%85%8D%E7%BD%AE.png" alt="runner 配置"></p>
+<h3 id="配置文件示例"><a href="#配置文件示例" class="headerlink" title="配置文件示例"></a>配置文件示例</h3><p>在项目根目录创建 <code>.gitlab-ci.yml</code> 文件，这是 GitLab CI/CD 的核心配置文件：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br></pre></td><td class="code"><pre><span class="line"># 定义流水线执行阶段</span><br><span class="line">stages:</span><br><span class="line">  - install       # 安装依赖</span><br><span class="line">  - lint          # 代码检查</span><br><span class="line">  - test          # 运行测试</span><br><span class="line">  - build         # 构建项目</span><br><span class="line">  - deploy_test   # 部署到测试环境</span><br><span class="line">  - deploy_prod   # 部署到生产环境</span><br><span class="line"></span><br><span class="line"># 缓存node_modules，加速后续构建</span><br><span class="line">cache:</span><br><span class="line">  paths:</span><br><span class="line">    - node_modules/</span><br><span class="line"></span><br><span class="line"># 安装依赖阶段</span><br><span class="line">install_deps:</span><br><span class="line">  stage: install</span><br><span class="line">  image: node:16-alpine  # 使用Node.js 16的轻量镜像</span><br><span class="line">  tags:</span><br><span class="line">    - macLocal</span><br><span class="line">  script:</span><br><span class="line">    - npm install --registry=https://registry.npm.taobao.org  # 使用国内镜像加速</span><br><span class="line">  artifacts:</span><br><span class="line">    paths:</span><br><span class="line">      - node_modules/   # 保存依赖供后续阶段使用</span><br><span class="line"></span><br><span class="line"># 代码检查阶段</span><br><span class="line">code_lint:</span><br><span class="line">  stage: lint</span><br><span class="line">  image: node:16-alpine</span><br><span class="line">  tags:</span><br><span class="line">    - macLocal</span><br><span class="line">  dependencies:</span><br><span class="line">    - install_deps  # 依赖安装阶段的输出</span><br><span class="line">  script:</span><br><span class="line">    - npm run lint  # 假设package.json中定义了lint脚本</span><br><span class="line"></span><br><span class="line"># 测试阶段</span><br><span class="line">unit_test:</span><br><span class="line">  stage: test</span><br><span class="line">  image: node:16-alpine</span><br><span class="line">  tags:</span><br><span class="line">    - macLocal</span><br><span class="line">  dependencies:</span><br><span class="line">    - install_deps</span><br><span class="line">  script:</span><br><span class="line">    - npm run test:unit  # 运行单元测试</span><br><span class="line"></span><br><span class="line"># 构建阶段</span><br><span class="line">build_project:</span><br><span class="line">  stage: build</span><br><span class="line">  image: node:16-alpine</span><br><span class="line">  tags:</span><br><span class="line">    - macLocal</span><br><span class="line">  dependencies:</span><br><span class="line">    - install_deps</span><br><span class="line">  script:</span><br><span class="line">    - npm run build  # 构建生产版本</span><br><span class="line">  artifacts:</span><br><span class="line">    paths:</span><br><span class="line">      - dist/  # 保存构建结果供部署使用</span><br><span class="line">  only:</span><br><span class="line">    - develop  # 只在develop分支执行</span><br><span class="line">    - main     # 只在main分支执行</span><br><span class="line"></span><br><span class="line"># 部署到测试环境</span><br><span class="line">deploy_to_test:</span><br><span class="line">  stage: deploy_test</span><br><span class="line">  image: alpine:latest</span><br><span class="line">  tags:</span><br><span class="line">    - macLocal</span><br><span class="line">  dependencies:</span><br><span class="line">    - build_project</span><br><span class="line">  script:</span><br><span class="line">    # 安装ssh客户端 这里依据操作系统来</span><br><span class="line">    # - brew install openssh</span><br><span class="line">    # 配置SSH（需要在GitLab项目设置中添加SSH私钥作为CI/CD变量）</span><br><span class="line">    - eval $(ssh-agent -s)</span><br><span class="line">    - echo &quot;$SSH_PRIVATE_KEY&quot; | tr -d &#x27;\r&#x27; | ssh-add -</span><br><span class="line">    - mkdir -p ~/.ssh</span><br><span class="line">    - chmod 700 ~/.ssh</span><br><span class="line">    - ssh-keyscan -H $TEST_SERVER_HOST &gt;&gt; ~/.ssh/known_hosts</span><br><span class="line">    # 部署到测试服务器</span><br><span class="line">    - scp -r dist $TEST_SERVER_USER@$TEST_SERVER_HOST:$TEST_SERVER_PATH</span><br><span class="line">  only:</span><br><span class="line">    - develop  # 只在develop分支部署到测试环境</span><br><span class="line"></span><br><span class="line"># 部署到生产环境</span><br><span class="line">deploy_to_prod:</span><br><span class="line">  stage: deploy_prod</span><br><span class="line">  image: alpine:latest</span><br><span class="line">  tags:</span><br><span class="line">    - macLocal</span><br><span class="line">  dependencies:</span><br><span class="line">    - build_project</span><br><span class="line">  script:</span><br><span class="line">    # 类似测试环境部署步骤，替换为生产服务器信息</span><br><span class="line">    # - brew install openssh</span><br><span class="line">    - eval $(ssh-agent -s)</span><br><span class="line">    - echo &quot;$SSH_PRIVATE_KEY_PROD&quot; | tr -d &#x27;\r&#x27; | ssh-add -</span><br><span class="line">    - mkdir -p ~/.ssh</span><br><span class="line">    - chmod 700 ~/.ssh</span><br><span class="line">    - ssh-keyscan -H $PROD_SERVER_HOST &gt;&gt; ~/.ssh/known_hosts</span><br><span class="line">    - scp -r dist $TEST_SERVER_USER@$TEST_SERVER_HOST:$TEST_SERVER_PATH</span><br><span class="line">  only:</span><br><span class="line">    - main  # 只在main分支部署到生产环境</span><br><span class="line">  when: manual  # 需要手动触发，防止误部署</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="配置说明"><a href="#配置说明" class="headerlink" title="配置说明"></a>配置说明</h3><ol>
+<li><p><strong>前置准备</strong>：</p>
+<ul>
+<li>确保项目中有 <code>package.json</code> 并定义了 <code>lint</code>、<code>test:unit</code>、<code>build</code> 等脚本</li>
+<li>在 GitLab 项目的「Settings → CI/CD → Variables」中添加必要的环境变量： - 测试服务器相关：<code>TEST_SERVER_HOST</code>、<code>TEST_SERVER_USER</code>、<code>TEST_SERVER_PATH</code> - 生产服务器相关：<code>PROD_SERVER_HOST</code>、<code>PROD_SERVER_USER</code>、<code>PROD_SERVER_PATH</code> - SSH 密钥：<code>SSH_PRIVATE_KEY</code>（测试环境）、<code>SSH_PRIVATE_KEY_PROD</code>（生产环境）<br><img src="image.png" alt="cicd变量配置"></li>
+</ul>
+</li>
+<li><p><strong>阶段说明</strong>：</p>
+<ul>
+<li><code>install</code>：安装依赖并缓存，加速后续构建</li>
+<li><code>lint</code>：执行 ESLint 等代码检查</li>
+<li><code>test</code>：运行单元测试，确保代码质量</li>
+<li><code>build</code>：构建生产版本的静态文件</li>
+<li><code>deploy_test</code>：自动部署 develop 分支到测试环境</li>
+<li><code>deploy_prod</code>：手动触发 main 分支到生产环境的部署</li>
+</ul>
+</li>
+<li><p><strong>安全提示</strong>：</p>
+<ul>
+<li>所有敏感信息（如 SSH 密钥、服务器地址）都应通过 GitLab 变量管理，不要硬编码在配置文件中</li>
+<li>生产环境部署设置为手动触发，避免代码提交后自动部署带来的风险</li>
+</ul>
+</li>
+</ol>
+<p>配置完成后，每次向 GitLab 推送代码时，都会自动触发相应的流水线，你可以在 GitLab 项目的「CI/CD → Pipelines」中查看执行状态和日志。</p>
+<p><code>SSH_PRIVATE_KEY</code> 是用于服务器身份验证的私钥，并非从某个地方”查看”，而是需要你<strong>提前生成</strong>并配置。以下是具体步骤：</p>
+<h3 id="1-生成-SSH-密钥对（本地操作）"><a href="#1-生成-SSH-密钥对（本地操作）" class="headerlink" title="1. 生成 SSH 密钥对（本地操作）"></a>1. 生成 SSH 密钥对（本地操作）</h3><p>在你的本地电脑（或用于部署的机器）上生成 SSH 密钥对（公钥 + 私钥）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 打开终端，执行以下命令</span></span><br><span class="line">ssh-keygen -t ed25519 -C <span class="string">&quot;your_email@example.com&quot;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>按提示操作，可设置密钥保存路径（默认 <code>~/.ssh/id_ed25519</code>）</li>
+<li>建议设置密码（passphrase）增强安全性</li>
+</ul>
+<h3 id="2-获取私钥内容（SSH-PRIVATE-KEY）"><a href="#2-获取私钥内容（SSH-PRIVATE-KEY）" class="headerlink" title="2. 获取私钥内容（SSH_PRIVATE_KEY）"></a>2. 获取私钥内容（<code>SSH_PRIVATE_KEY</code>）</h3><p>生成后，私钥文件默认路径为 <code>~/.ssh/id_ed25519</code>（Windows 通常在 <code>C:\Users\你的用户名\.ssh\id_ed25519</code>）。</p>
+<p>查看并复制私钥内容：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 终端中查看私钥</span></span><br><span class="line"><span class="built_in">cat</span> ~/.ssh/id_ed25519</span><br></pre></td></tr></table></figure>
+
+<p>复制输出的<strong>全部内容</strong>（包括 <code>-----BEGIN OPENSSH PRIVATE KEY-----</code> 和 <code>-----END OPENSSH PRIVATE KEY-----</code> 标记）。</p>
+<h3 id="3-将公钥配置到目标服务器"><a href="#3-将公钥配置到目标服务器" class="headerlink" title="3. 将公钥配置到目标服务器"></a>3. 将公钥配置到目标服务器</h3><p>为了让 CI/CD 流水线能通过 SSH 连接服务器，需要将<strong>公钥</strong>添加到目标服务器的授权列表中：</p>
+<ol>
+<li><p>查看公钥内容：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> ~/.ssh/id_ed25519.pub  <span class="comment"># 注意文件名末尾有 .pub</span></span><br></pre></td></tr></table></figure></li>
+<li><p>将公钥内容添加到服务器的 <code>~/.ssh/authorized_keys</code> 文件中：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 替换为你的服务器信息，执行后输入服务器密码</span></span><br><span class="line">ssh user@server_ip <span class="string">&quot;echo &#x27;你的公钥内容&#x27; &gt;&gt; ~/.ssh/authorized_keys&quot;</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="4-在-GitLab-中配置-SSH-PRIVATE-KEY-变量"><a href="#4-在-GitLab-中配置-SSH-PRIVATE-KEY-变量" class="headerlink" title="4. 在 GitLab 中配置 SSH_PRIVATE_KEY 变量"></a>4. 在 GitLab 中配置 <code>SSH_PRIVATE_KEY</code> 变量</h3><ol>
+<li>进入你的 GitLab 项目 → <strong>Settings</strong> → <strong>CI/CD</strong> → <strong>Variables</strong>（变量）</li>
+<li>点击 <strong>Add variable</strong>，填写：<ul>
+<li><strong>Key</strong>：<code>SSH_PRIVATE_KEY</code>（必须与 <code>.gitlab-ci.yml</code> 中使用的变量名一致）</li>
+<li><strong>Value</strong>：粘贴步骤 2 中复制的<strong>私钥完整内容</strong></li>
+<li>勾选 <strong>Mask variable</strong>（隐藏变量值，安全起见）</li>
+<li>勾选 <strong>Protect variable</strong>（如果只允许受保护分支使用，可选）</li>
+</ul>
+</li>
+<li>点击 <strong>Add variable</strong> 保存</li>
+</ol>
+<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><ul>
+<li>私钥是敏感信息，<strong>绝对不能泄露</strong>或提交到代码仓库</li>
+<li>如果私钥设置了密码（passphrase），需要额外配置 <code>SSH_KEY_PASSPHRASE</code> 变量</li>
+<li>若服务器使用非默认 SSH 端口（如 2222），需在部署脚本中添加 <code>-P 2222</code> 参数</li>
+</ul>
+<p>配置完成后，GitLab CI/CD 流水线就能通过这个私钥自动连接服务器进行部署了。</p>
+<p>GitLab Runner 是执行 CI/CD 流水线任务的代理程序，需要正确配置才能运行你的 Vue 项目构建和部署流程。以下是详细的设置步骤：</p>
+<h3 id="一、Runner-类型选择"><a href="#一、Runner-类型选择" class="headerlink" title="一、Runner 类型选择"></a>一、Runner 类型选择</h3><p>GitLab 提供两种 Runner：</p>
+<ul>
+<li><strong>共享 Runner</strong>：由 GitLab 官方或你的团队管理员维护，所有项目可共享使用</li>
+<li><strong>特定 Runner</strong>：仅用于你的项目，需自己安装和管理（推荐用于需要特殊环境的项目）</li>
+</ul>
+<h3 id="二、设置特定-Runner（推荐）"><a href="#二、设置特定-Runner（推荐）" class="headerlink" title="二、设置特定 Runner（推荐）"></a>二、设置特定 Runner（推荐）</h3><h4 id="1-安装-Runner-到服务器"><a href="#1-安装-Runner-到服务器" class="headerlink" title="1. 安装 Runner 到服务器"></a>1. 安装 Runner 到服务器</h4><p>根据你的服务器系统选择安装方式（以 Linux 为例）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 添加 GitLab 官方仓库</span></span><br><span class="line">curl -L <span class="string">&quot;https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh&quot;</span> | sudo bash</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 安装 Runner</span></span><br><span class="line">sudo apt-get install gitlab-runner</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 验证安装</span></span><br><span class="line">sudo gitlab-runner --version  <span class="comment"># 显示版本号即成功</span></span><br></pre></td></tr></table></figure>
+
+<p>其他系统（Windows/macOS）安装教程：<a target="_blank" rel="noopener" href="https://docs.gitlab.com/runner/install/">官方文档</a></p>
+<h4 id="2-注册-Runner-到你的项目"><a href="#2-注册-Runner-到你的项目" class="headerlink" title="2. 注册 Runner 到你的项目"></a>2. 注册 Runner 到你的项目</h4><p>需要从 GitLab 项目中获取<strong>注册令牌</strong>，然后将 Runner 与项目绑定：</p>
+<h5 id="步骤-1：获取注册令牌"><a href="#步骤-1：获取注册令牌" class="headerlink" title="步骤 1：获取注册令牌"></a>步骤 1：获取注册令牌</h5><ol>
+<li>进入你的 GitLab 项目 → <strong>Settings</strong> → <strong>CI/CD</strong> → 展开 <strong>Runners</strong> 配置</li>
+<li>在 <strong>Specific runners</strong> 部分，找到 <code>Registration token</code>（注册令牌）并复制</li>
+</ol>
+<h5 id="步骤-2：注册-Runner"><a href="#步骤-2：注册-Runner" class="headerlink" title="步骤 2：注册 Runner"></a>步骤 2：注册 Runner</h5><p>在安装 Runner 的服务器上执行注册命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gitlab-runner register</span><br></pre></td></tr></table></figure>
+
+<p>按提示输入以下信息：</p>
+<ul>
+<li><code>GitLab instance URL</code>：你的 GitLab 地址（如 <code>https://gitlab.com</code> 或自建 GitLab 域名）</li>
+<li><code>Registration token</code>：粘贴步骤 1 复制的令牌</li>
+<li><code>Description</code>：给 Runner 起个名字（如 <code>vue-deploy-runner</code>）</li>
+<li><code>Tags</code>：设置标签（如 <code>vue,deploy</code>，后续可在 <code>.gitlab-ci.yml</code> 中指定使用该 Runner）</li>
+<li><code>Executor</code>：选择执行器（推荐 <code>docker</code>，适合前端项目）</li>
+<li>若选择 <code>docker</code>，还需指定默认镜像（如 <code>alpine:latest</code>）</li>
+</ul>
+<h4 id="3-启动-Runner-服务"><a href="#3-启动-Runner-服务" class="headerlink" title="3. 启动 Runner 服务"></a>3. 启动 Runner 服务</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 启动服务</span></span><br><span class="line">sudo gitlab-runner start</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看状态（确保显示 running）</span></span><br><span class="line">sudo gitlab-runner status</span><br></pre></td></tr></table></figure>
+
+<h3 id="三、配置-Runner-权限（关键）"><a href="#三、配置-Runner-权限（关键）" class="headerlink" title="三、配置 Runner 权限（关键）"></a>三、配置 Runner 权限（关键）</h3><p>如果 Runner 用 <code>docker</code> 执行器，需要赋予足够权限：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将 gitlab-runner 用户加入 docker 组（避免权限问题）</span></span><br><span class="line">sudo usermod -aG docker gitlab-runner</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重启 Runner 生效</span></span><br><span class="line">sudo gitlab-runner restart</span><br></pre></td></tr></table></figure>
+
+<h3 id="四、在流水线中指定-Runner"><a href="#四、在流水线中指定-Runner" class="headerlink" title="四、在流水线中指定 Runner"></a>四、在流水线中指定 Runner</h3><p>在 <code>.gitlab-ci.yml</code> 中通过 <code>tags</code> 指定使用你的 Runner（与注册时设置的标签一致）：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 例如在部署阶段指定</span></span><br><span class="line"><span class="attr">deploy_to_test:</span></span><br><span class="line">  <span class="attr">stage:</span> <span class="string">deploy_test</span></span><br><span class="line">  <span class="attr">tags:</span> <span class="comment"># 匹配 Runner 的标签</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">vue</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">deploy</span></span><br><span class="line">  <span class="attr">script:</span></span><br><span class="line">    <span class="comment"># 部署命令...</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="五、管理-Runner"><a href="#五、管理-Runner" class="headerlink" title="五、管理 Runner"></a>五、管理 Runner</h3><p>在 GitLab 项目的 <code>Settings → CI/CD → Runners</code> 中可以：</p>
+<ul>
+<li>启用/禁用 Runner</li>
+<li>修改 Runner 标签</li>
+<li>查看 Runner 状态（是否在线）</li>
+<li>删除无用的 Runner</li>
+</ul>
+<h3 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h3><ol>
+<li><p><strong>Runner 显示离线</strong>：<br>检查 Runner 服务是否启动，以及服务器能否访问 GitLab 地址（网络/防火墙问题）。</p>
+</li>
+<li><p><strong>权限错误（如无法拉取代码、执行 docker）</strong>：<br>确保 <code>gitlab-runner</code> 用户有足够权限（参考步骤 3）。</p>
+</li>
+<li><p><strong>构建速度慢</strong>：<br>给 Runner 所在服务器增加资源（CPU/内存），或配置缓存（如 <code>node_modules</code> 缓存）。</p>
+</li>
+</ol>
+<p>配置完成后，你的流水线会自动使用指定的 Runner 执行任务，避免因共享 Runner 资源不足导致的卡住或失败问题。</p>
+<p>GitLab Runner 是执行 CI/CD 流水线任务的代理程序，需要正确配置才能运行你的 Vue 项目构建和部署流程。以下是详细的设置步骤：</p>
+<h3 id="一、Runner-类型选择-1"><a href="#一、Runner-类型选择-1" class="headerlink" title="一、Runner 类型选择"></a>一、Runner 类型选择</h3><p>GitLab 提供两种 Runner：</p>
+<ul>
+<li><strong>共享 Runner</strong>：由 GitLab 官方或你的团队管理员维护，所有项目可共享使用</li>
+<li><strong>特定 Runner</strong>：仅用于你的项目，需自己安装和管理（推荐用于需要特殊环境的项目）</li>
+</ul>
+<h3 id="二、设置特定-Runner（推荐）-1"><a href="#二、设置特定-Runner（推荐）-1" class="headerlink" title="二、设置特定 Runner（推荐）"></a>二、设置特定 Runner（推荐）</h3><h4 id="1-安装-Runner-到服务器-1"><a href="#1-安装-Runner-到服务器-1" class="headerlink" title="1. 安装 Runner 到服务器"></a>1. 安装 Runner 到服务器</h4><p>根据你的服务器系统选择安装方式（以 Linux 为例）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 添加 GitLab 官方仓库</span></span><br><span class="line">curl -L <span class="string">&quot;https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh&quot;</span> | sudo bash</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 安装 Runner</span></span><br><span class="line">sudo apt-get install gitlab-runner</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 验证安装</span></span><br><span class="line">sudo gitlab-runner --version  <span class="comment"># 显示版本号即成功</span></span><br></pre></td></tr></table></figure>
+
+<p>其他系统（Windows/macOS）安装教程：<a target="_blank" rel="noopener" href="https://docs.gitlab.com/runner/install/">官方文档</a></p>
+<h4 id="2-注册-Runner-到你的项目-1"><a href="#2-注册-Runner-到你的项目-1" class="headerlink" title="2. 注册 Runner 到你的项目"></a>2. 注册 Runner 到你的项目</h4><p>需要从 GitLab 项目中获取<strong>注册令牌</strong>，然后将 Runner 与项目绑定：</p>
+<p><img src="cicd%E5%AF%86%E9%92%A5.png" alt="cicd密钥"></p>
+<h5 id="步骤-1：获取注册令牌-1"><a href="#步骤-1：获取注册令牌-1" class="headerlink" title="步骤 1：获取注册令牌"></a>步骤 1：获取注册令牌</h5><ol>
+<li>进入你的 GitLab 项目 → <strong>Settings</strong> → <strong>CI/CD</strong> → 展开 <strong>Runners</strong> 配置</li>
+<li>在 <strong>Specific runners</strong> 部分，找到 <code>Registration token</code>（注册令牌）并复制</li>
+</ol>
+<h5 id="步骤-2：注册-Runner-1"><a href="#步骤-2：注册-Runner-1" class="headerlink" title="步骤 2：注册 Runner"></a>步骤 2：注册 Runner</h5><p>在安装 Runner 的服务器上执行注册命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gitlab-runner register</span><br></pre></td></tr></table></figure>
+
+<p>按提示输入以下信息：</p>
+<ul>
+<li><code>GitLab instance URL</code>：你的 GitLab 地址（如 <code>https://gitlab.com</code> 或自建 GitLab 域名）</li>
+<li><code>Registration token</code>：粘贴步骤 1 复制的令牌</li>
+<li><code>Description</code>：给 Runner 起个名字（如 <code>vue-deploy-runner</code>）</li>
+<li><code>Tags</code>：设置标签（如 <code>vue,deploy</code>，后续可在 <code>.gitlab-ci.yml</code> 中指定使用该 Runner）</li>
+<li><code>Executor</code>：选择执行器（推荐 <code>docker</code>，适合前端项目）</li>
+<li>若选择 <code>docker</code>，还需指定默认镜像（如 <code>alpine:latest</code>）</li>
+</ul>
+<h4 id="3-启动-Runner-服务-1"><a href="#3-启动-Runner-服务-1" class="headerlink" title="3. 启动 Runner 服务"></a>3. 启动 Runner 服务</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 启动服务</span></span><br><span class="line">sudo gitlab-runner start</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看状态（确保显示 running）</span></span><br><span class="line">sudo gitlab-runner status</span><br></pre></td></tr></table></figure>
+
+<h3 id="三、配置-Runner-权限（关键）-1"><a href="#三、配置-Runner-权限（关键）-1" class="headerlink" title="三、配置 Runner 权限（关键）"></a>三、配置 Runner 权限（关键）</h3><p>如果 Runner 用 <code>docker</code> 执行器，需要赋予足够权限：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将 gitlab-runner 用户加入 docker 组（避免权限问题）</span></span><br><span class="line">sudo usermod -aG docker gitlab-runner</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重启 Runner 生效</span></span><br><span class="line">sudo gitlab-runner restart</span><br></pre></td></tr></table></figure>
+
+<h3 id="四、在流水线中指定-Runner-1"><a href="#四、在流水线中指定-Runner-1" class="headerlink" title="四、在流水线中指定 Runner"></a>四、在流水线中指定 Runner</h3><p>在 <code>.gitlab-ci.yml</code> 中通过 <code>tags</code> 指定使用你的 Runner（与注册时设置的标签一致）：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 例如在部署阶段指定</span></span><br><span class="line"><span class="attr">deploy_to_test:</span></span><br><span class="line">  <span class="attr">stage:</span> <span class="string">deploy_test</span></span><br><span class="line">  <span class="attr">tags:</span> <span class="comment"># 匹配 Runner 的标签</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">vue</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">deploy</span></span><br><span class="line">  <span class="attr">script:</span></span><br><span class="line">    <span class="comment"># 部署命令...</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="五、管理-Runner-1"><a href="#五、管理-Runner-1" class="headerlink" title="五、管理 Runner"></a>五、管理 Runner</h3><p>在 GitLab 项目的 <code>Settings → CI/CD → Runners</code> 中可以：</p>
+<ul>
+<li>启用/禁用 Runner</li>
+<li>修改 Runner 标签</li>
+<li>查看 Runner 状态（是否在线）</li>
+<li>删除无用的 Runner</li>
+</ul>
+<h3 id="常见问题-1"><a href="#常见问题-1" class="headerlink" title="常见问题"></a>常见问题</h3><ol>
+<li><p><strong>Runner 显示离线</strong>：<br>检查 Runner 服务是否启动，以及服务器能否访问 GitLab 地址（网络/防火墙问题）。</p>
+</li>
+<li><p><strong>权限错误（如无法拉取代码、执行 docker）</strong>：<br>确保 <code>gitlab-runner</code> 用户有足够权限（参考步骤 3）。</p>
+</li>
+<li><p><strong>构建速度慢</strong>：<br>给 Runner 所在服务器增加资源（CPU/内存），或配置缓存（如 <code>node_modules</code> 缓存）。</p>
+</li>
+</ol>
+<p>配置完成后，你的流水线会自动使用指定的 Runner 执行任务，避免因共享 Runner 资源不足导致的卡住或失败问题。</p>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 guo2401143699@qq.com </span>
+    </div>
+</article>
+
+
+<p>
+    <a  class="dashang" onclick="dashangToggle()">💰</a>
+</p>
+
+
+
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">
+    c2022 guokun
+</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a></p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full" data-title="Toggle full screen shortcut key s"><span class="min "></span></button>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+
+<div class="hide_box" onclick="dashangToggle()"></div>
+<div class="shang_box">
+    <a class="shang_close"  onclick="dashangToggle()">×</a>
+    <div class="shang_tit">
+        <p>Help us with donation</p>
+    </div>
+    <div class="shang_payimg">
+        <div class="pay_img">
+            <img src="/img/alipay.jpg" class="alipay" title="扫码支持">
+            <img src="/img/weixin.jpg" class="weixin" title="扫码支持">
+        </div>
+    </div>
+    <div class="shang_payselect">
+        <span><label><input type="radio" name="pay" checked value="alipay">alipay</label></span><span><label><input type="radio" name="pay" value="weixin">weixin</label></span>
+    </div>
+</div>
+
+
+</body>
+<script src="/js/jquery.pjax.js?v=1.1.0" ></script>
+
+<script src="/js/script.js?v=1.1.0" ></script>
+<script>
+    var img_resize = 'default';
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $("#post .pjax table").addClass("green_title");
+        
+
+        /*渲染打赏样式*/
+        
+        $("input[name=pay]").on("click", function () {
+            if($("input[name=pay]:checked").val()=="weixin"){
+                $(".shang_box .shang_payimg .pay_img").addClass("weixin_img");
+            } else {
+                $(".shang_box .shang_payimg .pay_img").removeClass("weixin_img");
+            }
+        })
+        
+
+        /*高亮代码块行号*/
+        
+
+        /*访问数量*/
+        
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js");
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+    function dashangToggle() {
+        $(".shang_box").fadeToggle();
+        $(".hide_box").fadeToggle();
+    }
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 542px;
+    }
+    .nav.fullscreen {
+        margin-left: -542px;
+    }
+    .nav-left {
+        width: 120px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 492px;
+        }
+        .nav.fullscreen {
+            margin-left: -492px;
+        }
+        .nav-left {
+            width: 100px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 492px;
+            margin-left: -492px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #e2e0e0;
+    }
+    
+    
+
+    /*列表样式*/
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+    .nav-right:before {
+        content: ' ';
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.3;
+        background: url("https://gw.alicdn.com/imgextra/O1CN01qJtaNI1bWgX44BKhQ_!!6000000003473-2-yinhe.png_300x300Q75.jpg_.webp");
+        background-repeat: no-repeat;
+        background-position: 50% 0;
+        -ms-background-size: cover;
+        -o-background-size: cover;
+        -moz-background-size: cover;
+        -webkit-background-size: cover;
+        background-size: cover;
+    }
+    
+
+    
+</style>
+
+
+
+
+
+
+
+</html>
