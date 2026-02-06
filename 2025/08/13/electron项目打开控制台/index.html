@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>electron项目打开控制台 | 闷葫芦的博客</title>
+  <meta name="keywords" content=" 工具 ">
+  <meta name="description" content="electron项目打开控制台 | 闷葫芦的博客">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="解析、样式、布局、绘制、合成1. 创建dom树   词法分析-语法分析-dom树 2. 样式计算   创建cssom树 3. 布局计算   盒模型 content-pandding-border-margin 4. 绘制渲染   背景层（z-index：0）-内容层（z-index：50）-交互层（z-index：100） 5. 合成  合并层并绘制">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浏览器渲染原理">
+<meta property="og:url" content="https://guokungit.github.io/project/2026/02/06/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%B8%B2%E6%9F%93%E5%8E%9F%E7%90%86/index.html">
+<meta property="og:site_name" content="闷葫芦的博客">
+<meta property="og:description" content="解析、样式、布局、绘制、合成1. 创建dom树   词法分析-语法分析-dom树 2. 样式计算   创建cssom树 3. 布局计算   盒模型 content-pandding-border-margin 4. 绘制渲染   背景层（z-index：0）-内容层（z-index：50）-交互层（z-index：100） 5. 合成  合并层并绘制">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-02-06T02:00:42.000Z">
+<meta property="article:modified_time" content="2026-02-06T02:13:29.091Z">
+<meta property="article:author" content="闷葫芦">
+<meta property="article:tag" content="浏览器">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="icon" href="/img/avatar.png">
+
+<link href="/css/style.css?v=1.1.0" rel="stylesheet">
+
+<link href="/css/hl_theme/atom-light.css?v=1.1.0" rel="stylesheet">
+
+<link href="//cdn.jsdelivr.net/npm/animate.css@4.1.0/animate.min.css" rel="stylesheet">
+
+<script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="/js/titleTip.js?v=1.1.0" ></script>
+
+<script src="//cdn.jsdelivr.net/npm/highlightjs@9.16.2/highlight.pack.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" ></script>
+
+<script src="/js/iconfont.js?v=1.1.0" ></script>
+
+<meta name="generator" content="Hexo 5.4.1"></head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="false">
+  <input class="theme_preload_comment" value="">
+  <input class="theme_blog_path" value="">
+  <input id="theme_shortcut" value="true" />
+  <input id="theme_highlight_on" value="true" />
+  <input id="theme_code_copy" value="true" />
+</div>
+
+
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/"
+   class="avatar_target">
+    <img class="avatar"
+         src="/img/avatar.png"/>
+</a>
+<div class="author">
+    <span>闷葫芦</span>
+</div>
+
+<div class="icon">
+    
+        
+    
+        
+            <a title="github"
+               href="https://github.com/guokungit"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-github"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <a title="email"
+               href="mailto:guo2401143699@qq.com"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-email"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="qq"
+               href="http://wpa.qq.com/msgrd?v=3&uin=2401143699&site=qq&menu=yes"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-qq"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+</div>
+
+
+
+
+
+<ul>
+    <li>
+        <div class="all active" data-rel="All">All
+            
+                <small>(24)</small>
+            
+        </div>
+    </li>
+    
+        
+            
+                
+    <li>
+        <div data-rel="前端">
+            
+            前端
+            <small>(12)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="仓库管理">
+            
+            仓库管理
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="调试">
+            
+            调试
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="工程化">
+            
+            工程化
+            <small>(3)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="简历">
+            
+            简历
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="项目">
+            
+            项目
+            <small>(2)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="学习笔记">
+            
+            学习笔记
+            <small>(2)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="运维">
+            
+            运维
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+        
+            
+            
+            
+    </div>
+    <div>
+        
+        
+    </div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="24">
+
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        Links
+        <i class="iconfont icon-left"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <div class="right-top">
+        <div id="default-panel">
+            <i class="iconfont icon-search" data-title="search shortcut key i"></i>
+            <div class="right-title">All</div>
+            <i class="iconfont icon-file-tree" data-title="switch to outline view shortcut key w"></i>
+        </div>
+        <div id="search-panel">
+            <i class="iconfont icon-left" data-title="return"></i>
+            <input id="local-search-input" autocomplete="off"/>
+            <label class="border-line" for="input"></label>
+            <i class="iconfont icon-case-sensitive" data-title="case sensitive"></i>
+            <i class="iconfont icon-tag" data-title="label"></i>
+        </div>
+        <div id="outline-panel" style="display: none">
+            <div class="right-title">outline</div>
+            <i class="iconfont icon-list" data-title="switch to article list"></i>
+        </div>
+    </div>
+
+    <div class="tags-list">
+    <input id="tag-search" />
+    <div class="tag-wrapper">
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>安全</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>持续更新（ing）</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>个人信息</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>工程化</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>工具</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>后端接口</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>脚手架</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>浏览器</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>前端调接口下载</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>软工高项</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>信息安全工程师</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>音视频会议</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>影像协同</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>增量发布</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>cicd</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>css、svg</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>git</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>graphql</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>react webapackgit</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>vue状态库pinia、vuex</a>
+            </li>
+        
+    </div>
+
+</div>
+
+    
+    <nav id="title-list-nav">
+        
+        
+        <a  class="All 前端 "
+           href="/2026/02/06/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%B8%B2%E6%9F%93%E5%8E%9F%E7%90%86/"
+           data-tag="浏览器"
+           data-author="" >
+            <span class="post-title" title="浏览器渲染原理">浏览器渲染原理</span>
+            <span class="post-date" title="2026-02-06 10:00:42">2026/02/06</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2026/02/06/svg%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F/"
+           data-tag="css、svg"
+           data-author="" >
+            <span class="post-title" title="svg的使用方式">svg的使用方式</span>
+            <span class="post-date" title="2026-02-06 09:12:13">2026/02/06</span>
+        </a>
+        
+        
+        <a  class="All 学习笔记 "
+           href="/2026/01/29/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%B7%A5%E7%A8%8B%E5%B8%88%E2%80%94%E2%80%94%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"
+           data-tag="信息安全工程师"
+           data-author="" >
+            <span class="post-title" title="信息安全工程师——学习笔记">信息安全工程师——学习笔记</span>
+            <span class="post-date" title="2026-01-29 16:28:51">2026/01/29</span>
+        </a>
+        
+        
+        <a  class="All 学习笔记 "
+           href="/2026/01/29/%E9%AB%98%E7%BA%A7%E4%BF%A1%E6%81%AF%E7%B3%BB%E7%BB%9F%E9%A1%B9%E7%9B%AE%E5%B7%A5%E7%A8%8B%E5%B8%88%E2%80%94%E2%80%94%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"
+           data-tag="软工高项"
+           data-author="" >
+            <span class="post-title" title="高级信息系统项目工程师——学习笔记">高级信息系统项目工程师——学习笔记</span>
+            <span class="post-date" title="2026-01-29 16:23:59">2026/01/29</span>
+        </a>
+        
+        
+        <a  class="All 简历 "
+           href="/2025/10/29/%E4%B8%AA%E4%BA%BA%E7%AE%80%E5%8E%86/"
+           data-tag="个人信息"
+           data-author="" >
+            <span class="post-title" title="个人简历">个人简历</span>
+            <span class="post-date" title="2025-10-29 15:55:11">2025/10/29</span>
+        </a>
+        
+        
+        <a  class="All 调试 "
+           href="/2025/10/23/vscode%E7%9A%84%E8%B0%83%E8%AF%95/"
+           data-tag="工程化"
+           data-author="" >
+            <span class="post-title" title="vscode的调试">vscode的调试</span>
+            <span class="post-date" title="2025-10-23 19:36:18">2025/10/23</span>
+        </a>
+        
+        
+        <a  class="All 工程化 "
+           href="/2025/10/22/%E5%89%8D%E7%AB%AF%E6%9C%AC%E5%9C%B0%E8%B0%83%E8%AF%95%E8%84%9A%E6%89%8B%E6%9E%B6/"
+           data-tag="脚手架"
+           data-author="" >
+            <span class="post-title" title="前端本地调试脚手架">前端本地调试脚手架</span>
+            <span class="post-date" title="2025-10-22 09:33:58">2025/10/22</span>
+        </a>
+        
+        
+        <a  class="All 工程化 "
+           href="/2025/10/10/%E5%89%8D%E7%AB%AF%E5%A2%9E%E9%87%8F%E5%8F%91%E5%B8%83/"
+           data-tag="增量发布"
+           data-author="" >
+            <span class="post-title" title="前端增量发布">前端增量发布</span>
+            <span class="post-date" title="2025-10-10 09:44:03">2025/10/10</span>
+        </a>
+        
+        
+        <a  class="All 运维 "
+           href="/2025/08/14/gitlab%E7%9A%84cicd/"
+           data-tag="cicd"
+           data-author="" >
+            <span class="post-title" title="gitlab的cicd">gitlab的cicd</span>
+            <span class="post-date" title="2025-08-14 12:12:21">2025/08/14</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2025/08/13/electron%E9%A1%B9%E7%9B%AE%E6%89%93%E5%BC%80%E6%8E%A7%E5%88%B6%E5%8F%B0/"
+           data-tag="工具"
+           data-author="" >
+            <span class="post-title" title="electron项目打开控制台">electron项目打开控制台</span>
+            <span class="post-date" title="2025-08-13 08:50:50">2025/08/13</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2025/08/11/vuex%E4%B8%8Epinia/"
+           data-tag="vue状态库pinia、vuex"
+           data-author="" >
+            <span class="post-title" title="vuex与pinia">vuex与pinia</span>
+            <span class="post-date" title="2025-08-11 09:33:44">2025/08/11</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2025/08/01/%E5%A6%82%E4%BD%95%E5%9C%A8%E4%B8%80%E4%B8%AA%E9%A1%B9%E7%9B%AE%E4%B8%AD%E4%BD%BF%E7%94%A8lerna%E7%AE%A1%E7%90%86%E6%9C%8D%E5%8A%A1/"
+           data-tag="工程化"
+           data-author="" >
+            <span class="post-title" title="如何在一个项目中使用lerna管理服务">如何在一个项目中使用lerna管理服务</span>
+            <span class="post-date" title="2025-08-01 18:19:36">2025/08/01</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2025/08/01/scp%E5%85%8D%E5%AF%86%E6%8E%A8%E9%80%81%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E5%A4%B9%E5%88%B0%E8%BF%9C%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8/"
+           data-tag="工程化"
+           data-author="" >
+            <span class="post-title" title="scp免密推送本地文件夹到远程服务器">scp免密推送本地文件夹到远程服务器</span>
+            <span class="post-date" title="2025-08-01 17:26:16">2025/08/01</span>
+        </a>
+        
+        
+        <a  class="All "
+           href="/2025/07/16/hello-world/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="Hello World">Hello World</span>
+            <span class="post-date" title="2025-07-16 09:13:21">2025/07/16</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2025/06/25/react%E6%90%AD%E5%BB%BA%E6%A1%86%E6%9E%B6%E5%B7%B2%E8%B8%A9%E5%9D%91/"
+           data-tag="react webapackgit"
+           data-author="" >
+            <span class="post-title" title="react搭建框架已踩坑">react搭建框架已踩坑</span>
+            <span class="post-date" title="2025-06-25 11:00:06">2025/06/25</span>
+        </a>
+        
+        
+        <a  class="All 工程化 "
+           href="/2025/06/22/lerna%E7%AE%A1%E7%90%86%E6%9C%8D%E5%8A%A1/"
+           data-tag="脚手架"
+           data-author="" >
+            <span class="post-title" title="lerna管理服务">lerna管理服务</span>
+            <span class="post-date" title="2025-06-22 19:10:06">2025/06/22</span>
+        </a>
+        
+        
+        <a  class="All 项目 "
+           href="/2025/06/22/%E5%9F%BA%E4%BA%8Eohif%E5%AE%9E%E7%8E%B0%E5%BD%B1%E5%83%8F%E5%8D%8F%E5%90%8C/"
+           data-tag="影像协同"
+           data-author="" >
+            <span class="post-title" title="基于OHIF实现影像协同">基于OHIF实现影像协同</span>
+            <span class="post-date" title="2025-06-22 14:11:27">2025/06/22</span>
+        </a>
+        
+        
+        <a  class="All 项目 "
+           href="/2025/06/22/webrtc%E5%AE%9E%E7%8E%B0%E9%9F%B3%E8%A7%86%E9%A2%91%E9%80%9A%E8%AF%9D/"
+           data-tag="音视频会议"
+           data-author="" >
+            <span class="post-title" title="webrtc实现音视频通话">webrtc实现音视频通话</span>
+            <span class="post-date" title="2025-06-22 14:10:57">2025/06/22</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2022/08/28/graphql%E7%9C%8B%E6%87%82%E8%BF%99%E7%AF%87%E7%9B%B4%E6%8E%A5%E5%BC%80%E5%8F%91/"
+           data-tag="graphql"
+           data-author="" >
+            <span class="post-title" title="graphql看懂这篇直接开发">graphql看懂这篇直接开发</span>
+            <span class="post-date" title="2022-08-28 17:44:15">2022/08/28</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2022/05/24/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%AE%89%E5%85%A8/"
+           data-tag="安全"
+           data-author="" >
+            <span class="post-title" title="浏览器安全">浏览器安全</span>
+            <span class="post-date" title="2022-05-24 09:12:51">2022/05/24</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2022/05/22/%E6%AF%8F%E5%A4%A9%E4%B8%80%E4%B8%AA%E6%96%B0%E9%97%AE%E9%A2%98%EF%BC%88%E6%B0%B8%E8%BF%9C%E4%BF%9D%E6%8C%81%E6%80%80%E7%96%91%EF%BC%89/"
+           data-tag="持续更新（ing）"
+           data-author="" >
+            <span class="post-title" title="每天一个新问题（永远保持怀疑）">每天一个新问题（永远保持怀疑）</span>
+            <span class="post-date" title="2022-05-22 22:49:29">2022/05/22</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2022/05/22/react%E5%89%8D%E7%AB%AF%E4%B8%8B%E8%BD%BD%E5%90%8E%E7%AB%AF%E8%BF%94%E5%9B%9E%E7%9A%84%E6%96%87%E4%BB%B6%E6%96%B9%E6%B3%95%EF%BC%88url%E3%80%81%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%B5%81%EF%BC%89/"
+           data-tag="前端调接口下载"
+           data-author="" >
+            <span class="post-title" title="react前端下载后端返回的文件方法（url、二进制流）">react前端下载后端返回的文件方法（url、二进制流）</span>
+            <span class="post-date" title="2022-05-22 22:41:02">2022/05/22</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2022/05/22/%E6%A3%80%E6%B5%8B%E5%90%8E%E7%AB%AF%E6%8E%A5%E5%8F%A3%E5%B8%B8%E8%A7%81%E6%96%B9%E6%B3%95/"
+           data-tag="后端接口"
+           data-author="" >
+            <span class="post-title" title="检测后端接口常见方法">检测后端接口常见方法</span>
+            <span class="post-date" title="2022-05-22 22:36:45">2022/05/22</span>
+        </a>
+        
+        
+        <a  class="All 仓库管理 "
+           href="/2022/05/22/git/"
+           data-tag="git"
+           data-author="" >
+            <span class="post-title" title="实战中开发git">实战中开发git</span>
+            <span class="post-date" title="2022-05-22 21:34:00">2022/05/22</span>
+        </a>
+        
+        <div id="no-item-tips">
+
+        </div>
+    </nav>
+    <div id="outline-list">
+    </div>
+</div>
+
+    </div>
+    <div class="hide-list">
+        <div class="semicircle" data-title="Toggle full screen shortcut key s">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div id="post">
+    <div class="pjax">
+        <article id="post-electron项目打开控制台" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">electron项目打开控制台</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="前端">前端</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color3">工具</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+            Created At : <time class="date" title='Updated At: 2025-08-13 08:52:34'>2025-08-13 08:50</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        
+        <span id="busuanzi_container_page_pv">
+            Views 👀 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E6%8F%8F%E8%BF%B0"><span class="toc-text">实现描述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="toc-text">代码示例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%B2%E8%8C%83%E6%8E%AA%E6%96%BD%E2%80%94%E2%80%94%E5%96%9C%E9%A9%AC%E6%8B%89%E9%9B%85"><span class="toc-text">防范措施——喜马拉雅</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E5%AF%B9%E6%8E%AA%E6%96%BD"><span class="toc-text">应对措施</span></a></li></ol></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-3 i,
+    .toc-level-3 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="实现描述"><a href="#实现描述" class="headerlink" title="实现描述"></a>实现描述</h2><p>1、使用asar解压程序的asar压缩包 asar e app.asar app<br>2、在释放的文件中找到主进程入口文件 在package.json的main中为主入口文件，可以对压缩后的代码进行json格式化后在<br>3、找到创建窗口的代码，在后面添加 [Window].webContents.openDevTools()<br>4、将代码重新打包  asar p app app.asar<br>5、重新启动软件即可打开控制台</p>
+<h2 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h2><p>let {BrowserWindow} = require(‘electron’)<br>let timer = null<br>timer = setInterval(()=&gt;{<br>let windows = BrowserWindow.getAllWindows()<br>if(windows.length &gt; 0){<br>windows.forEach(v =&gt;{<br>if(v){<br>v.webContents.openDevTools()<br>}<br>})<br>clearInterval(timer)<br>}<br>},5000)</p>
+<h3 id="防范措施——喜马拉雅"><a href="#防范措施——喜马拉雅" class="headerlink" title="防范措施——喜马拉雅"></a>防范措施——喜马拉雅</h3><p>1、监听打开控制台的事件，闪退</p>
+<h3 id="应对措施"><a href="#应对措施" class="headerlink" title="应对措施"></a>应对措施</h3><p>1、在开启前，移除打开控制台事件闪退<br>v.webContents.removeAllListener(‘devtools-opened’)</p>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 guo2401143699@qq.com </span>
+    </div>
+</article>
+
+
+<p>
+    <a  class="dashang" onclick="dashangToggle()">💰</a>
+</p>
+
+
+
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">
+    c2022 guokun
+</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a></p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full" data-title="Toggle full screen shortcut key s"><span class="min "></span></button>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+
+<div class="hide_box" onclick="dashangToggle()"></div>
+<div class="shang_box">
+    <a class="shang_close"  onclick="dashangToggle()">×</a>
+    <div class="shang_tit">
+        <p>Help us with donation</p>
+    </div>
+    <div class="shang_payimg">
+        <div class="pay_img">
+            <img src="/img/alipay.jpg" class="alipay" title="扫码支持">
+            <img src="/img/weixin.jpg" class="weixin" title="扫码支持">
+        </div>
+    </div>
+    <div class="shang_payselect">
+        <span><label><input type="radio" name="pay" checked value="alipay">alipay</label></span><span><label><input type="radio" name="pay" value="weixin">weixin</label></span>
+    </div>
+</div>
+
+
+</body>
+<script src="/js/jquery.pjax.js?v=1.1.0" ></script>
+
+<script src="/js/script.js?v=1.1.0" ></script>
+<script>
+    var img_resize = 'default';
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $("#post .pjax table").addClass("green_title");
+        
+
+        /*渲染打赏样式*/
+        
+        $("input[name=pay]").on("click", function () {
+            if($("input[name=pay]:checked").val()=="weixin"){
+                $(".shang_box .shang_payimg .pay_img").addClass("weixin_img");
+            } else {
+                $(".shang_box .shang_payimg .pay_img").removeClass("weixin_img");
+            }
+        })
+        
+
+        /*高亮代码块行号*/
+        
+
+        /*访问数量*/
+        
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js");
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+    function dashangToggle() {
+        $(".shang_box").fadeToggle();
+        $(".hide_box").fadeToggle();
+    }
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 542px;
+    }
+    .nav.fullscreen {
+        margin-left: -542px;
+    }
+    .nav-left {
+        width: 120px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 492px;
+        }
+        .nav.fullscreen {
+            margin-left: -492px;
+        }
+        .nav-left {
+            width: 100px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 492px;
+            margin-left: -492px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #e2e0e0;
+    }
+    
+    
+
+    /*列表样式*/
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+    .nav-right:before {
+        content: ' ';
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.3;
+        background: url("https://gw.alicdn.com/imgextra/O1CN01qJtaNI1bWgX44BKhQ_!!6000000003473-2-yinhe.png_300x300Q75.jpg_.webp");
+        background-repeat: no-repeat;
+        background-position: 50% 0;
+        -ms-background-size: cover;
+        -o-background-size: cover;
+        -moz-background-size: cover;
+        -webkit-background-size: cover;
+        background-size: cover;
+    }
+    
+
+    
+</style>
+
+
+
+
+
+
+
+</html>

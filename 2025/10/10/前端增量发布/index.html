@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>前端增量发布 | 闷葫芦的博客</title>
+  <meta name="keywords" content=" 增量发布 ">
+  <meta name="description" content="前端增量发布 | 闷葫芦的博客">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="解析、样式、布局、绘制、合成1. 创建dom树   词法分析-语法分析-dom树 2. 样式计算   创建cssom树 3. 布局计算   盒模型 content-pandding-border-margin 4. 绘制渲染   背景层（z-index：0）-内容层（z-index：50）-交互层（z-index：100） 5. 合成  合并层并绘制">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浏览器渲染原理">
+<meta property="og:url" content="https://guokungit.github.io/project/2026/02/06/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%B8%B2%E6%9F%93%E5%8E%9F%E7%90%86/index.html">
+<meta property="og:site_name" content="闷葫芦的博客">
+<meta property="og:description" content="解析、样式、布局、绘制、合成1. 创建dom树   词法分析-语法分析-dom树 2. 样式计算   创建cssom树 3. 布局计算   盒模型 content-pandding-border-margin 4. 绘制渲染   背景层（z-index：0）-内容层（z-index：50）-交互层（z-index：100） 5. 合成  合并层并绘制">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-02-06T02:00:42.000Z">
+<meta property="article:modified_time" content="2026-02-06T02:13:29.091Z">
+<meta property="article:author" content="闷葫芦">
+<meta property="article:tag" content="浏览器">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="icon" href="/img/avatar.png">
+
+<link href="/css/style.css?v=1.1.0" rel="stylesheet">
+
+<link href="/css/hl_theme/atom-light.css?v=1.1.0" rel="stylesheet">
+
+<link href="//cdn.jsdelivr.net/npm/animate.css@4.1.0/animate.min.css" rel="stylesheet">
+
+<script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="/js/titleTip.js?v=1.1.0" ></script>
+
+<script src="//cdn.jsdelivr.net/npm/highlightjs@9.16.2/highlight.pack.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" ></script>
+
+<script src="/js/iconfont.js?v=1.1.0" ></script>
+
+<meta name="generator" content="Hexo 5.4.1"></head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="false">
+  <input class="theme_preload_comment" value="">
+  <input class="theme_blog_path" value="">
+  <input id="theme_shortcut" value="true" />
+  <input id="theme_highlight_on" value="true" />
+  <input id="theme_code_copy" value="true" />
+</div>
+
+
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/"
+   class="avatar_target">
+    <img class="avatar"
+         src="/img/avatar.png"/>
+</a>
+<div class="author">
+    <span>闷葫芦</span>
+</div>
+
+<div class="icon">
+    
+        
+    
+        
+            <a title="github"
+               href="https://github.com/guokungit"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-github"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <a title="email"
+               href="mailto:guo2401143699@qq.com"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-email"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="qq"
+               href="http://wpa.qq.com/msgrd?v=3&uin=2401143699&site=qq&menu=yes"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-qq"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+</div>
+
+
+
+
+
+<ul>
+    <li>
+        <div class="all active" data-rel="All">All
+            
+                <small>(24)</small>
+            
+        </div>
+    </li>
+    
+        
+            
+                
+    <li>
+        <div data-rel="前端">
+            
+            前端
+            <small>(12)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="仓库管理">
+            
+            仓库管理
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="调试">
+            
+            调试
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="工程化">
+            
+            工程化
+            <small>(3)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="简历">
+            
+            简历
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="项目">
+            
+            项目
+            <small>(2)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="学习笔记">
+            
+            学习笔记
+            <small>(2)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="运维">
+            
+            运维
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+        
+            
+            
+            
+    </div>
+    <div>
+        
+        
+    </div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="24">
+
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        Links
+        <i class="iconfont icon-left"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <div class="right-top">
+        <div id="default-panel">
+            <i class="iconfont icon-search" data-title="search shortcut key i"></i>
+            <div class="right-title">All</div>
+            <i class="iconfont icon-file-tree" data-title="switch to outline view shortcut key w"></i>
+        </div>
+        <div id="search-panel">
+            <i class="iconfont icon-left" data-title="return"></i>
+            <input id="local-search-input" autocomplete="off"/>
+            <label class="border-line" for="input"></label>
+            <i class="iconfont icon-case-sensitive" data-title="case sensitive"></i>
+            <i class="iconfont icon-tag" data-title="label"></i>
+        </div>
+        <div id="outline-panel" style="display: none">
+            <div class="right-title">outline</div>
+            <i class="iconfont icon-list" data-title="switch to article list"></i>
+        </div>
+    </div>
+
+    <div class="tags-list">
+    <input id="tag-search" />
+    <div class="tag-wrapper">
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>安全</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>持续更新（ing）</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>个人信息</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>工程化</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>工具</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>后端接口</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>脚手架</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>浏览器</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>前端调接口下载</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>软工高项</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>信息安全工程师</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>音视频会议</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>影像协同</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>增量发布</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>cicd</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>css、svg</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>git</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>graphql</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>react webapackgit</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>vue状态库pinia、vuex</a>
+            </li>
+        
+    </div>
+
+</div>
+
+    
+    <nav id="title-list-nav">
+        
+        
+        <a  class="All 前端 "
+           href="/2026/02/06/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%B8%B2%E6%9F%93%E5%8E%9F%E7%90%86/"
+           data-tag="浏览器"
+           data-author="" >
+            <span class="post-title" title="浏览器渲染原理">浏览器渲染原理</span>
+            <span class="post-date" title="2026-02-06 10:00:42">2026/02/06</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2026/02/06/svg%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F/"
+           data-tag="css、svg"
+           data-author="" >
+            <span class="post-title" title="svg的使用方式">svg的使用方式</span>
+            <span class="post-date" title="2026-02-06 09:12:13">2026/02/06</span>
+        </a>
+        
+        
+        <a  class="All 学习笔记 "
+           href="/2026/01/29/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%B7%A5%E7%A8%8B%E5%B8%88%E2%80%94%E2%80%94%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"
+           data-tag="信息安全工程师"
+           data-author="" >
+            <span class="post-title" title="信息安全工程师——学习笔记">信息安全工程师——学习笔记</span>
+            <span class="post-date" title="2026-01-29 16:28:51">2026/01/29</span>
+        </a>
+        
+        
+        <a  class="All 学习笔记 "
+           href="/2026/01/29/%E9%AB%98%E7%BA%A7%E4%BF%A1%E6%81%AF%E7%B3%BB%E7%BB%9F%E9%A1%B9%E7%9B%AE%E5%B7%A5%E7%A8%8B%E5%B8%88%E2%80%94%E2%80%94%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"
+           data-tag="软工高项"
+           data-author="" >
+            <span class="post-title" title="高级信息系统项目工程师——学习笔记">高级信息系统项目工程师——学习笔记</span>
+            <span class="post-date" title="2026-01-29 16:23:59">2026/01/29</span>
+        </a>
+        
+        
+        <a  class="All 简历 "
+           href="/2025/10/29/%E4%B8%AA%E4%BA%BA%E7%AE%80%E5%8E%86/"
+           data-tag="个人信息"
+           data-author="" >
+            <span class="post-title" title="个人简历">个人简历</span>
+            <span class="post-date" title="2025-10-29 15:55:11">2025/10/29</span>
+        </a>
+        
+        
+        <a  class="All 调试 "
+           href="/2025/10/23/vscode%E7%9A%84%E8%B0%83%E8%AF%95/"
+           data-tag="工程化"
+           data-author="" >
+            <span class="post-title" title="vscode的调试">vscode的调试</span>
+            <span class="post-date" title="2025-10-23 19:36:18">2025/10/23</span>
+        </a>
+        
+        
+        <a  class="All 工程化 "
+           href="/2025/10/22/%E5%89%8D%E7%AB%AF%E6%9C%AC%E5%9C%B0%E8%B0%83%E8%AF%95%E8%84%9A%E6%89%8B%E6%9E%B6/"
+           data-tag="脚手架"
+           data-author="" >
+            <span class="post-title" title="前端本地调试脚手架">前端本地调试脚手架</span>
+            <span class="post-date" title="2025-10-22 09:33:58">2025/10/22</span>
+        </a>
+        
+        
+        <a  class="All 工程化 "
+           href="/2025/10/10/%E5%89%8D%E7%AB%AF%E5%A2%9E%E9%87%8F%E5%8F%91%E5%B8%83/"
+           data-tag="增量发布"
+           data-author="" >
+            <span class="post-title" title="前端增量发布">前端增量发布</span>
+            <span class="post-date" title="2025-10-10 09:44:03">2025/10/10</span>
+        </a>
+        
+        
+        <a  class="All 运维 "
+           href="/2025/08/14/gitlab%E7%9A%84cicd/"
+           data-tag="cicd"
+           data-author="" >
+            <span class="post-title" title="gitlab的cicd">gitlab的cicd</span>
+            <span class="post-date" title="2025-08-14 12:12:21">2025/08/14</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2025/08/13/electron%E9%A1%B9%E7%9B%AE%E6%89%93%E5%BC%80%E6%8E%A7%E5%88%B6%E5%8F%B0/"
+           data-tag="工具"
+           data-author="" >
+            <span class="post-title" title="electron项目打开控制台">electron项目打开控制台</span>
+            <span class="post-date" title="2025-08-13 08:50:50">2025/08/13</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2025/08/11/vuex%E4%B8%8Epinia/"
+           data-tag="vue状态库pinia、vuex"
+           data-author="" >
+            <span class="post-title" title="vuex与pinia">vuex与pinia</span>
+            <span class="post-date" title="2025-08-11 09:33:44">2025/08/11</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2025/08/01/%E5%A6%82%E4%BD%95%E5%9C%A8%E4%B8%80%E4%B8%AA%E9%A1%B9%E7%9B%AE%E4%B8%AD%E4%BD%BF%E7%94%A8lerna%E7%AE%A1%E7%90%86%E6%9C%8D%E5%8A%A1/"
+           data-tag="工程化"
+           data-author="" >
+            <span class="post-title" title="如何在一个项目中使用lerna管理服务">如何在一个项目中使用lerna管理服务</span>
+            <span class="post-date" title="2025-08-01 18:19:36">2025/08/01</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2025/08/01/scp%E5%85%8D%E5%AF%86%E6%8E%A8%E9%80%81%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E5%A4%B9%E5%88%B0%E8%BF%9C%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8/"
+           data-tag="工程化"
+           data-author="" >
+            <span class="post-title" title="scp免密推送本地文件夹到远程服务器">scp免密推送本地文件夹到远程服务器</span>
+            <span class="post-date" title="2025-08-01 17:26:16">2025/08/01</span>
+        </a>
+        
+        
+        <a  class="All "
+           href="/2025/07/16/hello-world/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="Hello World">Hello World</span>
+            <span class="post-date" title="2025-07-16 09:13:21">2025/07/16</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2025/06/25/react%E6%90%AD%E5%BB%BA%E6%A1%86%E6%9E%B6%E5%B7%B2%E8%B8%A9%E5%9D%91/"
+           data-tag="react webapackgit"
+           data-author="" >
+            <span class="post-title" title="react搭建框架已踩坑">react搭建框架已踩坑</span>
+            <span class="post-date" title="2025-06-25 11:00:06">2025/06/25</span>
+        </a>
+        
+        
+        <a  class="All 工程化 "
+           href="/2025/06/22/lerna%E7%AE%A1%E7%90%86%E6%9C%8D%E5%8A%A1/"
+           data-tag="脚手架"
+           data-author="" >
+            <span class="post-title" title="lerna管理服务">lerna管理服务</span>
+            <span class="post-date" title="2025-06-22 19:10:06">2025/06/22</span>
+        </a>
+        
+        
+        <a  class="All 项目 "
+           href="/2025/06/22/%E5%9F%BA%E4%BA%8Eohif%E5%AE%9E%E7%8E%B0%E5%BD%B1%E5%83%8F%E5%8D%8F%E5%90%8C/"
+           data-tag="影像协同"
+           data-author="" >
+            <span class="post-title" title="基于OHIF实现影像协同">基于OHIF实现影像协同</span>
+            <span class="post-date" title="2025-06-22 14:11:27">2025/06/22</span>
+        </a>
+        
+        
+        <a  class="All 项目 "
+           href="/2025/06/22/webrtc%E5%AE%9E%E7%8E%B0%E9%9F%B3%E8%A7%86%E9%A2%91%E9%80%9A%E8%AF%9D/"
+           data-tag="音视频会议"
+           data-author="" >
+            <span class="post-title" title="webrtc实现音视频通话">webrtc实现音视频通话</span>
+            <span class="post-date" title="2025-06-22 14:10:57">2025/06/22</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2022/08/28/graphql%E7%9C%8B%E6%87%82%E8%BF%99%E7%AF%87%E7%9B%B4%E6%8E%A5%E5%BC%80%E5%8F%91/"
+           data-tag="graphql"
+           data-author="" >
+            <span class="post-title" title="graphql看懂这篇直接开发">graphql看懂这篇直接开发</span>
+            <span class="post-date" title="2022-08-28 17:44:15">2022/08/28</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2022/05/24/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%AE%89%E5%85%A8/"
+           data-tag="安全"
+           data-author="" >
+            <span class="post-title" title="浏览器安全">浏览器安全</span>
+            <span class="post-date" title="2022-05-24 09:12:51">2022/05/24</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2022/05/22/%E6%AF%8F%E5%A4%A9%E4%B8%80%E4%B8%AA%E6%96%B0%E9%97%AE%E9%A2%98%EF%BC%88%E6%B0%B8%E8%BF%9C%E4%BF%9D%E6%8C%81%E6%80%80%E7%96%91%EF%BC%89/"
+           data-tag="持续更新（ing）"
+           data-author="" >
+            <span class="post-title" title="每天一个新问题（永远保持怀疑）">每天一个新问题（永远保持怀疑）</span>
+            <span class="post-date" title="2022-05-22 22:49:29">2022/05/22</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2022/05/22/react%E5%89%8D%E7%AB%AF%E4%B8%8B%E8%BD%BD%E5%90%8E%E7%AB%AF%E8%BF%94%E5%9B%9E%E7%9A%84%E6%96%87%E4%BB%B6%E6%96%B9%E6%B3%95%EF%BC%88url%E3%80%81%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%B5%81%EF%BC%89/"
+           data-tag="前端调接口下载"
+           data-author="" >
+            <span class="post-title" title="react前端下载后端返回的文件方法（url、二进制流）">react前端下载后端返回的文件方法（url、二进制流）</span>
+            <span class="post-date" title="2022-05-22 22:41:02">2022/05/22</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2022/05/22/%E6%A3%80%E6%B5%8B%E5%90%8E%E7%AB%AF%E6%8E%A5%E5%8F%A3%E5%B8%B8%E8%A7%81%E6%96%B9%E6%B3%95/"
+           data-tag="后端接口"
+           data-author="" >
+            <span class="post-title" title="检测后端接口常见方法">检测后端接口常见方法</span>
+            <span class="post-date" title="2022-05-22 22:36:45">2022/05/22</span>
+        </a>
+        
+        
+        <a  class="All 仓库管理 "
+           href="/2022/05/22/git/"
+           data-tag="git"
+           data-author="" >
+            <span class="post-title" title="实战中开发git">实战中开发git</span>
+            <span class="post-date" title="2022-05-22 21:34:00">2022/05/22</span>
+        </a>
+        
+        <div id="no-item-tips">
+
+        </div>
+    </nav>
+    <div id="outline-list">
+    </div>
+</div>
+
+    </div>
+    <div class="hide-list">
+        <div class="semicircle" data-title="Toggle full screen shortcut key s">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div id="post">
+    <div class="pjax">
+        <article id="post-前端增量发布" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">前端增量发布</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="工程化">工程化</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color5">增量发布</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+            Created At : <time class="date" title='Updated At: 2025-10-10 09:45:03'>2025-10-10 09:44</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        
+        <span id="busuanzi_container_page_pv">
+            Views 👀 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E7%AB%AF%E5%A2%9E%E9%87%8F%E5%8F%91%E5%B8%83%EF%BC%9A%E5%8E%9F%E7%90%86%E3%80%81%E6%96%B9%E6%A1%88%E4%B8%8E%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97"><span class="toc-text">前端增量发布：原理、方案与实践指南</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E4%B8%8E%E4%BB%B7%E5%80%BC"><span class="toc-text">一、核心概念与价值</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E4%B8%8E%E5%85%A8%E9%87%8F%E5%8F%91%E5%B8%83%E7%9A%84%E5%AF%B9%E6%AF%94"><span class="toc-text">1. 与全量发布的对比</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%A2%9E%E9%87%8F%E5%8F%91%E5%B8%83%E7%9A%84%E6%A0%B8%E5%BF%83%E4%BB%B7%E5%80%BC"><span class="toc-text">2. 增量发布的核心价值</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%AE%9E%E7%8E%B0%E5%A2%9E%E9%87%8F%E5%8F%91%E5%B8%83%E7%9A%84%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E5%89%8D%E6%8F%90"><span class="toc-text">二、实现增量发布的核心技术前提</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E8%B5%84%E6%BA%90%E7%89%88%E6%9C%AC%E5%8C%96%EF%BC%88%E6%8C%87%E7%BA%B9%E7%AD%96%E7%95%A5%EF%BC%89"><span class="toc-text">1. 资源版本化（指纹策略）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%9E%84%E5%BB%BA%E4%BA%A7%E7%89%A9%E5%8F%AF%E8%BF%BD%E6%BA%AF"><span class="toc-text">2. 构建产物可追溯</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E4%B8%BB%E6%B5%81%E5%A2%9E%E9%87%8F%E5%8F%91%E5%B8%83%E6%96%B9%E6%A1%88"><span class="toc-text">三、主流增量发布方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%A1%881%EF%BC%9A%E8%B5%84%E6%BA%90%E7%BA%A7%E5%A2%9E%E9%87%8F%EF%BC%88%E5%9F%BA%E4%BA%8E%E6%96%87%E4%BB%B6%E5%AF%B9%E6%AF%94%EF%BC%89"><span class="toc-text">方案1：资源级增量（基于文件对比）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E6%B5%81%E7%A8%8B"><span class="toc-text">实现流程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7%E6%8E%A8%E8%8D%90"><span class="toc-text">工具推荐</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%A1%882%EF%BC%9A%E6%A8%A1%E5%9D%97%E7%BA%A7%E5%A2%9E%E9%87%8F%EF%BC%88%E5%9F%BA%E4%BA%8E%E6%A8%A1%E5%9D%97%E5%8C%96%E6%8B%86%E5%88%86%EF%BC%89"><span class="toc-text">方案2：模块级增量（基于模块化拆分）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E6%A0%B8%E5%BF%83%EF%BC%9A%E4%BB%A3%E7%A0%81%E5%88%86%E5%89%B2%EF%BC%88Code-Splitting%EF%BC%89"><span class="toc-text">实现核心：代码分割（Code Splitting）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B8%E5%9E%8B%E5%9C%BA%E6%99%AF%EF%BC%9A%E8%B7%AF%E7%94%B1%E7%BA%A7%E5%A2%9E%E9%87%8F"><span class="toc-text">典型场景：路由级增量</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%A1%883%EF%BC%9A%E5%9F%BA%E4%BA%8E-Git-%E7%9A%84%E5%A2%9E%E9%87%8F%E5%8F%91%E5%B8%83"><span class="toc-text">方案3：基于 Git 的增量发布</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E6%B5%81%E7%A8%8B-1"><span class="toc-text">实现流程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BC%98%E5%8A%BF%E4%B8%8E%E5%B1%80%E9%99%90"><span class="toc-text">优势与局限</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%85%B3%E9%94%AE%E9%97%AE%E9%A2%98%E4%B8%8E%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-text">四、关键问题与解决方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E7%BC%93%E5%AD%98%E5%A4%B1%E6%95%88%E9%97%AE%E9%A2%98"><span class="toc-text">1. 缓存失效问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%9B%9E%E6%BB%9A%E6%96%B9%E6%A1%88"><span class="toc-text">2. 回滚方案</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E8%B7%A8%E7%89%88%E6%9C%AC%E5%A2%9E%E9%87%8F%E9%97%AE%E9%A2%98"><span class="toc-text">3. 跨版本增量问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5%E5%BB%BA%E8%AE%AE"><span class="toc-text">五、最佳实践建议</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E6%80%BB%E7%BB%93"><span class="toc-text">六、总结</span></a></li></ol></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-3 i,
+    .toc-level-3 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="前端增量发布：原理、方案与实践指南"><a href="#前端增量发布：原理、方案与实践指南" class="headerlink" title="前端增量发布：原理、方案与实践指南"></a>前端增量发布：原理、方案与实践指南</h1><p>前端增量发布是一种优化发布流程的技术策略，核心是<strong>仅将代码变更部分（而非完整包）部署到生产环境</strong>，以减少发布体积、降低加载耗时、提升发布效率并降低全量发布的风险。它在大型前端项目（如中后台系统、电商平台）中应用广泛，是前端工程化体系的重要组成部分。</p>
+<h2 id="一、核心概念与价值"><a href="#一、核心概念与价值" class="headerlink" title="一、核心概念与价值"></a>一、核心概念与价值</h2><p>在理解具体方案前，需先明确增量发布的核心逻辑与解决的痛点：</p>
+<h3 id="1-与全量发布的对比"><a href="#1-与全量发布的对比" class="headerlink" title="1. 与全量发布的对比"></a>1. 与全量发布的对比</h3><p>全量发布每次将完整的前端资源包（如 <code>dist</code> 目录）部署到服务器，而增量发布仅传输变更文件。二者差异如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>全量发布</th>
+<th>增量发布</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>发布体积</td>
+<td>完整资源包（通常MB级）</td>
+<td>仅变更文件（通常KB级）</td>
+</tr>
+<tr>
+<td>加载耗时（用户端）</td>
+<td>需重新加载所有资源，耗时久</td>
+<td>仅加载变更资源，缓存复用率高</td>
+</tr>
+<tr>
+<td>发布风险</td>
+<td>全量覆盖，失败影响所有用户</td>
+<td>仅变更部分生效，风险范围可控</td>
+</tr>
+<tr>
+<td>适用场景</td>
+<td>小型项目、资源体积小的场景</td>
+<td>大型项目、迭代频繁、资源体积大的场景</td>
+</tr>
+</tbody></table>
+<h3 id="2-增量发布的核心价值"><a href="#2-增量发布的核心价值" class="headerlink" title="2. 增量发布的核心价值"></a>2. 增量发布的核心价值</h3><ul>
+<li><strong>提升发布效率</strong>：减少传输文件体积，尤其在大型项目中，发布时间可从分钟级缩短至秒级。</li>
+<li><strong>优化用户体验</strong>：用户无需重新加载未变更资源，依赖浏览器缓存，首屏/二次加载速度显著提升。</li>
+<li><strong>降低发布风险</strong>：变更范围小，若出现问题，回滚仅需恢复少量文件，影响面可控。</li>
+<li><strong>节省带宽成本</strong>：服务器与CDN间的传输量减少，长期可降低带宽支出。</li>
+</ul>
+<h2 id="二、实现增量发布的核心技术前提"><a href="#二、实现增量发布的核心技术前提" class="headerlink" title="二、实现增量发布的核心技术前提"></a>二、实现增量发布的核心技术前提</h2><p>增量发布的落地依赖前端工程化的基础配置，核心是<strong>资源标识唯一性</strong>与<strong>构建产物可对比性</strong>，具体需满足以下两点：</p>
+<h3 id="1-资源版本化（指纹策略）"><a href="#1-资源版本化（指纹策略）" class="headerlink" title="1. 资源版本化（指纹策略）"></a>1. 资源版本化（指纹策略）</h3><p>为避免浏览器缓存旧资源，需为每个资源文件添加“唯一标识”（即“指纹”），确保变更文件的指纹更新，未变更文件指纹不变。常见指纹策略有两种：</p>
+<ul>
+<li><strong>内容哈希（Content Hash）</strong>：基于文件内容计算哈希值（如 MD5、SHA-1），仅当文件内容变更时，哈希值才会变化（推荐）。<br>示例：<code>index.8f2d7b.js</code>、<code>style.a3c92e.css</code>。</li>
+<li><strong>版本哈希（Version Hash）</strong>：基于项目版本号（如 <code>package.json</code> 中的 <code>version</code>）或构建时间戳生成哈希，若项目无变更但版本号更新，所有资源指纹都会变化（不推荐，易导致“伪增量”）。</li>
+</ul>
+<p><strong>实现方式</strong>：通过构建工具（Webpack、Vite、Rollup）配置自动生成指纹，以 Webpack 为例：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.config.js</span></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">  <span class="attr">output</span>: &#123;</span><br><span class="line">    <span class="attr">filename</span>: <span class="string">&#x27;[name].[contenthash].js&#x27;</span>, <span class="comment">// JS文件加内容哈希</span></span><br><span class="line">    <span class="attr">cssFilename</span>: <span class="string">&#x27;[name].[contenthash].css&#x27;</span>, <span class="comment">// CSS文件加内容哈希（需配合mini-css-extract-plugin）</span></span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-构建产物可追溯"><a href="#2-构建产物可追溯" class="headerlink" title="2. 构建产物可追溯"></a>2. 构建产物可追溯</h3><p>每次构建需生成“变更清单”（如 <code>manifest.json</code>），记录本次发布的资源列表、哈希值、与上一版本的差异，供部署工具判断需传输的增量文件。</p>
+<p>以 Webpack 的 <code>webpack-manifest-plugin</code> 为例，生成的 <code>manifest.json</code> 如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;index.js&quot;</span><span class="punctuation">:</span> <span class="string">&quot;index.8f2d7b.js&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;style.css&quot;</span><span class="punctuation">:</span> <span class="string">&quot;style.a3c92e.css&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;vendor.js&quot;</span><span class="punctuation">:</span> <span class="string">&quot;vendor.5d8e1c.js&quot;</span> <span class="comment">// 第三方依赖（若未变更，哈希不变）</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+
+<h2 id="三、主流增量发布方案"><a href="#三、主流增量发布方案" class="headerlink" title="三、主流增量发布方案"></a>三、主流增量发布方案</h2><p>根据发布对象（静态资源、代码模块）的不同，增量发布可分为“资源级增量”和“模块级增量”两类，具体方案如下：</p>
+<h3 id="方案1：资源级增量（基于文件对比）"><a href="#方案1：资源级增量（基于文件对比）" class="headerlink" title="方案1：资源级增量（基于文件对比）"></a>方案1：资源级增量（基于文件对比）</h3><p>最基础、最通用的方案，核心是<strong>对比前后两次构建的产物目录，仅部署变更的文件</strong>，适用于所有前端项目（尤其是未采用模块化架构的项目）。</p>
+<h4 id="实现流程"><a href="#实现流程" class="headerlink" title="实现流程"></a>实现流程</h4><ol>
+<li><strong>本地构建</strong>：执行 <code>npm run build</code>，生成带内容哈希的产物（如 <code>dist</code> 目录）和 <code>manifest.json</code>。</li>
+<li><strong>差异对比</strong>：<ul>
+<li>方式1：本地对比（小型项目）：通过脚本（如 <code>diff</code> 命令、Node.js 工具）对比当前 <code>dist</code> 与上一版本的 <code>dist</code>，输出变更文件列表（新增、修改、删除）。</li>
+<li>方式2：服务器对比（大型项目）：将当前 <code>manifest.json</code> 上传至服务器，与服务器存储的“历史 manifest”对比，确定需传输的增量文件。</li>
+</ul>
+</li>
+<li><strong>增量部署</strong>：仅将变更文件上传至服务器/CDN，覆盖旧文件（若文件被删除，需同步删除服务器对应文件）。</li>
+<li><strong>更新入口文件</strong>：若 HTML 是动态生成的（如通过后端模板或 Node.js 服务），需更新 HTML 中引用的资源路径（如将 <code>index.oldhash.js</code> 改为 <code>index.newhash.js</code>）；若 HTML 是静态文件，需确保 HTML 本身也按增量逻辑部署（但 HTML 通常体积小，全量部署影响可忽略）。</li>
+</ol>
+<h4 id="工具推荐"><a href="#工具推荐" class="headerlink" title="工具推荐"></a>工具推荐</h4><ul>
+<li>对比工具：<code>diff-dir</code>（Node.js 库，对比目录差异）、<code>rsync</code>（Linux 命令，支持增量文件传输）。</li>
+<li>部署工具：<code>ftp-deploy</code>（基于 FTP 的增量部署）、<code>scp2</code>（基于 SSH 的增量部署）、云厂商 SDK（如阿里云 OSS SDK、腾讯云 COS SDK，支持批量上传变更文件）。</li>
+</ul>
+<h3 id="方案2：模块级增量（基于模块化拆分）"><a href="#方案2：模块级增量（基于模块化拆分）" class="headerlink" title="方案2：模块级增量（基于模块化拆分）"></a>方案2：模块级增量（基于模块化拆分）</h3><p>适用于采用 ES Module（ESM）或 AMD 等模块化架构的项目，核心是<strong>按业务模块拆分代码，仅发布变更的模块</strong>，进一步缩小发布范围（如仅更新“用户中心”模块，不影响“商品列表”模块）。</p>
+<h4 id="实现核心：代码分割（Code-Splitting）"><a href="#实现核心：代码分割（Code-Splitting）" class="headerlink" title="实现核心：代码分割（Code Splitting）"></a>实现核心：代码分割（Code Splitting）</h4><p>通过构建工具将代码拆分为“公共模块”（如 <code>vendor.js</code>、<code>common.js</code>）和“业务模块”（如 <code>user.js</code>、<code>goods.js</code>），每个模块独立生成带哈希的文件，变更仅影响对应模块。</p>
+<p>以 Webpack 代码分割为例：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.config.js</span></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">  <span class="attr">optimization</span>: &#123;</span><br><span class="line">    <span class="attr">splitChunks</span>: &#123;</span><br><span class="line">      <span class="attr">chunks</span>: <span class="string">&#x27;all&#x27;</span>,</span><br><span class="line">      <span class="attr">cacheGroups</span>: &#123;</span><br><span class="line">        <span class="comment">// 拆分第三方依赖为 vendor 模块</span></span><br><span class="line">        <span class="attr">vendor</span>: &#123;</span><br><span class="line">          <span class="attr">test</span>: <span class="regexp">/[\\/]node_modules[\\/]/</span>,</span><br><span class="line">          <span class="attr">name</span>: <span class="string">&#x27;vendor&#x27;</span>,</span><br><span class="line">          <span class="attr">chunks</span>: <span class="string">&#x27;all&#x27;</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="comment">// 拆分公共业务逻辑为 common 模块</span></span><br><span class="line">        <span class="attr">common</span>: &#123;</span><br><span class="line">          <span class="attr">name</span>: <span class="string">&#x27;common&#x27;</span>,</span><br><span class="line">          <span class="attr">minChunks</span>: <span class="number">2</span>, <span class="comment">// 被引用2次以上的模块纳入公共模块</span></span><br><span class="line">          <span class="attr">chunks</span>: <span class="string">&#x27;all&#x27;</span>,</span><br><span class="line">          <span class="attr">priority</span>: -<span class="number">10</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// 拆分异步加载的业务模块（如路由懒加载）</span></span><br><span class="line">    <span class="attr">runtimeChunk</span>: <span class="string">&#x27;single&#x27;</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="典型场景：路由级增量"><a href="#典型场景：路由级增量" class="headerlink" title="典型场景：路由级增量"></a>典型场景：路由级增量</h4><p>在 Vue/React 项目中，通过“路由懒加载”实现模块级增量发布：</p>
+<ul>
+<li>路由配置时，用 <code>import()</code> 异步加载组件，Webpack 会将每个路由组件拆分为独立模块。</li>
+<li>若仅修改“订单详情”路由的组件，发布时仅需更新该路由对应的模块文件（如 <code>OrderDetail.7a9d3f.js</code>），其他路由模块无需变动。</li>
+</ul>
+<p>Vue Router 示例：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> routes = [</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">path</span>: <span class="string">&#x27;/order/detail&#x27;</span>,</span><br><span class="line">    <span class="attr">name</span>: <span class="string">&#x27;OrderDetail&#x27;</span>,</span><br><span class="line">    <span class="comment">// 异步加载组件，生成独立模块</span></span><br><span class="line">    <span class="attr">component</span>: <span class="function">() =&gt;</span> <span class="title function_">import</span>(<span class="comment">/* webpackChunkName: &quot;OrderDetail&quot; */</span> <span class="string">&#x27;../views/OrderDetail.vue&#x27;</span>),</span><br><span class="line">  &#125;,</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="方案3：基于-Git-的增量发布"><a href="#方案3：基于-Git-的增量发布" class="headerlink" title="方案3：基于 Git 的增量发布"></a>方案3：基于 Git 的增量发布</h3><p>利用 Git 的版本控制能力，<strong>仅构建和发布 Git 提交中变更的代码对应的资源</strong>，适用于多人协作、迭代频繁的项目，可进一步减少无效构建。</p>
+<h4 id="实现流程-1"><a href="#实现流程-1" class="headerlink" title="实现流程"></a>实现流程</h4><ol>
+<li><strong>确定变更范围</strong>：通过 <code>git diff</code> 命令（如 <code>git diff HEAD~1 HEAD</code>）对比当前提交与上一提交，获取变更的文件列表（如 <code>src/views/User.vue</code>、<code>src/utils/format.js</code>）。</li>
+<li><strong>精准构建</strong>：通过构建工具插件（如 Webpack 的 <code>webpack-incremental-build-plugin</code>），仅构建变更文件依赖的资源，而非全量构建。</li>
+<li><strong>增量部署</strong>：将精准构建生成的变更资源，按方案1的逻辑部署到服务器。</li>
+</ol>
+<h4 id="优势与局限"><a href="#优势与局限" class="headerlink" title="优势与局限"></a>优势与局限</h4><ul>
+<li>优势：减少构建时间（尤其大型项目，全量构建可能需10+分钟，增量构建仅需1-2分钟）。</li>
+<li>局限：依赖 Git 提交记录，若提交包含大量不相关文件（如日志、文档），需额外过滤；且需确保构建工具支持“基于文件变更的增量构建”。</li>
+</ul>
+<h2 id="四、关键问题与解决方案"><a href="#四、关键问题与解决方案" class="headerlink" title="四、关键问题与解决方案"></a>四、关键问题与解决方案</h2><p>增量发布在实践中可能遇到“缓存失效”“回滚复杂”等问题，需针对性处理：</p>
+<h3 id="1-缓存失效问题"><a href="#1-缓存失效问题" class="headerlink" title="1. 缓存失效问题"></a>1. 缓存失效问题</h3><ul>
+<li><strong>问题描述</strong>：若某模块 A 依赖模块 B，当 B 变更时，A 的内容未变（哈希不变），但浏览器会缓存旧的 A，导致 A 仍引用旧的 B，引发报错。</li>
+<li><strong>解决方案</strong>：<ul>
+<li>构建时启用“依赖追踪”：通过 Webpack 的 <code>runtimeChunk</code> 配置，将模块间的依赖关系（如 <code>moduleId</code> 映射）拆分为独立的 <code>runtime.js</code>。当依赖变更时，<code>runtime.js</code> 的哈希会更新，浏览器重新加载 <code>runtime.js</code> 即可获取新的依赖映射。</li>
+<li>示例配置：<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">  <span class="attr">optimization</span>: &#123;</span><br><span class="line">    <span class="attr">runtimeChunk</span>: <span class="string">&#x27;single&#x27;</span>, <span class="comment">// 生成独立的 runtime.js</span></span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h3 id="2-回滚方案"><a href="#2-回滚方案" class="headerlink" title="2. 回滚方案"></a>2. 回滚方案</h3><ul>
+<li><strong>问题描述</strong>：增量发布后若出现 Bug，需快速回滚到上一版本，而仅恢复增量文件可能遗漏删除的文件。</li>
+<li><strong>解决方案</strong>：<ul>
+<li>版本备份：每次发布时，在服务器上按版本号（如 <code>v1.0.0</code>、<code>v1.0.1</code>）创建资源目录，而非直接覆盖旧目录。</li>
+<li>回滚操作：回滚时仅需将“入口文件引用”指向目标版本的资源目录，无需重新传输文件（如将 HTML 中资源路径从 <code>/v1.0.1/index.js</code> 改为 <code>/v1.0.0/index.js</code>）。</li>
+<li>示例目录结构：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">/static</span><br><span class="line">  /v1.0.0</span><br><span class="line">    index.8f2d7b.js</span><br><span class="line">    style.a3c92e.css</span><br><span class="line">  /v1.0.1</span><br><span class="line">    index.9a3e5f.js  // 仅变更此文件</span><br><span class="line">    style.a3c92e.css // 未变更，复用缓存</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h3 id="3-跨版本增量问题"><a href="#3-跨版本增量问题" class="headerlink" title="3. 跨版本增量问题"></a>3. 跨版本增量问题</h3><ul>
+<li><strong>问题描述</strong>：若跳过多个版本（如从 <code>v1.0.0</code> 直接发布 <code>v1.0.2</code>），仅对比相邻版本可能遗漏中间版本的变更。</li>
+<li><strong>解决方案</strong>：<ul>
+<li>维护“全量版本清单”：服务器存储每个版本的完整 <code>manifest.json</code>，发布时对比“当前版本”与“线上最新版本”的清单，而非相邻版本。</li>
+<li>工具支持：使用 <code>npm</code> 包 <code>compare-manifests</code> 等工具，直接对比两个版本清单的差异，生成增量文件列表。</li>
+</ul>
+</li>
+</ul>
+<h2 id="五、最佳实践建议"><a href="#五、最佳实践建议" class="headerlink" title="五、最佳实践建议"></a>五、最佳实践建议</h2><ol>
+<li><strong>优先使用内容哈希</strong>：避免用时间戳或版本号作为指纹，确保未变更文件的缓存可复用。</li>
+<li><strong>配合 CDN 部署</strong>：将静态资源（JS、CSS、图片）部署到 CDN，利用 CDN 的边缘缓存能力，进一步提升用户加载速度；增量发布时仅更新 CDN 上的变更资源。</li>
+<li><strong>自动化发布流程</strong>：将“构建-对比-部署-回滚”整合到 CI/CD 流水线（如 Jenkins、GitHub Actions、GitLab CI），减少人工操作失误。<br>示例 GitHub Actions 流程：<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">增量发布</span></span><br><span class="line"><span class="attr">on:</span></span><br><span class="line">  <span class="attr">push:</span></span><br><span class="line">    <span class="attr">branches:</span> [<span class="string">main</span>]</span><br><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">build-and-deploy:</span></span><br><span class="line">    <span class="attr">runs-on:</span> <span class="string">ubuntu-latest</span></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">uses:</span> <span class="string">actions/checkout@v3</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">安装依赖</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">npm</span> <span class="string">install</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">构建产物</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">npm</span> <span class="string">run</span> <span class="string">build</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">对比增量文件</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">node</span> <span class="string">scripts/diff-files.js</span> <span class="comment"># 自定义脚本对比变更</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">增量部署到</span> <span class="string">CDN</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">node</span> <span class="string">scripts/deploy-to-cdn.js</span> <span class="comment"># 仅上传变更文件</span></span><br></pre></td></tr></table></figure></li>
+<li><strong>监控发布状态</strong>：部署后通过监控工具（如 Sentry、阿里云 ARMS）检查资源加载情况，若出现“404 缺失文件”“资源加载失败”等问题，立即触发回滚。</li>
+</ol>
+<h2 id="六、总结"><a href="#六、总结" class="headerlink" title="六、总结"></a>六、总结</h2><p>前端增量发布的核心是“<strong>精准识别变更，最小化发布范围</strong>”，其落地依赖“资源指纹+构建清单+差异对比”三大技术支柱。在实际项目中，需根据项目规模（小型用资源级增量，大型用模块级增量）、协作模式（Git 协作用 Git 增量方案）选择合适的方案，并通过自动化流程和回滚机制保障发布稳定性。</p>
+<p>随着前端工程化的发展，增量发布已与微前端、模块联邦等技术结合（如微前端子应用的增量发布），进一步拓展了其应用场景，是大型前端项目提升发布效率的关键技术之一。</p>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 guo2401143699@qq.com </span>
+    </div>
+</article>
+
+
+<p>
+    <a  class="dashang" onclick="dashangToggle()">💰</a>
+</p>
+
+
+
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">
+    c2022 guokun
+</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a></p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full" data-title="Toggle full screen shortcut key s"><span class="min "></span></button>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+
+<div class="hide_box" onclick="dashangToggle()"></div>
+<div class="shang_box">
+    <a class="shang_close"  onclick="dashangToggle()">×</a>
+    <div class="shang_tit">
+        <p>Help us with donation</p>
+    </div>
+    <div class="shang_payimg">
+        <div class="pay_img">
+            <img src="/img/alipay.jpg" class="alipay" title="扫码支持">
+            <img src="/img/weixin.jpg" class="weixin" title="扫码支持">
+        </div>
+    </div>
+    <div class="shang_payselect">
+        <span><label><input type="radio" name="pay" checked value="alipay">alipay</label></span><span><label><input type="radio" name="pay" value="weixin">weixin</label></span>
+    </div>
+</div>
+
+
+</body>
+<script src="/js/jquery.pjax.js?v=1.1.0" ></script>
+
+<script src="/js/script.js?v=1.1.0" ></script>
+<script>
+    var img_resize = 'default';
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $("#post .pjax table").addClass("green_title");
+        
+
+        /*渲染打赏样式*/
+        
+        $("input[name=pay]").on("click", function () {
+            if($("input[name=pay]:checked").val()=="weixin"){
+                $(".shang_box .shang_payimg .pay_img").addClass("weixin_img");
+            } else {
+                $(".shang_box .shang_payimg .pay_img").removeClass("weixin_img");
+            }
+        })
+        
+
+        /*高亮代码块行号*/
+        
+
+        /*访问数量*/
+        
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js");
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+    function dashangToggle() {
+        $(".shang_box").fadeToggle();
+        $(".hide_box").fadeToggle();
+    }
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 542px;
+    }
+    .nav.fullscreen {
+        margin-left: -542px;
+    }
+    .nav-left {
+        width: 120px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 492px;
+        }
+        .nav.fullscreen {
+            margin-left: -492px;
+        }
+        .nav-left {
+            width: 100px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 492px;
+            margin-left: -492px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #e2e0e0;
+    }
+    
+    
+
+    /*列表样式*/
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+    .nav-right:before {
+        content: ' ';
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.3;
+        background: url("https://gw.alicdn.com/imgextra/O1CN01qJtaNI1bWgX44BKhQ_!!6000000003473-2-yinhe.png_300x300Q75.jpg_.webp");
+        background-repeat: no-repeat;
+        background-position: 50% 0;
+        -ms-background-size: cover;
+        -o-background-size: cover;
+        -moz-background-size: cover;
+        -webkit-background-size: cover;
+        background-size: cover;
+    }
+    
+
+    
+</style>
+
+
+
+
+
+
+
+</html>

@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>每天一个新问题（永远保持怀疑） | 闷葫芦的博客</title>
+  <meta name="keywords" content=" 持续更新（ing） ">
+  <meta name="description" content="每天一个新问题（永远保持怀疑） | 闷葫芦的博客">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="解析、样式、布局、绘制、合成1. 创建dom树   词法分析-语法分析-dom树 2. 样式计算   创建cssom树 3. 布局计算   盒模型 content-pandding-border-margin 4. 绘制渲染   背景层（z-index：0）-内容层（z-index：50）-交互层（z-index：100） 5. 合成  合并层并绘制">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浏览器渲染原理">
+<meta property="og:url" content="https://guokungit.github.io/project/2026/02/06/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%B8%B2%E6%9F%93%E5%8E%9F%E7%90%86/index.html">
+<meta property="og:site_name" content="闷葫芦的博客">
+<meta property="og:description" content="解析、样式、布局、绘制、合成1. 创建dom树   词法分析-语法分析-dom树 2. 样式计算   创建cssom树 3. 布局计算   盒模型 content-pandding-border-margin 4. 绘制渲染   背景层（z-index：0）-内容层（z-index：50）-交互层（z-index：100） 5. 合成  合并层并绘制">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-02-06T02:00:42.000Z">
+<meta property="article:modified_time" content="2026-02-06T02:13:29.091Z">
+<meta property="article:author" content="闷葫芦">
+<meta property="article:tag" content="浏览器">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="icon" href="/img/avatar.png">
+
+<link href="/css/style.css?v=1.1.0" rel="stylesheet">
+
+<link href="/css/hl_theme/atom-light.css?v=1.1.0" rel="stylesheet">
+
+<link href="//cdn.jsdelivr.net/npm/animate.css@4.1.0/animate.min.css" rel="stylesheet">
+
+<script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="/js/titleTip.js?v=1.1.0" ></script>
+
+<script src="//cdn.jsdelivr.net/npm/highlightjs@9.16.2/highlight.pack.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" ></script>
+
+<script src="/js/iconfont.js?v=1.1.0" ></script>
+
+<meta name="generator" content="Hexo 5.4.1"></head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="false">
+  <input class="theme_preload_comment" value="">
+  <input class="theme_blog_path" value="">
+  <input id="theme_shortcut" value="true" />
+  <input id="theme_highlight_on" value="true" />
+  <input id="theme_code_copy" value="true" />
+</div>
+
+
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/"
+   class="avatar_target">
+    <img class="avatar"
+         src="/img/avatar.png"/>
+</a>
+<div class="author">
+    <span>闷葫芦</span>
+</div>
+
+<div class="icon">
+    
+        
+    
+        
+            <a title="github"
+               href="https://github.com/guokungit"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-github"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <a title="email"
+               href="mailto:guo2401143699@qq.com"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-email"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="qq"
+               href="http://wpa.qq.com/msgrd?v=3&uin=2401143699&site=qq&menu=yes"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-qq"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+</div>
+
+
+
+
+
+<ul>
+    <li>
+        <div class="all active" data-rel="All">All
+            
+                <small>(24)</small>
+            
+        </div>
+    </li>
+    
+        
+            
+                
+    <li>
+        <div data-rel="前端">
+            
+            前端
+            <small>(12)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="仓库管理">
+            
+            仓库管理
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="调试">
+            
+            调试
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="工程化">
+            
+            工程化
+            <small>(3)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="简历">
+            
+            简历
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="项目">
+            
+            项目
+            <small>(2)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="学习笔记">
+            
+            学习笔记
+            <small>(2)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="运维">
+            
+            运维
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+        
+            
+            
+            
+    </div>
+    <div>
+        
+        
+    </div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="24">
+
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        Links
+        <i class="iconfont icon-left"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <div class="right-top">
+        <div id="default-panel">
+            <i class="iconfont icon-search" data-title="search shortcut key i"></i>
+            <div class="right-title">All</div>
+            <i class="iconfont icon-file-tree" data-title="switch to outline view shortcut key w"></i>
+        </div>
+        <div id="search-panel">
+            <i class="iconfont icon-left" data-title="return"></i>
+            <input id="local-search-input" autocomplete="off"/>
+            <label class="border-line" for="input"></label>
+            <i class="iconfont icon-case-sensitive" data-title="case sensitive"></i>
+            <i class="iconfont icon-tag" data-title="label"></i>
+        </div>
+        <div id="outline-panel" style="display: none">
+            <div class="right-title">outline</div>
+            <i class="iconfont icon-list" data-title="switch to article list"></i>
+        </div>
+    </div>
+
+    <div class="tags-list">
+    <input id="tag-search" />
+    <div class="tag-wrapper">
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>安全</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>持续更新（ing）</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>个人信息</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>工程化</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>工具</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>后端接口</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>脚手架</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>浏览器</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>前端调接口下载</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>软工高项</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>信息安全工程师</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>音视频会议</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>影像协同</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>增量发布</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>cicd</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>css、svg</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>git</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>graphql</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>react webapackgit</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>vue状态库pinia、vuex</a>
+            </li>
+        
+    </div>
+
+</div>
+
+    
+    <nav id="title-list-nav">
+        
+        
+        <a  class="All 前端 "
+           href="/2026/02/06/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%B8%B2%E6%9F%93%E5%8E%9F%E7%90%86/"
+           data-tag="浏览器"
+           data-author="" >
+            <span class="post-title" title="浏览器渲染原理">浏览器渲染原理</span>
+            <span class="post-date" title="2026-02-06 10:00:42">2026/02/06</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2026/02/06/svg%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F/"
+           data-tag="css、svg"
+           data-author="" >
+            <span class="post-title" title="svg的使用方式">svg的使用方式</span>
+            <span class="post-date" title="2026-02-06 09:12:13">2026/02/06</span>
+        </a>
+        
+        
+        <a  class="All 学习笔记 "
+           href="/2026/01/29/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%B7%A5%E7%A8%8B%E5%B8%88%E2%80%94%E2%80%94%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"
+           data-tag="信息安全工程师"
+           data-author="" >
+            <span class="post-title" title="信息安全工程师——学习笔记">信息安全工程师——学习笔记</span>
+            <span class="post-date" title="2026-01-29 16:28:51">2026/01/29</span>
+        </a>
+        
+        
+        <a  class="All 学习笔记 "
+           href="/2026/01/29/%E9%AB%98%E7%BA%A7%E4%BF%A1%E6%81%AF%E7%B3%BB%E7%BB%9F%E9%A1%B9%E7%9B%AE%E5%B7%A5%E7%A8%8B%E5%B8%88%E2%80%94%E2%80%94%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"
+           data-tag="软工高项"
+           data-author="" >
+            <span class="post-title" title="高级信息系统项目工程师——学习笔记">高级信息系统项目工程师——学习笔记</span>
+            <span class="post-date" title="2026-01-29 16:23:59">2026/01/29</span>
+        </a>
+        
+        
+        <a  class="All 简历 "
+           href="/2025/10/29/%E4%B8%AA%E4%BA%BA%E7%AE%80%E5%8E%86/"
+           data-tag="个人信息"
+           data-author="" >
+            <span class="post-title" title="个人简历">个人简历</span>
+            <span class="post-date" title="2025-10-29 15:55:11">2025/10/29</span>
+        </a>
+        
+        
+        <a  class="All 调试 "
+           href="/2025/10/23/vscode%E7%9A%84%E8%B0%83%E8%AF%95/"
+           data-tag="工程化"
+           data-author="" >
+            <span class="post-title" title="vscode的调试">vscode的调试</span>
+            <span class="post-date" title="2025-10-23 19:36:18">2025/10/23</span>
+        </a>
+        
+        
+        <a  class="All 工程化 "
+           href="/2025/10/22/%E5%89%8D%E7%AB%AF%E6%9C%AC%E5%9C%B0%E8%B0%83%E8%AF%95%E8%84%9A%E6%89%8B%E6%9E%B6/"
+           data-tag="脚手架"
+           data-author="" >
+            <span class="post-title" title="前端本地调试脚手架">前端本地调试脚手架</span>
+            <span class="post-date" title="2025-10-22 09:33:58">2025/10/22</span>
+        </a>
+        
+        
+        <a  class="All 工程化 "
+           href="/2025/10/10/%E5%89%8D%E7%AB%AF%E5%A2%9E%E9%87%8F%E5%8F%91%E5%B8%83/"
+           data-tag="增量发布"
+           data-author="" >
+            <span class="post-title" title="前端增量发布">前端增量发布</span>
+            <span class="post-date" title="2025-10-10 09:44:03">2025/10/10</span>
+        </a>
+        
+        
+        <a  class="All 运维 "
+           href="/2025/08/14/gitlab%E7%9A%84cicd/"
+           data-tag="cicd"
+           data-author="" >
+            <span class="post-title" title="gitlab的cicd">gitlab的cicd</span>
+            <span class="post-date" title="2025-08-14 12:12:21">2025/08/14</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2025/08/13/electron%E9%A1%B9%E7%9B%AE%E6%89%93%E5%BC%80%E6%8E%A7%E5%88%B6%E5%8F%B0/"
+           data-tag="工具"
+           data-author="" >
+            <span class="post-title" title="electron项目打开控制台">electron项目打开控制台</span>
+            <span class="post-date" title="2025-08-13 08:50:50">2025/08/13</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2025/08/11/vuex%E4%B8%8Epinia/"
+           data-tag="vue状态库pinia、vuex"
+           data-author="" >
+            <span class="post-title" title="vuex与pinia">vuex与pinia</span>
+            <span class="post-date" title="2025-08-11 09:33:44">2025/08/11</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2025/08/01/%E5%A6%82%E4%BD%95%E5%9C%A8%E4%B8%80%E4%B8%AA%E9%A1%B9%E7%9B%AE%E4%B8%AD%E4%BD%BF%E7%94%A8lerna%E7%AE%A1%E7%90%86%E6%9C%8D%E5%8A%A1/"
+           data-tag="工程化"
+           data-author="" >
+            <span class="post-title" title="如何在一个项目中使用lerna管理服务">如何在一个项目中使用lerna管理服务</span>
+            <span class="post-date" title="2025-08-01 18:19:36">2025/08/01</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2025/08/01/scp%E5%85%8D%E5%AF%86%E6%8E%A8%E9%80%81%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E5%A4%B9%E5%88%B0%E8%BF%9C%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8/"
+           data-tag="工程化"
+           data-author="" >
+            <span class="post-title" title="scp免密推送本地文件夹到远程服务器">scp免密推送本地文件夹到远程服务器</span>
+            <span class="post-date" title="2025-08-01 17:26:16">2025/08/01</span>
+        </a>
+        
+        
+        <a  class="All "
+           href="/2025/07/16/hello-world/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="Hello World">Hello World</span>
+            <span class="post-date" title="2025-07-16 09:13:21">2025/07/16</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2025/06/25/react%E6%90%AD%E5%BB%BA%E6%A1%86%E6%9E%B6%E5%B7%B2%E8%B8%A9%E5%9D%91/"
+           data-tag="react webapackgit"
+           data-author="" >
+            <span class="post-title" title="react搭建框架已踩坑">react搭建框架已踩坑</span>
+            <span class="post-date" title="2025-06-25 11:00:06">2025/06/25</span>
+        </a>
+        
+        
+        <a  class="All 工程化 "
+           href="/2025/06/22/lerna%E7%AE%A1%E7%90%86%E6%9C%8D%E5%8A%A1/"
+           data-tag="脚手架"
+           data-author="" >
+            <span class="post-title" title="lerna管理服务">lerna管理服务</span>
+            <span class="post-date" title="2025-06-22 19:10:06">2025/06/22</span>
+        </a>
+        
+        
+        <a  class="All 项目 "
+           href="/2025/06/22/%E5%9F%BA%E4%BA%8Eohif%E5%AE%9E%E7%8E%B0%E5%BD%B1%E5%83%8F%E5%8D%8F%E5%90%8C/"
+           data-tag="影像协同"
+           data-author="" >
+            <span class="post-title" title="基于OHIF实现影像协同">基于OHIF实现影像协同</span>
+            <span class="post-date" title="2025-06-22 14:11:27">2025/06/22</span>
+        </a>
+        
+        
+        <a  class="All 项目 "
+           href="/2025/06/22/webrtc%E5%AE%9E%E7%8E%B0%E9%9F%B3%E8%A7%86%E9%A2%91%E9%80%9A%E8%AF%9D/"
+           data-tag="音视频会议"
+           data-author="" >
+            <span class="post-title" title="webrtc实现音视频通话">webrtc实现音视频通话</span>
+            <span class="post-date" title="2025-06-22 14:10:57">2025/06/22</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2022/08/28/graphql%E7%9C%8B%E6%87%82%E8%BF%99%E7%AF%87%E7%9B%B4%E6%8E%A5%E5%BC%80%E5%8F%91/"
+           data-tag="graphql"
+           data-author="" >
+            <span class="post-title" title="graphql看懂这篇直接开发">graphql看懂这篇直接开发</span>
+            <span class="post-date" title="2022-08-28 17:44:15">2022/08/28</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2022/05/24/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%AE%89%E5%85%A8/"
+           data-tag="安全"
+           data-author="" >
+            <span class="post-title" title="浏览器安全">浏览器安全</span>
+            <span class="post-date" title="2022-05-24 09:12:51">2022/05/24</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2022/05/22/%E6%AF%8F%E5%A4%A9%E4%B8%80%E4%B8%AA%E6%96%B0%E9%97%AE%E9%A2%98%EF%BC%88%E6%B0%B8%E8%BF%9C%E4%BF%9D%E6%8C%81%E6%80%80%E7%96%91%EF%BC%89/"
+           data-tag="持续更新（ing）"
+           data-author="" >
+            <span class="post-title" title="每天一个新问题（永远保持怀疑）">每天一个新问题（永远保持怀疑）</span>
+            <span class="post-date" title="2022-05-22 22:49:29">2022/05/22</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2022/05/22/react%E5%89%8D%E7%AB%AF%E4%B8%8B%E8%BD%BD%E5%90%8E%E7%AB%AF%E8%BF%94%E5%9B%9E%E7%9A%84%E6%96%87%E4%BB%B6%E6%96%B9%E6%B3%95%EF%BC%88url%E3%80%81%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%B5%81%EF%BC%89/"
+           data-tag="前端调接口下载"
+           data-author="" >
+            <span class="post-title" title="react前端下载后端返回的文件方法（url、二进制流）">react前端下载后端返回的文件方法（url、二进制流）</span>
+            <span class="post-date" title="2022-05-22 22:41:02">2022/05/22</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2022/05/22/%E6%A3%80%E6%B5%8B%E5%90%8E%E7%AB%AF%E6%8E%A5%E5%8F%A3%E5%B8%B8%E8%A7%81%E6%96%B9%E6%B3%95/"
+           data-tag="后端接口"
+           data-author="" >
+            <span class="post-title" title="检测后端接口常见方法">检测后端接口常见方法</span>
+            <span class="post-date" title="2022-05-22 22:36:45">2022/05/22</span>
+        </a>
+        
+        
+        <a  class="All 仓库管理 "
+           href="/2022/05/22/git/"
+           data-tag="git"
+           data-author="" >
+            <span class="post-title" title="实战中开发git">实战中开发git</span>
+            <span class="post-date" title="2022-05-22 21:34:00">2022/05/22</span>
+        </a>
+        
+        <div id="no-item-tips">
+
+        </div>
+    </nav>
+    <div id="outline-list">
+    </div>
+</div>
+
+    </div>
+    <div class="hide-list">
+        <div class="semicircle" data-title="Toggle full screen shortcut key s">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div id="post">
+    <div class="pjax">
+        <article id="post-每天一个新问题（永远保持怀疑）" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">每天一个新问题（永远保持怀疑）</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="前端">前端</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color5">持续更新（ing）</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+            Created At : <time class="date" title='Updated At: 2025-08-13 16:32:28'>2022-05-22 22:49</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        
+        <span id="busuanzi_container_page_pv">
+            Views 👀 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E7%AD%94%E6%A1%88%EF%BC%9A"><span class="toc-text">答案：</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E7%AD%94%E6%A1%88"><span class="toc-text">答案</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E8%A7%A3%E7%AD%94"><span class="toc-text">解答</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E8%A7%A3%E7%AD%94-1"><span class="toc-text">解答</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E9%83%AD%E5%9D%A4%E3%80%81%E5%8F%B2%E5%A3%AE%E5%A3%AE%E3%80%81%E5%BE%90%E9%9B%AF%E7%AD%89%E5%9C%A8%E6%9E%97%E9%9D%99%E7%AC%AC%E4%B8%80%E6%AC%A1%E7%BA%BF%E4%B8%8B%E6%B2%9F%E9%80%9A%E6%97%B6%E7%9A%84%E8%AE%A8%E8%AE%BA%E6%89%80%E5%BE%97%E3%80%82"><span class="toc-text">郭坤、史壮壮、徐雯等在林静第一次线下沟通时的讨论所得。</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E8%A7%A3%E7%AD%94-2"><span class="toc-text">解答</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%9D%91"><span class="toc-text">坑</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E8%A7%A3%E7%AD%94-3"><span class="toc-text">解答</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E8%A7%A3%E7%AD%94-4"><span class="toc-text">解答</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%9D%91-1"><span class="toc-text">坑</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E8%A7%A3%E7%AD%94-5"><span class="toc-text">解答</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AD%94%E6%A1%88-1"><span class="toc-text">答案</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9B%B4%E7%AE%80%E4%BE%BF%E7%9A%84%E6%96%B9%E6%B3%95%E6%98%AF%E5%9C%A8%EF%BC%8C%E7%BB%88%E7%AB%AF%E5%90%AF%E5%8A%A8%E6%97%B6%EF%BC%8C%E5%B0%B1%E8%87%AA%E5%8A%A8%E6%BF%80%E6%B4%BB%E9%85%8D%E7%BD%AE-open-bash-profile"><span class="toc-text">更简便的方法是在，终端启动时，就自动激活配置 open ~&#x2F;.bash_profile</span></a>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-3 i,
+    .toc-level-3 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>1、&lt;&gt; 、&lt;React.Fragment&gt;与&lt;div&gt;。前两者作为代码块插入的 form 表单中，form 表单无法获取其值，后者可以获得。</p>
+<h6 id="答案："><a href="#答案：" class="headerlink" title="答案："></a>答案：</h6><figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// form表单获取值是通过内部最近的控件的onchange（）事件和value值获取，&lt;&gt; 和 &lt;React.Fragment&gt;中是没有onchange（）和value事件的，所以form.item无法获取内部控件的值，（对children进行最近的控件的onchange的事件监听）。而div控件是有onchange事件的。（onchage事件是冒泡）</span></span><br><span class="line">&lt;<span class="title class_">Form</span>.<span class="property">Item</span> name=<span class="string">&quot;opterator&quot;</span> label=<span class="string">&quot;操作人：&quot;</span>&gt;</span><br><span class="line">  <span class="language-xml"><span class="tag">&lt;<span class="name">div</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">    <span class="attr">onChange</span>=<span class="string">&#123;(e)</span> =&gt;</span> &#123;</span></span><br><span class="line"><span class="language-xml">      console.log(&quot;gerd =&gt; &quot;, e);</span></span><br><span class="line"><span class="language-xml">    &#125;&#125;</span></span><br><span class="line"><span class="language-xml">  &gt;</span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">div</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        <span class="attr">onChange</span>=<span class="string">&#123;(e)</span> =&gt;</span> &#123;</span></span><br><span class="line"><span class="language-xml">          console.log(e);</span></span><br><span class="line"><span class="language-xml">          e.stopPropagation(); //阻止冒泡后，获取不到值</span></span><br><span class="line"><span class="language-xml">        &#125;&#125;</span></span><br><span class="line"><span class="language-xml">      &gt;</span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">input</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          // <span class="attr">style</span>=<span class="string">&#123;&#123;</span> <span class="attr">width:</span> &#x27;<span class="attr">75</span>%&#x27; &#125;&#125;</span></span></span><br><span class="line"><span class="tag"><span class="language-xml">          <span class="attr">placeholder</span>=<span class="string">&quot;请输入操作人&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        /&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/&gt;</span></span></span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/<span class="title class_">Form</span>.<span class="property">Item</span>&gt;</span><br></pre></td></tr></table></figure>
+
+<p>2、antd 的 select 的默认属性值在 form 表单中不起作用，获取的是 undefined</p>
+<h6 id="答案"><a href="#答案" class="headerlink" title="答案"></a>答案</h6><blockquote>
+<p>form 表单中控件的值默认初始化只能通过 form 的 initialValues 和 setFieldsValue 进行初始化，form.item 内部控件中的 defaultvalue 值只能展示，但是当获取时，通过 form 的 value 为 undefined。</p>
+</blockquote>
+<p>3、this.setstate({data}),为了代码的简略性，常常使用 es6 的特性。易出现 state 值发生了变化，但是 render 函数并未触发。</p>
+<h6 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h6><blockquote>
+<p>react 的 this.setstate 方法在对象引用是需要注意，当对象中属性发生变化时，对象引用即发生变化，当数组对象中成员添加时，引用未发生变化。建议通过 this.setstate({data: […data]})的方式，将数组拆分赋值，实现引用的变化来触发 render 函数。</p>
+</blockquote>
+<p>4、 当我们开发时，经常遇到 antd 中日期选择器的时间处理。</p>
+<h6 id="解答-1"><a href="#解答-1" class="headerlink" title="解答"></a>解答</h6><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 通过monent函数转化，当然，monent需要引入函数库；import monent from &#x27;monent&#x27;;</span></span><br><span class="line">startDate = <span class="title function_">moment</span>(value.<span class="property">findDate</span>[<span class="number">0</span>].<span class="title function_">format</span>(<span class="string">&#x27;YYYY-MM-DD HH:mm:ss&#x27;</span>));<span class="comment">// 转化为开始日期</span></span><br><span class="line">endDate = <span class="title function_">moment</span>(value.<span class="property">findDate</span>[<span class="number">1</span>].<span class="title function_">format</span>(<span class="string">&#x27;YYYY-MM-DD HH:mm:ss&#x27;</span>));<span class="comment">// 转化为结束日期</span></span><br><span class="line"><span class="comment">// 此处的x为datepicker的value值哟。</span></span><br><span class="line">日期=》时间戳： x.<span class="title function_">unix</span>()</span><br><span class="line">时间戳=》日期：<span class="title function_">moment</span>( <span class="keyword">new</span> <span class="title class_">Date</span>(x * <span class="number">1000</span> ))</span><br></pre></td></tr></table></figure>
+
+<p>5、当需要实现带状态跳转页面时，实现进出返回页面的页面信息一致。</p>
+<h6 id="郭坤、史壮壮、徐雯等在林静第一次线下沟通时的讨论所得。"><a href="#郭坤、史壮壮、徐雯等在林静第一次线下沟通时的讨论所得。" class="headerlink" title="郭坤、史壮壮、徐雯等在林静第一次线下沟通时的讨论所得。"></a>郭坤、史壮壮、徐雯等在林静第一次线下沟通时的讨论所得。</h6><blockquote>
+<p>1）、redux<br>2）、将状态放在上级组件中存储<br>3）、放在 sessionstorage 或 localstorage 中存储</p>
+</blockquote>
+<p>优缺点：redux 可避免状态外漏</p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>方法</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>redux</td>
+<td>避免状态信息的泄漏</td>
+<td>每次不可以刷新页面进入，需通过路由跳转才能获取 props 中 redux 的值</td>
+</tr>
+<tr>
+<td>2</td>
+<td>将状态放在上级组件中存储</td>
+<td>通过组件的 props 传值，获取值时机可靠</td>
+<td>组件间耦合关系太深，开发繁琐</td>
+</tr>
+<tr>
+<td>3</td>
+<td>放在 sessionstorage 或 localstorage 中存储</td>
+<td>存储值方便</td>
+<td>当页面跳转时，无法有效的删除 storage 和在 session 中泄露状态信息</td>
+</tr>
+<tr>
+<td>4</td>
+<td>放在 url 中存储</td>
+<td>方便页面跳转获取参数</td>
+<td>当状态信息过多时，超出 url 长度。对于泄漏参数信息可以通过加密实现，最简单的 window.btoa()和 window.atob();window.atob()进行加密</td>
+</tr>
+</tbody></table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">6、&lt;a href=&quot;#&quot;&gt;&lt;/a&gt;标签点击下，路由上会添加#，当有涉及到路由情况时要注意，比如umi的propmt控件，检测路由变化，当路由发生变化时才进入肉流程。反之不会。</span><br><span class="line">    &lt;Prompt</span><br><span class="line">      when=&#123;this.state.submit&#125; // sunmit为提交按钮状态 默认为false</span><br><span class="line">      message=&#123;location =&gt; &#123;</span><br><span class="line">        if (this.state.submit) &#123;</span><br><span class="line">          Modal.confirm(&#123;</span><br><span class="line">            icon: &lt;ExclamationCircleOutlined /&gt;,</span><br><span class="line">            content: &#x27;暂未提交您所做的更改，是否提交&#x27;,</span><br><span class="line">            okText: &#x27;继续加载&#x27;,</span><br><span class="line">            cancelText: &#x27;取消&#x27;,</span><br><span class="line">            onOk: () =&gt; &#123;</span><br><span class="line">              this.setState(&#123; submit: false &#125;, () =&gt; &#123;</span><br><span class="line">                this.props.history.push(`$&#123;location.pathname&#125;`);</span><br><span class="line">              &#125;);</span><br><span class="line">            &#125;,</span><br><span class="line">            onCancel: () =&gt; &#123;&#125;,</span><br><span class="line">          &#125;);</span><br><span class="line">          return false; // 返回false时，阻塞路由跳转</span><br><span class="line">        &#125;</span><br><span class="line">        return true; // 返回true时，路由跳转</span><br><span class="line">      &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>7、永远不要修改 this.state 里的对象，要用 lodash 的 cloneDeep 实现对象隔离。chrome 也是人写的，不可避免的存在错误，不要相信没问题的工具。能相信的只有自己。！！！！</p>
+<p>8、父组件向子组件传值，子组件的个别属性接收的是第一次组件的值。状态未刷新</p>
+<h6 id="解答-2"><a href="#解答-2" class="headerlink" title="解答"></a>解答</h6><pre><code>    react的diff是根据组件的key值和value进行对比是否进行更换的，没有key值易出现传a但是接受到的还是b，状态没有刷新的情况。
+</code></pre>
+<p>9、定位问题，需要根据现有的情况进行定位。比如：当页面上路由展示不对时，应该尝试当 url 变化时，内容是否展示。是则是展示控件问题，通过查看版本锁，打包工具的不同对应的版本锁也不同。<br>10、验签问题，验签实质时获取申请的资源通过计算出想要的字段放在头文件中，每次调用接口都带上。</p>
+<h6 id="坑"><a href="#坑" class="headerlink" title="坑"></a>坑</h6><pre><code>   当设计时间戳问题时，一般设置为前后三十秒。且为本机时间，这时候电脑时间要与网络同步，不然会验签不通过。
+</code></pre>
+<p>11、antd 的版本包问题：antdesign/proprolayout 依赖安装 ant 时，它默认安装最新的 antd 版本包。但是 antd 的版本包易出错，导致网站样式错误。</p>
+<h6 id="解答-3"><a href="#解答-3" class="headerlink" title="解答"></a>解答</h6><pre><code>    通过指定安装antd版本，寻找无问题的antd版本可以安装无错误时间的antd版本，或者，依赖安装的prolayout中指定的antd版本。（到npm包仓库中找对应的版本包里的依赖项的版本）
+</code></pre>
+<p>13、为什么现在 peritter 在 vscode 中无法支持了？</p>
+<h6 id="解答-4"><a href="#解答-4" class="headerlink" title="解答"></a>解答</h6><pre><code>    最新版的peritter的默认配置不是项目根目录的.preitterrc而是.editorconfig。需要在vscode的设置中将preitter的设置默认值.editorconfig的勾选项取消即可。
+</code></pre>
+<p>14、element-ui 的 input 的 type 为 textarea，文本框。在接收后端值进行赋值后，无法进行编辑。</p>
+<h6 id="坑-1"><a href="#坑-1" class="headerlink" title="坑"></a>坑</h6><pre><code>背景是，我有一个文本框，文本框内容可通过调用ai接口获取到最佳文本，然后将获取到的文本赋值给文本框。
+问题：在赋值前，文本框是可以编辑的，赋值后，文本框无法编辑。
+排查问题思路：
+  1、看一下控制台是否有js报错。无报错。js逻辑没有问题
+  2、看一下input组件的事件监听是否正常。onfucs。blurs事件均正常。组件的事件系统没有问题
+  3、看一下element的dom节点是否正常。dom节点正常，textarea需要name或者id，否则会有提示信息。这个与问题原因无关
+  4、看一下后端接口返回字段。因为，该页面为编辑页面涉及到一个初始化的流程。接口字段缺失导致该问题
+</code></pre>
+<h6 id="解答-5"><a href="#解答-5" class="headerlink" title="解答"></a>解答</h6><pre><code>原因是，element-ui的input组件在初始化时，接口中没有返回相关字段，（不是字段为null，而是就没返回该字段）。使得页面中该组件绑定的值未被vue2的object。definepropertype监控到。渲染与数据层脱节。导致无法进行编辑。
+建议，前端在接到后端返回的接口数据源时，不要直接赋值。两个方案：
+1、一个一个字段的赋值，没有就赋值undefined
+2、通过object。asign（target，source）实现，后面的优先，这样至少可以放置接口返回字段缺失的问题。
+</code></pre>
+<p>15、推荐一个框架，<a target="_blank" rel="noopener" href="https://www.renren.io/guide/security%EF%BC%8C%E8%A6%86%E7%9B%96%E5%A4%A7%E5%A4%9A%E6%95%B0%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E9%9C%80%E6%B1%82">https://www.renren.io/guide/security，覆盖大多数后台管理需求</a></p>
+<p>16、为什么我明明安装了 nvm。重启后，再次打开终端输入 nvm 时候，被告知识别不到呢？配置文件也正确配置了，open ~/.bashrc</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"># tabtab source for electron-forge package</span><br><span class="line"># uninstall by removing these lines or running `tabtab uninstall electron-forge`</span><br><span class="line">[ -f /Users/ke/.nvm/versions/node/v20.11.1/lib/node_modules/electron-forge/node_modules/tabtab/.completions/electron-forge.bash ] &amp;&amp; . /Users/ke/.nvm/versions/node/v20.11.1/lib/node_modules/electron-forge/node_modules/tabtab/.completions/electron-forge.bash</span><br><span class="line">export NVM_DIR=&quot;$HOME/.nvm&quot;</span><br><span class="line">[ -s &quot;$NVM_DIR/nvm.sh&quot; ] &amp;&amp; \. &quot;$NVM_DIR/nvm.sh&quot;  # This loads nvm</span><br><span class="line">[ -s &quot;$NVM_DIR/bash_completion&quot; ] &amp;&amp; \. &quot;$NVM_DIR/bash_completion&quot;  # This loads nvm bash_completion</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="答案-1"><a href="#答案-1" class="headerlink" title="答案"></a>答案</h4><p>在终端中输入 source ～/.bashrc,激活配置即可。</p>
+<h4 id="更简便的方法是在，终端启动时，就自动激活配置-open-bash-profile"><a href="#更简便的方法是在，终端启动时，就自动激活配置-open-bash-profile" class="headerlink" title="更简便的方法是在，终端启动时，就自动激活配置 open ~/.bash_profile"></a>更简便的方法是在，终端启动时，就自动激活配置 open ~/.bash_profile</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"># &gt;&gt;&gt; conda initialize &gt;&gt;&gt;</span><br><span class="line"># !! Contents within this block are managed by &#x27;conda init&#x27; !!</span><br><span class="line">__conda_setup=&quot;$(&#x27;/opt/anaconda3/bin/conda&#x27; &#x27;shell.bash&#x27; &#x27;hook&#x27; 2&gt; /dev/null)&quot;</span><br><span class="line">if [ $? -eq 0 ]; then</span><br><span class="line">    eval &quot;$__conda_setup&quot;</span><br><span class="line">else</span><br><span class="line">    if [ -f &quot;/opt/anaconda3/etc/profile.d/conda.sh&quot; ]; then</span><br><span class="line">        . &quot;/opt/anaconda3/etc/profile.d/conda.sh&quot;</span><br><span class="line">    else</span><br><span class="line">        export PATH=&quot;/opt/anaconda3/bin:$PATH&quot;</span><br><span class="line">    fi</span><br><span class="line">fi</span><br><span class="line">unset __conda_setup</span><br><span class="line"># &lt;&lt;&lt; conda initialize &lt;&lt;&lt;</span><br><span class="line"></span><br><span class="line">if [ -f ~/.bashrc ]; then</span><br><span class="line">    source ~/.bashrc</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 guo2401143699@qq.com </span>
+    </div>
+</article>
+
+
+<p>
+    <a  class="dashang" onclick="dashangToggle()">💰</a>
+</p>
+
+
+
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">
+    c2022 guokun
+</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a></p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full" data-title="Toggle full screen shortcut key s"><span class="min "></span></button>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+
+<div class="hide_box" onclick="dashangToggle()"></div>
+<div class="shang_box">
+    <a class="shang_close"  onclick="dashangToggle()">×</a>
+    <div class="shang_tit">
+        <p>Help us with donation</p>
+    </div>
+    <div class="shang_payimg">
+        <div class="pay_img">
+            <img src="/img/alipay.jpg" class="alipay" title="扫码支持">
+            <img src="/img/weixin.jpg" class="weixin" title="扫码支持">
+        </div>
+    </div>
+    <div class="shang_payselect">
+        <span><label><input type="radio" name="pay" checked value="alipay">alipay</label></span><span><label><input type="radio" name="pay" value="weixin">weixin</label></span>
+    </div>
+</div>
+
+
+</body>
+<script src="/js/jquery.pjax.js?v=1.1.0" ></script>
+
+<script src="/js/script.js?v=1.1.0" ></script>
+<script>
+    var img_resize = 'default';
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $("#post .pjax table").addClass("green_title");
+        
+
+        /*渲染打赏样式*/
+        
+        $("input[name=pay]").on("click", function () {
+            if($("input[name=pay]:checked").val()=="weixin"){
+                $(".shang_box .shang_payimg .pay_img").addClass("weixin_img");
+            } else {
+                $(".shang_box .shang_payimg .pay_img").removeClass("weixin_img");
+            }
+        })
+        
+
+        /*高亮代码块行号*/
+        
+
+        /*访问数量*/
+        
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js");
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+    function dashangToggle() {
+        $(".shang_box").fadeToggle();
+        $(".hide_box").fadeToggle();
+    }
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 542px;
+    }
+    .nav.fullscreen {
+        margin-left: -542px;
+    }
+    .nav-left {
+        width: 120px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 492px;
+        }
+        .nav.fullscreen {
+            margin-left: -492px;
+        }
+        .nav-left {
+            width: 100px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 492px;
+            margin-left: -492px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #e2e0e0;
+    }
+    
+    
+
+    /*列表样式*/
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+    .nav-right:before {
+        content: ' ';
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.3;
+        background: url("https://gw.alicdn.com/imgextra/O1CN01qJtaNI1bWgX44BKhQ_!!6000000003473-2-yinhe.png_300x300Q75.jpg_.webp");
+        background-repeat: no-repeat;
+        background-position: 50% 0;
+        -ms-background-size: cover;
+        -o-background-size: cover;
+        -moz-background-size: cover;
+        -webkit-background-size: cover;
+        background-size: cover;
+    }
+    
+
+    
+</style>
+
+
+
+
+
+
+
+</html>

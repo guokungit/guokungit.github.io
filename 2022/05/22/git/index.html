@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>实战中开发git | 闷葫芦的博客</title>
+  <meta name="keywords" content=" git ">
+  <meta name="description" content="实战中开发git | 闷葫芦的博客">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="解析、样式、布局、绘制、合成1. 创建dom树   词法分析-语法分析-dom树 2. 样式计算   创建cssom树 3. 布局计算   盒模型 content-pandding-border-margin 4. 绘制渲染   背景层（z-index：0）-内容层（z-index：50）-交互层（z-index：100） 5. 合成  合并层并绘制">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浏览器渲染原理">
+<meta property="og:url" content="https://guokungit.github.io/project/2026/02/06/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%B8%B2%E6%9F%93%E5%8E%9F%E7%90%86/index.html">
+<meta property="og:site_name" content="闷葫芦的博客">
+<meta property="og:description" content="解析、样式、布局、绘制、合成1. 创建dom树   词法分析-语法分析-dom树 2. 样式计算   创建cssom树 3. 布局计算   盒模型 content-pandding-border-margin 4. 绘制渲染   背景层（z-index：0）-内容层（z-index：50）-交互层（z-index：100） 5. 合成  合并层并绘制">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-02-06T02:00:42.000Z">
+<meta property="article:modified_time" content="2026-02-06T02:13:29.091Z">
+<meta property="article:author" content="闷葫芦">
+<meta property="article:tag" content="浏览器">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="icon" href="/img/avatar.png">
+
+<link href="/css/style.css?v=1.1.0" rel="stylesheet">
+
+<link href="/css/hl_theme/atom-light.css?v=1.1.0" rel="stylesheet">
+
+<link href="//cdn.jsdelivr.net/npm/animate.css@4.1.0/animate.min.css" rel="stylesheet">
+
+<script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="/js/titleTip.js?v=1.1.0" ></script>
+
+<script src="//cdn.jsdelivr.net/npm/highlightjs@9.16.2/highlight.pack.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" ></script>
+
+<script src="/js/iconfont.js?v=1.1.0" ></script>
+
+<meta name="generator" content="Hexo 5.4.1"></head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="false">
+  <input class="theme_preload_comment" value="">
+  <input class="theme_blog_path" value="">
+  <input id="theme_shortcut" value="true" />
+  <input id="theme_highlight_on" value="true" />
+  <input id="theme_code_copy" value="true" />
+</div>
+
+
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/"
+   class="avatar_target">
+    <img class="avatar"
+         src="/img/avatar.png"/>
+</a>
+<div class="author">
+    <span>闷葫芦</span>
+</div>
+
+<div class="icon">
+    
+        
+    
+        
+            <a title="github"
+               href="https://github.com/guokungit"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-github"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <a title="email"
+               href="mailto:guo2401143699@qq.com"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-email"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="qq"
+               href="http://wpa.qq.com/msgrd?v=3&uin=2401143699&site=qq&menu=yes"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-qq"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+</div>
+
+
+
+
+
+<ul>
+    <li>
+        <div class="all active" data-rel="All">All
+            
+                <small>(24)</small>
+            
+        </div>
+    </li>
+    
+        
+            
+                
+    <li>
+        <div data-rel="前端">
+            
+            前端
+            <small>(12)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="仓库管理">
+            
+            仓库管理
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="调试">
+            
+            调试
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="工程化">
+            
+            工程化
+            <small>(3)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="简历">
+            
+            简历
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="项目">
+            
+            项目
+            <small>(2)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="学习笔记">
+            
+            学习笔记
+            <small>(2)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="运维">
+            
+            运维
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+        
+            
+            
+            
+    </div>
+    <div>
+        
+        
+    </div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="24">
+
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        Links
+        <i class="iconfont icon-left"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <div class="right-top">
+        <div id="default-panel">
+            <i class="iconfont icon-search" data-title="search shortcut key i"></i>
+            <div class="right-title">All</div>
+            <i class="iconfont icon-file-tree" data-title="switch to outline view shortcut key w"></i>
+        </div>
+        <div id="search-panel">
+            <i class="iconfont icon-left" data-title="return"></i>
+            <input id="local-search-input" autocomplete="off"/>
+            <label class="border-line" for="input"></label>
+            <i class="iconfont icon-case-sensitive" data-title="case sensitive"></i>
+            <i class="iconfont icon-tag" data-title="label"></i>
+        </div>
+        <div id="outline-panel" style="display: none">
+            <div class="right-title">outline</div>
+            <i class="iconfont icon-list" data-title="switch to article list"></i>
+        </div>
+    </div>
+
+    <div class="tags-list">
+    <input id="tag-search" />
+    <div class="tag-wrapper">
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>安全</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>持续更新（ing）</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>个人信息</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>工程化</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>工具</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>后端接口</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>脚手架</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>浏览器</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>前端调接口下载</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>软工高项</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>信息安全工程师</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>音视频会议</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>影像协同</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>增量发布</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>cicd</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>css、svg</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>git</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>graphql</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>react webapackgit</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>vue状态库pinia、vuex</a>
+            </li>
+        
+    </div>
+
+</div>
+
+    
+    <nav id="title-list-nav">
+        
+        
+        <a  class="All 前端 "
+           href="/2026/02/06/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%B8%B2%E6%9F%93%E5%8E%9F%E7%90%86/"
+           data-tag="浏览器"
+           data-author="" >
+            <span class="post-title" title="浏览器渲染原理">浏览器渲染原理</span>
+            <span class="post-date" title="2026-02-06 10:00:42">2026/02/06</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2026/02/06/svg%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F/"
+           data-tag="css、svg"
+           data-author="" >
+            <span class="post-title" title="svg的使用方式">svg的使用方式</span>
+            <span class="post-date" title="2026-02-06 09:12:13">2026/02/06</span>
+        </a>
+        
+        
+        <a  class="All 学习笔记 "
+           href="/2026/01/29/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%B7%A5%E7%A8%8B%E5%B8%88%E2%80%94%E2%80%94%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"
+           data-tag="信息安全工程师"
+           data-author="" >
+            <span class="post-title" title="信息安全工程师——学习笔记">信息安全工程师——学习笔记</span>
+            <span class="post-date" title="2026-01-29 16:28:51">2026/01/29</span>
+        </a>
+        
+        
+        <a  class="All 学习笔记 "
+           href="/2026/01/29/%E9%AB%98%E7%BA%A7%E4%BF%A1%E6%81%AF%E7%B3%BB%E7%BB%9F%E9%A1%B9%E7%9B%AE%E5%B7%A5%E7%A8%8B%E5%B8%88%E2%80%94%E2%80%94%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"
+           data-tag="软工高项"
+           data-author="" >
+            <span class="post-title" title="高级信息系统项目工程师——学习笔记">高级信息系统项目工程师——学习笔记</span>
+            <span class="post-date" title="2026-01-29 16:23:59">2026/01/29</span>
+        </a>
+        
+        
+        <a  class="All 简历 "
+           href="/2025/10/29/%E4%B8%AA%E4%BA%BA%E7%AE%80%E5%8E%86/"
+           data-tag="个人信息"
+           data-author="" >
+            <span class="post-title" title="个人简历">个人简历</span>
+            <span class="post-date" title="2025-10-29 15:55:11">2025/10/29</span>
+        </a>
+        
+        
+        <a  class="All 调试 "
+           href="/2025/10/23/vscode%E7%9A%84%E8%B0%83%E8%AF%95/"
+           data-tag="工程化"
+           data-author="" >
+            <span class="post-title" title="vscode的调试">vscode的调试</span>
+            <span class="post-date" title="2025-10-23 19:36:18">2025/10/23</span>
+        </a>
+        
+        
+        <a  class="All 工程化 "
+           href="/2025/10/22/%E5%89%8D%E7%AB%AF%E6%9C%AC%E5%9C%B0%E8%B0%83%E8%AF%95%E8%84%9A%E6%89%8B%E6%9E%B6/"
+           data-tag="脚手架"
+           data-author="" >
+            <span class="post-title" title="前端本地调试脚手架">前端本地调试脚手架</span>
+            <span class="post-date" title="2025-10-22 09:33:58">2025/10/22</span>
+        </a>
+        
+        
+        <a  class="All 工程化 "
+           href="/2025/10/10/%E5%89%8D%E7%AB%AF%E5%A2%9E%E9%87%8F%E5%8F%91%E5%B8%83/"
+           data-tag="增量发布"
+           data-author="" >
+            <span class="post-title" title="前端增量发布">前端增量发布</span>
+            <span class="post-date" title="2025-10-10 09:44:03">2025/10/10</span>
+        </a>
+        
+        
+        <a  class="All 运维 "
+           href="/2025/08/14/gitlab%E7%9A%84cicd/"
+           data-tag="cicd"
+           data-author="" >
+            <span class="post-title" title="gitlab的cicd">gitlab的cicd</span>
+            <span class="post-date" title="2025-08-14 12:12:21">2025/08/14</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2025/08/13/electron%E9%A1%B9%E7%9B%AE%E6%89%93%E5%BC%80%E6%8E%A7%E5%88%B6%E5%8F%B0/"
+           data-tag="工具"
+           data-author="" >
+            <span class="post-title" title="electron项目打开控制台">electron项目打开控制台</span>
+            <span class="post-date" title="2025-08-13 08:50:50">2025/08/13</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2025/08/11/vuex%E4%B8%8Epinia/"
+           data-tag="vue状态库pinia、vuex"
+           data-author="" >
+            <span class="post-title" title="vuex与pinia">vuex与pinia</span>
+            <span class="post-date" title="2025-08-11 09:33:44">2025/08/11</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2025/08/01/%E5%A6%82%E4%BD%95%E5%9C%A8%E4%B8%80%E4%B8%AA%E9%A1%B9%E7%9B%AE%E4%B8%AD%E4%BD%BF%E7%94%A8lerna%E7%AE%A1%E7%90%86%E6%9C%8D%E5%8A%A1/"
+           data-tag="工程化"
+           data-author="" >
+            <span class="post-title" title="如何在一个项目中使用lerna管理服务">如何在一个项目中使用lerna管理服务</span>
+            <span class="post-date" title="2025-08-01 18:19:36">2025/08/01</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2025/08/01/scp%E5%85%8D%E5%AF%86%E6%8E%A8%E9%80%81%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E5%A4%B9%E5%88%B0%E8%BF%9C%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8/"
+           data-tag="工程化"
+           data-author="" >
+            <span class="post-title" title="scp免密推送本地文件夹到远程服务器">scp免密推送本地文件夹到远程服务器</span>
+            <span class="post-date" title="2025-08-01 17:26:16">2025/08/01</span>
+        </a>
+        
+        
+        <a  class="All "
+           href="/2025/07/16/hello-world/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="Hello World">Hello World</span>
+            <span class="post-date" title="2025-07-16 09:13:21">2025/07/16</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2025/06/25/react%E6%90%AD%E5%BB%BA%E6%A1%86%E6%9E%B6%E5%B7%B2%E8%B8%A9%E5%9D%91/"
+           data-tag="react webapackgit"
+           data-author="" >
+            <span class="post-title" title="react搭建框架已踩坑">react搭建框架已踩坑</span>
+            <span class="post-date" title="2025-06-25 11:00:06">2025/06/25</span>
+        </a>
+        
+        
+        <a  class="All 工程化 "
+           href="/2025/06/22/lerna%E7%AE%A1%E7%90%86%E6%9C%8D%E5%8A%A1/"
+           data-tag="脚手架"
+           data-author="" >
+            <span class="post-title" title="lerna管理服务">lerna管理服务</span>
+            <span class="post-date" title="2025-06-22 19:10:06">2025/06/22</span>
+        </a>
+        
+        
+        <a  class="All 项目 "
+           href="/2025/06/22/%E5%9F%BA%E4%BA%8Eohif%E5%AE%9E%E7%8E%B0%E5%BD%B1%E5%83%8F%E5%8D%8F%E5%90%8C/"
+           data-tag="影像协同"
+           data-author="" >
+            <span class="post-title" title="基于OHIF实现影像协同">基于OHIF实现影像协同</span>
+            <span class="post-date" title="2025-06-22 14:11:27">2025/06/22</span>
+        </a>
+        
+        
+        <a  class="All 项目 "
+           href="/2025/06/22/webrtc%E5%AE%9E%E7%8E%B0%E9%9F%B3%E8%A7%86%E9%A2%91%E9%80%9A%E8%AF%9D/"
+           data-tag="音视频会议"
+           data-author="" >
+            <span class="post-title" title="webrtc实现音视频通话">webrtc实现音视频通话</span>
+            <span class="post-date" title="2025-06-22 14:10:57">2025/06/22</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2022/08/28/graphql%E7%9C%8B%E6%87%82%E8%BF%99%E7%AF%87%E7%9B%B4%E6%8E%A5%E5%BC%80%E5%8F%91/"
+           data-tag="graphql"
+           data-author="" >
+            <span class="post-title" title="graphql看懂这篇直接开发">graphql看懂这篇直接开发</span>
+            <span class="post-date" title="2022-08-28 17:44:15">2022/08/28</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2022/05/24/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%AE%89%E5%85%A8/"
+           data-tag="安全"
+           data-author="" >
+            <span class="post-title" title="浏览器安全">浏览器安全</span>
+            <span class="post-date" title="2022-05-24 09:12:51">2022/05/24</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2022/05/22/%E6%AF%8F%E5%A4%A9%E4%B8%80%E4%B8%AA%E6%96%B0%E9%97%AE%E9%A2%98%EF%BC%88%E6%B0%B8%E8%BF%9C%E4%BF%9D%E6%8C%81%E6%80%80%E7%96%91%EF%BC%89/"
+           data-tag="持续更新（ing）"
+           data-author="" >
+            <span class="post-title" title="每天一个新问题（永远保持怀疑）">每天一个新问题（永远保持怀疑）</span>
+            <span class="post-date" title="2022-05-22 22:49:29">2022/05/22</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2022/05/22/react%E5%89%8D%E7%AB%AF%E4%B8%8B%E8%BD%BD%E5%90%8E%E7%AB%AF%E8%BF%94%E5%9B%9E%E7%9A%84%E6%96%87%E4%BB%B6%E6%96%B9%E6%B3%95%EF%BC%88url%E3%80%81%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%B5%81%EF%BC%89/"
+           data-tag="前端调接口下载"
+           data-author="" >
+            <span class="post-title" title="react前端下载后端返回的文件方法（url、二进制流）">react前端下载后端返回的文件方法（url、二进制流）</span>
+            <span class="post-date" title="2022-05-22 22:41:02">2022/05/22</span>
+        </a>
+        
+        
+        <a  class="All 前端 "
+           href="/2022/05/22/%E6%A3%80%E6%B5%8B%E5%90%8E%E7%AB%AF%E6%8E%A5%E5%8F%A3%E5%B8%B8%E8%A7%81%E6%96%B9%E6%B3%95/"
+           data-tag="后端接口"
+           data-author="" >
+            <span class="post-title" title="检测后端接口常见方法">检测后端接口常见方法</span>
+            <span class="post-date" title="2022-05-22 22:36:45">2022/05/22</span>
+        </a>
+        
+        
+        <a  class="All 仓库管理 "
+           href="/2022/05/22/git/"
+           data-tag="git"
+           data-author="" >
+            <span class="post-title" title="实战中开发git">实战中开发git</span>
+            <span class="post-date" title="2022-05-22 21:34:00">2022/05/22</span>
+        </a>
+        
+        <div id="no-item-tips">
+
+        </div>
+    </nav>
+    <div id="outline-list">
+    </div>
+</div>
+
+    </div>
+    <div class="hide-list">
+        <div class="semicircle" data-title="Toggle full screen shortcut key s">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div id="post">
+    <div class="pjax">
+        <article id="post-git" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">实战中开发git</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="仓库管理">仓库管理</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color4">git</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+            Created At : <time class="date" title='Updated At: 2025-08-14 10:30:14'>2022-05-22 21:34</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        
+        <span id="busuanzi_container_page_pv">
+            Views 👀 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E4%BB%93%E5%BA%93"><span class="toc-text">初始化仓库</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%8B%E9%9A%86%E4%BB%93%E5%BA%93"><span class="toc-text">克隆仓库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E7%94%A8%E6%88%B7%E5%90%8D%E5%92%8C%E9%82%AE%E7%AE%B1-%E2%80%93global-%E4%B8%BA%E5%85%A8%E5%B1%80%E5%8F%82%E6%95%B0%EF%BC%8C%E8%A1%A8%E6%98%8E%E6%9C%AC%E5%9C%B0%E6%89%80%E6%9C%89Git%E4%BB%93%E5%BA%93%E9%83%BD%E4%BC%9A%E4%BD%BF%E7%94%A8%E8%BF%99%E4%B8%AA%E9%85%8D%E7%BD%AE"><span class="toc-text">设置用户名和邮箱(–global 为全局参数，表明本地所有Git仓库都会使用这个配置)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%93%BE%E6%8E%A5%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93"><span class="toc-text">链接远程仓库</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BD%93%E4%BF%AE%E6%94%B9%E5%AF%86%E7%A0%81%E5%90%8E%E9%9C%80%E8%A6%81git-push-%E6%97%B6%E6%8A%A5http-denied%E9%94%99%E8%AF%AF%E6%97%B6"><span class="toc-text">当修改密码后需要git push 时报http denied错误时</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BD%93%E6%9C%AC%E5%9C%B0%E6%9F%A5%E7%9C%8B%E8%BF%9C%E7%A8%8B%E5%88%86%E6%94%AF%E6%97%B6"><span class="toc-text">当本地查看远程分支时</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#git-fetch-origin%E3%80%82%E6%8B%89%E5%8F%96%E8%BF%9C%E7%A8%8B%E5%88%86%E6%94%AF%E5%88%97%E8%A1%A8"><span class="toc-text">** git fetch origin。拉取远程分支列表</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%92%A4%E9%94%80git-add-%E7%9A%84%E6%96%B9%E6%B3%95-gt-git-restore"><span class="toc-text">撤销git add . 的方法 -&gt; git restore .</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%92%A4%E9%94%80git-commit-m-%E2%80%9C%E6%B3%A8%E9%87%8A%E2%80%9D%EF%BC%8C"><span class="toc-text">撤销git commit -m “注释”，</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%A8%E9%80%81%E4%BB%93%E5%BA%93"><span class="toc-text">推送仓库</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9A%82%E6%97%B6%E5%AD%98%E5%82%A8%E5%B7%A5%E4%BD%9C%E5%8C%BA%E4%BB%A3%E7%A0%81%EF%BC%8C%EF%BC%88%E5%8F%AF%E4%BB%A5%E5%9C%A8%E5%88%86%E6%94%AF%E9%97%B4%E6%A8%AA%E8%B7%B3%E4%BB%A3%E7%A0%81%EF%BC%89"><span class="toc-text">暂时存储工作区代码，（可以在分支间横跳代码）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%88%86%E6%94%AF"><span class="toc-text">创建分支</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E5%88%86%E6%94%AF"><span class="toc-text">删除分支</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E5%88%86%E6%94%AF"><span class="toc-text">查看分支</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8B%89%E5%8F%96%E5%88%86%E6%94%AF"><span class="toc-text">拉取分支</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#git-merge%E7%9A%84%E5%8F%82%E6%95%B0"><span class="toc-text">git merge的参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#git-rebase%E7%9A%84%E5%8F%82%E6%95%B0"><span class="toc-text">git rebase的参数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%8D%E5%88%B6%E9%83%A8%E5%88%86%E5%88%86%E6%94%AF"><span class="toc-text">复制部分分支</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#git-commit-%E8%AE%B0%E5%BD%95%E6%9F%A5%E8%AF%A2"><span class="toc-text">git commit 记录查询</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A5%E4%B8%8B%E6%98%AF-git-tag-%E5%B8%B8%E7%94%A8%E7%9A%84%E6%93%8D%E4%BD%9C%EF%BC%9A"><span class="toc-text">以下是 git tag 常用的操作：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%88%A0%E9%99%A4%E8%BF%9C%E7%A8%8B%E5%88%86%E6%94%AF"><span class="toc-text">1. 删除远程分支</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%88%A0%E9%99%A4%E8%BF%9C%E7%A8%8B%E6%A0%87%E7%AD%BE%EF%BC%88tag%EF%BC%89"><span class="toc-text">2. 删除远程标签（tag）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B9%E5%BC%8F%E4%B8%80%EF%BC%9A%E4%BD%BF%E7%94%A8-delete-%E5%8F%82%E6%95%B0"><span class="toc-text">方式一：使用 --delete 参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B9%E5%BC%8F%E4%BA%8C%EF%BC%9A%E6%8E%A8%E9%80%81%E7%A9%BA%E5%BC%95%E7%94%A8%E5%88%B0%E8%BF%9C%E7%A8%8B%E6%A0%87%E7%AD%BE"><span class="toc-text">方式二：推送空引用到远程标签</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9%EF%BC%9A"><span class="toc-text">注意事项：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95"><span class="toc-text">基本用法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-text">工作原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E5%9C%BA%E6%99%AF"><span class="toc-text">常见场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8E-git-reset-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">与 git reset 的区别</span></a></li></ol></li></ol></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-3 i,
+    .toc-level-3 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="初始化仓库"><a href="#初始化仓库" class="headerlink" title="初始化仓库"></a>初始化仓库</h1><p>git init</p>
+<h2 id="克隆仓库"><a href="#克隆仓库" class="headerlink" title="克隆仓库"></a>克隆仓库</h2><p>git clone git地址</p>
+<h2 id="设置用户名和邮箱-–global-为全局参数，表明本地所有Git仓库都会使用这个配置"><a href="#设置用户名和邮箱-–global-为全局参数，表明本地所有Git仓库都会使用这个配置" class="headerlink" title="设置用户名和邮箱(–global 为全局参数，表明本地所有Git仓库都会使用这个配置)"></a>设置用户名和邮箱(–global 为全局参数，表明本地所有Git仓库都会使用这个配置)</h2><p>git config –global user,name “用户名”<br>git config –global user.email “用户邮箱”</p>
+<h2 id="链接远程仓库"><a href="#链接远程仓库" class="headerlink" title="链接远程仓库"></a>链接远程仓库</h2><p>git remote add origin git地址</p>
+<h3 id="当修改密码后需要git-push-时报http-denied错误时"><a href="#当修改密码后需要git-push-时报http-denied错误时" class="headerlink" title="当修改密码后需要git push 时报http denied错误时"></a>当修改密码后需要git push 时报http denied错误时</h3><p>输入”git config –system –unset credential.helper”命令（重置远程端的用户名和密码）<br>或<br>git config –global http.emptyAuth true </p>
+<h3 id="当本地查看远程分支时"><a href="#当本地查看远程分支时" class="headerlink" title="当本地查看远程分支时"></a>当本地查看远程分支时</h3><h3 id="git-fetch-origin。拉取远程分支列表"><a href="#git-fetch-origin。拉取远程分支列表" class="headerlink" title="** git fetch origin。拉取远程分支列表"></a>** git fetch origin。拉取远程分支列表</h3><table>
+<thead>
+<tr>
+<th>git branch</th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td>空</td>
+<td>查看本地分支</td>
+</tr>
+<tr>
+<td></td>
+<td>-r</td>
+<td>查看远程分支</td>
+</tr>
+<tr>
+<td></td>
+<td>-a</td>
+<td>查看全部焚毁</td>
+</tr>
+</tbody></table>
+<h1 id="撤销git-add-的方法-gt-git-restore"><a href="#撤销git-add-的方法-gt-git-restore" class="headerlink" title="撤销git add . 的方法 -&gt; git restore ."></a>撤销git add . 的方法 -&gt; git restore .</h1><h2 id="撤销git-commit-m-“注释”，"><a href="#撤销git-commit-m-“注释”，" class="headerlink" title="撤销git commit -m “注释”，"></a>撤销git commit -m “注释”，</h2><table>
+<thead>
+<tr>
+<th>git reset</th>
+<th>–hard</th>
+<th>删除工作空间改动代码，撤销git add，撤销commit . 注意完成这个操作后，就恢复到了上一次的commit状态。</th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td>–mixed</td>
+<td>不删除工作空间改动代码，撤销git add，撤销commit .为默认参数,git reset –mixed HEAD^==git reset HEAD^</td>
+</tr>
+<tr>
+<td></td>
+<td>–sort</td>
+<td>不删除工作空间改动代码，不撤销git add ，撤销commit</td>
+</tr>
+<tr>
+<td>git commit</td>
+<td>–amend</td>
+<td>如果commit注释写错了，改一下注释</td>
+</tr>
+</tbody></table>
+<h2 id="推送仓库"><a href="#推送仓库" class="headerlink" title="推送仓库"></a>推送仓库</h2><table>
+<thead>
+<tr>
+<th>git push</th>
+<th>-u</th>
+<th>建立+推送远程分支</th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td>-f</td>
+<td>强制覆盖远程分支</td>
+</tr>
+</tbody></table>
+<h3 id="暂时存储工作区代码，（可以在分支间横跳代码）"><a href="#暂时存储工作区代码，（可以在分支间横跳代码）" class="headerlink" title="暂时存储工作区代码，（可以在分支间横跳代码）"></a>暂时存储工作区代码，（可以在分支间横跳代码）</h3><table>
+<thead>
+<tr>
+<th>git stash save “save message”</th>
+<th>执行存储时，添加备注，方便查找，只有git stash 也要可以的，但查找时不方便识别。</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>git stash list</td>
+<td>查看stash了哪些存储</td>
+</tr>
+<tr>
+<td>git stash show</td>
+<td>显示做了哪些改动，默认show第一个存储,如果要显示其他存贮，后面加stash@{$num}，比如第二个 git stash show stash@{1}</td>
+</tr>
+<tr>
+<td>git stash show -p</td>
+<td>显示第一个存储的改动，如果想显示其他存存储，命令：git stash show stash@{$num} -p ，比如第二个：git stash show stash@{1} -p</td>
+</tr>
+<tr>
+<td>git stash apply</td>
+<td>应用某个存储,但不会把存储从存储列表中删除，默认使用第一个存储,即stash@{0}，如果要使用其他个，git stash apply stash@{$num} ， 比如第二个：git stash apply stash@{1}</td>
+</tr>
+<tr>
+<td>git stash pop</td>
+<td>命令恢复之前缓存的工作目录，将缓存堆栈中的对应stash删除，并将对应修改应用到当前的工作目录下,默认为第一个stash,即stash@{0}，如果要应用并删除其他stash，命令：git stash pop stash@{$num} ，比如应用并删除第二个：git stash pop stash@{1}</td>
+</tr>
+<tr>
+<td>git stash drop stash@{$num}</td>
+<td>丢弃stash@{$num}存储，从列表中删除这个存储</td>
+</tr>
+<tr>
+<td>git stash clear</td>
+<td>删除所有缓存的stash</td>
+</tr>
+</tbody></table>
+<h1 id="创建分支"><a href="#创建分支" class="headerlink" title="创建分支"></a>创建分支</h1><p>git branch test: 基于当前commit创建test分支。.git/HEAD 文件中记录了当前分支名字。<br>git checkout -b test; 创建并切换到test分支</p>
+<h1 id="删除分支"><a href="#删除分支" class="headerlink" title="删除分支"></a>删除分支</h1><p>git branch -d test：删除本地test分支</p>
+<p>git branch -D test： test分支还没有合入当前分支，所以要用-D参数才能删掉。</p>
+<p>git push origin –delete test 删除远程test分支</p>
+<p>git push origin :test 删除远程test分支</p>
+<h1 id="查看分支"><a href="#查看分支" class="headerlink" title="查看分支"></a>查看分支</h1><table>
+<thead>
+<tr>
+<th>git</th>
+<th>branch</th>
+<th>空</th>
+<th>列出当前分支清单</th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td></td>
+<td>-r</td>
+<td>查看远程分支</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>-a</td>
+<td>查看远程分支和本地分支</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>-v</td>
+<td>查看各个分支最后一个提交信息</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>–merged</td>
+<td>查看哪些分支已经合并入当前分支</td>
+</tr>
+</tbody></table>
+<h1 id="拉取分支"><a href="#拉取分支" class="headerlink" title="拉取分支"></a>拉取分支</h1><p>git fetch origin 同步远程服务器的数据到本地</p>
+<p>git checkout -b test origin/test_remote 将远程分支test_remote拉取下来到本地test分支</p>
+<p>git checkout test 将远程分支test拉取下来到本地test分支</p>
+<p>git pull test从远程分支test 中checkout下来的本地分支test成为跟踪分支，使用git pull或者git push就会操作到对应的远程分支test</p>
+<h2 id="git-merge的参数"><a href="#git-merge的参数" class="headerlink" title="git merge的参数"></a>git merge的参数</h2><p>merge的两个分支要有历史关联，没有的话需要添加git merge master –allow-unrelated-histories，参数。</p>
+<table>
+<thead>
+<tr>
+<th>git</th>
+<th>merge</th>
+<th></th>
+<th>合并分支到当前分支</th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td></td>
+<td>–ff</td>
+<td>快速合并，这个是默认的参数。如果合并过程出现冲突，Git会显示出冲突并等待手动解决</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>–ff-only</td>
+<td>只有能快速合并的情况才合并。如果合并过程出现冲突，Git会自动abort此次merge</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>–no-ff</td>
+<td>不使用快速合并。会生成一次新的提交记录，这个记录只是标识在这里进行了一次merge操作（目前还没想到应用场景）</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>–squash</td>
+<td>压缩合并。将待合并的分支的内容压缩成一个新的提交合并进来</td>
+</tr>
+</tbody></table>
+<h2 id="git-rebase的参数"><a href="#git-rebase的参数" class="headerlink" title="git rebase的参数"></a>git rebase的参数</h2><table>
+<thead>
+<tr>
+<th>git</th>
+<th>rebase</th>
+<th>分布湿合并分支</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-i HEAD~num</td>
+<td>合并后num个commit记录</td>
+<td>p表示采用，s表示将当前commit合并到上一commit，d表示删除当前commit，。。。</td>
+</tr>
+<tr>
+<td>-i [start] [end]</td>
+<td>左开右闭</td>
+<td>start和end分别代码commit id</td>
+</tr>
+<tr>
+<td>-i [start] [end]</td>
+<td>onto [newbase]</td>
+<td>将部分分支复制到新commit上，实现中间一大段commit的删除</td>
+</tr>
+<tr>
+<td>通过git rebase -i [start] [end] 或者 git rebase -i HEAD~num将本地的多次提交合并为一个，以简化提交历史。(左开右闭)</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p><img src="gitrebase.png" alt="截屏2021-12-01 18.38.28.png"><br>在用d时可删除部分分支。s时前面得有pick，<br>本地有多个提交时,如果不进行这一步,在git rebase master时会多次解决冲突(最坏情况下,每一个提交都会相应解决一个冲突)</p>
+<h3 id="复制部分分支"><a href="#复制部分分支" class="headerlink" title="复制部分分支"></a>复制部分分支</h3><p>git rebase [startpoint] [endpoint] --onto [branchName] （[startpoint] [endpoint]指定的是一个前开后闭的区间，将该区间中的分支复制到另一个分支上）<br>运行git rebase –continue命令继续变基。<br>运行git rebase –abort命令回到rebase之前的状态。<br>个人见解，rebase就是操作本地的提交记录实现对commit的简化。git rebase branchname，在次合并分支，解决冲突，将冲突解决在开发分支上，避免主分支上出现脏分支记录。</p>
+<h1 id="git-commit-记录查询"><a href="#git-commit-记录查询" class="headerlink" title="git commit 记录查询"></a>git commit 记录查询</h1><table>
+<thead>
+<tr>
+<th>git</th>
+<th>show</th>
+<th>空</th>
+<th>.查看最新的commit</th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td></td>
+<td>commitId</td>
+<td>.查看指定commit hashID的所有修改：</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>commitId fileName</td>
+<td>.查看某次commit中具体某个文件的修改：</td>
+</tr>
+</tbody></table>
+<p><code>git tag</code> 是 Git 中用于管理标签（tag）的命令，标签主要用于标记代码库中的重要节点（如版本发布），方便后续查阅和回溯。</p>
+<h2 id="以下是-git-tag-常用的操作："><a href="#以下是-git-tag-常用的操作：" class="headerlink" title="以下是 git tag 常用的操作："></a>以下是 <code>git tag</code> 常用的操作：</h2><ol>
+<li><p><strong>查看所有标签</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git tag</span><br></pre></td></tr></table></figure>
+<p>按字母排序显示所有标签</p>
+</li>
+<li><p><strong>创建轻量标签（lightweight）</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git tag v1.0.0</span><br></pre></td></tr></table></figure>
+<p>轻量标签仅包含标签名，不附带额外信息</p>
+</li>
+<li><p><strong>创建附注标签（annotated）</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git tag -a v1.0.0 -m <span class="string">&quot;版本1.0.0发布&quot;</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<ul>
+<li><code>-a</code> 表示创建附注标签（会存储在 Git 数据库中）</li>
+<li><code>-m</code> 指定标签说明信息</li>
+</ul>
+<ol start="4">
+<li><p><strong>为历史提交打标签</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git tag -a v0.9.0 8f937c6 -m <span class="string">&quot;为历史提交打标签&quot;</span></span><br></pre></td></tr></table></figure>
+<p>其中 <code>8f937c6</code> 是历史提交的哈希值前几位</p>
+</li>
+<li><p><strong>删除标签</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git tag -d v1.0.0</span><br></pre></td></tr></table></figure></li>
+<li><p><strong>推送标签到远程仓库</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 推送单个标签</span></span><br><span class="line">git push origin v1.0.0</span><br><span class="line"></span><br><span class="line"><span class="comment"># 推送所有未推送的标签</span></span><br><span class="line">git push origin --tags</span><br></pre></td></tr></table></figure></li>
+<li><p><strong>检出标签</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout v1.0.0</span><br></pre></td></tr></table></figure>
+<p>检出标签会使仓库处于分离头指针（detached HEAD）状态，通常用于查看历史版本</p>
+</li>
+<li><p><strong>搜索标签</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git tag -l <span class="string">&quot;v1.0.*&quot;</span></span><br></pre></td></tr></table></figure>
+<p>列出所有以 <code>v1.0.</code> 开头的标签</p>
+</li>
+</ol>
+<p>标签与分支的区别：标签是固定的，通常用于标记发布版本；而分支是动态的，用于开发过程中代码的分离与合并。</p>
+<p>要删除远程仓库的分支和标签（tag），需要通过本地 Git 命令向远程仓库发送删除请求。以下是具体操作：</p>
+<h3 id="1-删除远程分支"><a href="#1-删除远程分支" class="headerlink" title="1. 删除远程分支"></a><strong>1. 删除远程分支</strong></h3><p>格式：<code>git push &lt;远程仓库名&gt; --delete &lt;分支名&gt;</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 删除远程的 feature-branch 分支</span></span><br><span class="line">git push origin --delete feature-branch</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>origin</code> 是远程仓库的默认名称（可替换为实际远程仓库名）</li>
+<li><code>--delete</code> 表示删除操作</li>
+</ul>
+<h3 id="2-删除远程标签（tag）"><a href="#2-删除远程标签（tag）" class="headerlink" title="2. 删除远程标签（tag）"></a><strong>2. 删除远程标签（tag）</strong></h3><p>有两种等效方式：</p>
+<h4 id="方式一：使用-delete-参数"><a href="#方式一：使用-delete-参数" class="headerlink" title="方式一：使用 --delete 参数"></a>方式一：使用 <code>--delete</code> 参数</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 删除远程的 v1.0.0 标签</span></span><br><span class="line">git push origin --delete v1.0.0</span><br></pre></td></tr></table></figure>
+
+<h4 id="方式二：推送空引用到远程标签"><a href="#方式二：推送空引用到远程标签" class="headerlink" title="方式二：推送空引用到远程标签"></a>方式二：推送空引用到远程标签</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 效果同上，删除远程的 v1.0.0 标签</span></span><br><span class="line">git push origin :refs/tags/v1.0.0</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="注意事项："><a href="#注意事项：" class="headerlink" title="注意事项："></a>注意事项：</h3><ol>
+<li><strong>权限要求</strong>：需要有远程仓库的写入权限才能执行删除操作。</li>
+<li><strong>本地同步</strong>：删除远程分支/标签后，本地不会自动删除对应的分支/标签，如需清理本地残留：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 删除本地分支</span></span><br><span class="line">git branch -d 本地分支名</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除本地标签</span></span><br><span class="line">git tag -d 标签名</span><br></pre></td></tr></table></figure></li>
+<li><strong>谨慎操作</strong>：远程分支/标签删除后难以恢复，建议删除前确认是否有必要备份。</li>
+</ol>
+<p><code>git config pull</code> 用于配置 Git 拉取（pull）操作的默认行为。Git 的 <code>pull</code> 操作本质上是 <code>fetch</code>（获取远程更新）加上 <code>merge</code>（合并到本地分支）或 <code>rebase</code>（变基）的组合，通过配置可以指定默认使用哪种方式。</p>
+<p>常用的配置命令如下：</p>
+<ol>
+<li><p>**设置默认合并方式为 <code>merge</code>**（Git 默认行为）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global pull.rebase <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<p>执行 <code>git pull</code> 时，会将远程分支的更新 <code>fetch</code> 到本地后，通过 <code>merge</code> 合并到当前分支，可能产生合并提交。</p>
+</li>
+<li><p>**设置默认合并方式为 <code>rebase</code>**：（变基，解决远程分支与本地分支不同基时）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global pull.rebase <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<p>执行 <code>git pull</code> 时，会将远程分支的更新 <code>fetch</code> 到本地后，通过 <code>rebase</code> 方式将本地提交“嫁接”到远程更新之后，保持提交历史线性。</p>
+</li>
+<li><p><strong>更精细的 rebase 配置</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global pull.rebase preserve</span><br></pre></td></tr></table></figure>
+<p>在 rebase 时保留本地已提交的合并记录（适用于需要保留复杂分支合并历史的场景）。</p>
+</li>
+<li><p><strong>查看当前 pull 配置</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global --get pull.rebase</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>配置的作用域：</p>
+<ul>
+<li>加上 <code>--global</code> 表示全局配置（对当前用户所有仓库生效）</li>
+<li>不加则只对当前仓库生效</li>
+</ul>
+<p>选择哪种方式取决于团队协作规范和个人习惯，<code>rebase</code> 通常能保持更整洁的提交历史，而 <code>merge</code> 会明确保留分支合并的轨迹。</p>
+<p><code>git revert</code> 是 Git 中用于撤销某次提交的命令，它通过创建一个<strong>新的提交</strong>来抵消指定提交的更改，而不是直接删除历史记录，这使得它在协作场景中非常安全。</p>
+<h3 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 撤销最近一次提交</span></span><br><span class="line">git revert HEAD</span><br><span class="line"></span><br><span class="line"><span class="comment"># 撤销指定 commit（commit-hash 是提交的哈希值）</span></span><br><span class="line">git revert &lt;commit-hash&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h3><ul>
+<li>执行 <code>git revert &lt;commit&gt;</code> 时，Git 会生成一个新的提交，该提交的内容与被撤销的提交完全相反（比如删除变成添加，修改变成反向修改）。</li>
+<li>原提交记录会被保留在历史中，只是新增了一个”抵消”它的提交，保证了历史的完整性。</li>
+</ul>
+<h3 id="常见场景"><a href="#常见场景" class="headerlink" title="常见场景"></a>常见场景</h3><ol>
+<li><p><strong>撤销单个提交</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 先查看提交历史，找到要撤销的 commit-hash</span></span><br><span class="line">git <span class="built_in">log</span> --oneline</span><br><span class="line"></span><br><span class="line"><span class="comment"># 假设要撤销的提交哈希是 a1b2c3d</span></span><br><span class="line">git revert a1b2c3d</span><br></pre></td></tr></table></figure>
+<p>执行后会自动打开编辑器，让你填写撤销提交的说明（默认信息已包含被撤销的提交哈希），保存退出即可完成操作。</p>
+</li>
+<li><p><strong>撤销多个连续提交</strong>（左开右闭区间，不包含 start-commit）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git revert &lt;start-commit&gt;..&lt;end-commit&gt;</span><br></pre></td></tr></table></figure></li>
+<li><p><strong>撤销合并提交</strong>：<br>合并提交（merge commit）有两个父提交，撤销时需要指定 <code>-m</code> 参数说明以哪个父提交为基准：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git revert -m 1 &lt;merge-commit-hash&gt;</span><br></pre></td></tr></table></figure>
+<p>通常 <code>-m 1</code> 表示以主分支（被合并的分支）为基准。</p>
+</li>
+</ol>
+<h3 id="与-git-reset-的区别"><a href="#与-git-reset-的区别" class="headerlink" title="与 git reset 的区别"></a>与 <code>git reset</code> 的区别</h3><table>
+<thead>
+<tr>
+<th>特性</th>
+<th><code>git revert</code></th>
+<th><code>git reset</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>历史记录</td>
+<td>保留原提交，新增撤销提交</td>
+<td>直接删除指定提交之后的历史</td>
+</tr>
+<tr>
+<td>协作安全性</td>
+<td>安全，不修改共享历史</td>
+<td>危险，修改已推送的历史会冲突</td>
+</tr>
+<tr>
+<td>适用场景</td>
+<td>撤销已推送（public）的提交</td>
+<td>撤销本地未推送（private）的提交</td>
+</tr>
+</tbody></table>
+<p>使用建议：如果提交已经推送到远程仓库，优先使用 <code>git revert</code>；如果只是本地修改且未推送，可考虑 <code>git reset</code>。</p>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 guo2401143699@qq.com </span>
+    </div>
+</article>
+
+
+<p>
+    <a  class="dashang" onclick="dashangToggle()">💰</a>
+</p>
+
+
+
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">
+    c2022 guokun
+</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a></p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full" data-title="Toggle full screen shortcut key s"><span class="min "></span></button>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+
+<div class="hide_box" onclick="dashangToggle()"></div>
+<div class="shang_box">
+    <a class="shang_close"  onclick="dashangToggle()">×</a>
+    <div class="shang_tit">
+        <p>Help us with donation</p>
+    </div>
+    <div class="shang_payimg">
+        <div class="pay_img">
+            <img src="/img/alipay.jpg" class="alipay" title="扫码支持">
+            <img src="/img/weixin.jpg" class="weixin" title="扫码支持">
+        </div>
+    </div>
+    <div class="shang_payselect">
+        <span><label><input type="radio" name="pay" checked value="alipay">alipay</label></span><span><label><input type="radio" name="pay" value="weixin">weixin</label></span>
+    </div>
+</div>
+
+
+</body>
+<script src="/js/jquery.pjax.js?v=1.1.0" ></script>
+
+<script src="/js/script.js?v=1.1.0" ></script>
+<script>
+    var img_resize = 'default';
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $("#post .pjax table").addClass("green_title");
+        
+
+        /*渲染打赏样式*/
+        
+        $("input[name=pay]").on("click", function () {
+            if($("input[name=pay]:checked").val()=="weixin"){
+                $(".shang_box .shang_payimg .pay_img").addClass("weixin_img");
+            } else {
+                $(".shang_box .shang_payimg .pay_img").removeClass("weixin_img");
+            }
+        })
+        
+
+        /*高亮代码块行号*/
+        
+
+        /*访问数量*/
+        
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js");
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+    function dashangToggle() {
+        $(".shang_box").fadeToggle();
+        $(".hide_box").fadeToggle();
+    }
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 542px;
+    }
+    .nav.fullscreen {
+        margin-left: -542px;
+    }
+    .nav-left {
+        width: 120px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 492px;
+        }
+        .nav.fullscreen {
+            margin-left: -492px;
+        }
+        .nav-left {
+            width: 100px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 492px;
+            margin-left: -492px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #e2e0e0;
+    }
+    
+    
+
+    /*列表样式*/
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+    .nav-right:before {
+        content: ' ';
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.3;
+        background: url("https://gw.alicdn.com/imgextra/O1CN01qJtaNI1bWgX44BKhQ_!!6000000003473-2-yinhe.png_300x300Q75.jpg_.webp");
+        background-repeat: no-repeat;
+        background-position: 50% 0;
+        -ms-background-size: cover;
+        -o-background-size: cover;
+        -moz-background-size: cover;
+        -webkit-background-size: cover;
+        background-size: cover;
+    }
+    
+
+    
+</style>
+
+
+
+
+
+
+
+</html>
