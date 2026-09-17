@@ -1,9 +1,13 @@
 ---
-title: ai漫剧流程尝鲜
+title: ai漫剧流程——小白
 date: 2026-09-16 17:28:51
 tags: 剧本
 categories: Ai漫剧
 ---
+
+---
+
+## 小白简易版：**豆包（剧本分镜）+ 即梦（图生视频）+ 剪映（配音字幕剪辑）**
 
 免费工具下载
 <a href="https://pan.xunlei.com/s/VP1gtQBGeJ-wYB-_VVftAP8AA1?pwd=57bi">剪映旧版本（无会员）5.9官方版本</a>
