@@ -51,6 +51,7 @@ if (theme.category && theme.category.sub) {
 <% function renderCategory(category, refName) {
     refName = refName ? refName + '<--->' + category.name : category.name
 %>
+<% if (category.name) { %>
     <li>
         <div data-rel="<%= refName %>">
             <% if (childCategoryMap[category._id]) { %><i class="fold iconfont icon-right"></i><% } %>
@@ -66,6 +67,7 @@ if (theme.category && theme.category.sub) {
         <% } %>
     </li>
 <% } %>
+<% } %>
 <ul>
     <li>
         <div class="all active" data-rel="<%= __('all_articles') %>"><%= __('all_articles') %>
@@ -80,12 +82,14 @@ if (theme.category && theme.category.sub) {
                 <%= renderCategory(category) %>
             <% } %>
         <% } else { %>
+            <% if (category.name) { %>
             <li>
                 <div data-rel="<%= category.name %>"><%= category.name %>
                     <% if (theme.category && theme.category.num) { %><small>(<%= category.posts.length %>)</small>
                     <% } %>
                 </div>
             </li>
+            <% } %>
         <% } %>
     <% }) %>
 </ul>
