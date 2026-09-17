@@ -1,7 +1,7 @@
 ---
 title: ai漫剧流程——小白
 date: 2026-09-16 17:28:51
-tags: 剧本
+tags: 小白
 categories: Ai漫剧
 ---
 
